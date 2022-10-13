@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "ES6",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "jsxFactory": "xeito.createElement",
+    "jsxFragmentFactory": "xeito.Fragment",
+  },
+}
