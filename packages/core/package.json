@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Samuel Bazaga",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "snabbdom": "^3.5.1"
+  }
 }
