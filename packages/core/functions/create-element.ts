@@ -11,7 +11,7 @@ import { separateProps } from "./separate-props";
  */
 export function createElement (sel: string | any, data: VNodeData = {}, ...children: VNodeChildren[]): VNode {
   if (sel.prototype) {
-    if (sel.prototype.basuraComponent) {
+    if (sel.prototype.xeitoComponent) {
       const component = new sel(data);
       component._vNode = component.render();
       return component._vNode;
