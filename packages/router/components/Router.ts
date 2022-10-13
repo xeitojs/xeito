@@ -1,4 +1,4 @@
-import { Xeito } from "@xeito/core";
+import { Component, Xeito } from "@xeito/core";
 import { History, createBrowserHistory, createHashHistory, Location } from "history";
 import { State } from "../../core/decorators/state";
 import { RouteData } from "../interfaces/route-data";
