@@ -9,5 +9,9 @@ export const Xeito = {
   digestUpdate: digestUpdate
 }
 
+// Export core decorators
+export { Component } from "./decorators/component";
+export { State } from "./decorators/state";
+
 // Export types
 export type { VNode } from "snabbdom";
