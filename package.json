@@ -6,6 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "workspaces": {
+    "packages": [
+      "packages/core",
+      "packages/injection",
+      "packages/router",
+      "packages/cli"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aerotoad/xeito.git"
