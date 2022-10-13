@@ -1,2 +1,17 @@
 # Dependency directories
 node_modules/
+
+# DS_Store files
+.DS_Store
+
+# Package-lock.json
+package-lock.json
+
+# VScode
+.vscode
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
