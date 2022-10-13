@@ -7,5 +7,6 @@
     "jsx": "react",
     "jsxFactory": "xeito.createElement",
     "jsxFragmentFactory": "xeito.Fragment",
+    "isolatedModules": true
   },
 }
