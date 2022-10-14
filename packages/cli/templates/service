@@ -1,0 +1,8 @@
+import { Injectable } from '@xeito/injection';
+
+@Injectable()
+export class {{serviceName}} {
+
+  constructor() {}
+
+}
