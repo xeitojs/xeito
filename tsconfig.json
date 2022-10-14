@@ -5,8 +5,8 @@
     "target": "ES6",
     "moduleResolution": "node",
     "jsx": "react",
-    "jsxFactory": "xeito.createElement",
-    "jsxFragmentFactory": "xeito.Fragment",
+    "jsxFactory": "Xeito.createElement",
+    "jsxFragmentFactory": "Xeito.Fragment",
     "isolatedModules": true
   },
 }
