@@ -7,6 +7,6 @@ console.log('------------------------------');
 await buildCore();
 await buildInjection();
 await buildRouter();
-// buildCLI(); // Disabled for now since CLI is not ready yet
+// buildCLI(); // Disabled - CLI doesn't need building/bundling
 
 process.exit(0);
