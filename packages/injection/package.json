@@ -1,7 +1,7 @@
 {
   "name": "@xeito/injection",
-  "version": "0.0.3",
-  "description": "",
+  "version": "0.0.4",
+  "description": "Dependency Injection for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
