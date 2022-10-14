@@ -1,6 +1,7 @@
 import { Component, Xeito } from "@xeito/core";
 import { History, createBrowserHistory, createHashHistory, Location } from "history";
 import { State } from "../../core/decorators/state";
+import { appHistory, setAppHistory } from "../functions/app-history";
 import { RouteData } from "../interfaces/route-data";
 import { RouterConfig } from "../interfaces/router-config";
 import { RouterOptions } from "../interfaces/router-options";
@@ -16,14 +17,14 @@ export class Router {
 
   constructor({routerConfig}: {routerConfig: RouterConfig}) {
     this.routerConfig = routerConfig;
-    this.startRouter()
+    this.startRouter();
   }
 
   /**
    * Start the router
    */
   startRouter() {
-    this.history = this.initializeHistory(this.routerConfig.options);
+    this.history = appHistory ? appHistory : this.initializeHistory(this.routerConfig.options);
 
     // Listen for route changes
     const unlisten = this.history.listen(({location}: {location: Location}) => {
@@ -39,11 +40,16 @@ export class Router {
    * @param {RouterOptions} options 
    * @returns 
    */
-  initializeHistory(options: RouterOptions) {
+  initializeHistory(options: RouterOptions): History {
+    let history;
     if (options.mode === 'hash') {
-      return createHashHistory();
+      history = createHashHistory();
+      setAppHistory(history);
     }
-    return createBrowserHistory();
+    history = createBrowserHistory();
+    setAppHistory(history);
+
+    return history;
   }
 
   handleRouteChange(location: Location) {
