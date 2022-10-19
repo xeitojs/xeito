@@ -3,7 +3,8 @@
   "version": "0.0.4",
   "description": "Framework for building web applications",
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "start:example": "node scripts/run-example.mjs"
   },
   "workspaces": {
     "packages": [
