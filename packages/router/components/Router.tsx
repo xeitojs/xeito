@@ -1,118 +1,83 @@
-import { Component, Xeito } from "@xeito/core";
-import { History, createBrowserHistory, createHashHistory, Location } from "history";
-import { State } from "../../core/decorators/state";
-import { appHistory, setAppHistory } from "../functions/app-history";
-import { RouteData } from "../interfaces/route-data";
-import { RouterConfig } from "../interfaces/router-config";
-import { RouterOptions } from "../interfaces/router-options";
+import { Xeito, Component, State } from '@xeito/core';
+import { XeitoRouter } from '../classes/xeito-router';
+import { findCurrentRoute } from '../functions/find-current-route';
+import { RouterConfig } from '../interfaces/router-config';
+import { PendingTree } from '../utils/pending-tree';
+import { createBrowserHistory } from 'history';
+import { processRedirects } from '../functions/process-redirects';
+import { processGuards } from '../functions/process-guards';
+import { formatRouterConfig } from '../utils/format-router-config';
+
+interface RouterProps {
+  routerConfig: RouterConfig;
+}
 
 @Component()
 export class Router {
+  	
+  @State() currentPage: any;
 
   private routerConfig: RouterConfig;
 
-  private history: History;
+  constructor({ routerConfig }: RouterProps) {
+    this.routerConfig = formatRouterConfig(routerConfig);
+    
+    // Initialize the router history with the given strategy
+    XeitoRouter.initializeHistory(this.routerConfig.options?.strategy || 'browser');
 
-  @State() private currentRoute: any;
-
-  constructor({routerConfig}: {routerConfig: RouterConfig}) {
-    this.routerConfig = routerConfig;
-    this.startRouter();
-  }
-
-  /**
-   * Start the router
-   */
-  startRouter() {
-    this.history = appHistory ? appHistory : this.initializeHistory(this.routerConfig.options);
-
-    // Listen for route changes
-    const unlisten = this.history.listen(({location}: {location: Location}) => {
-      this.handleRouteChange(location);
+    // Listen to the history changes
+    XeitoRouter.routeUpdate$.subscribe((update) => {
+      this.routeUpdated();
     });
 
-    // Handle the initial route
-    this.handleRouteChange(this.history.location);
+    // Check the initial route
+    this.routeUpdated();
+    
   }
 
-  /**
-   * Initialize the history object based on the router options
-   * @param {RouterOptions} options 
-   * @returns 
-   */
-  initializeHistory(options: RouterOptions): History {
-    let history;
-    if (options.mode === 'hash') {
-      history = createHashHistory();
-      setAppHistory(history);
-    }
-    history = createBrowserHistory();
-    setAppHistory(history);
+  async routeUpdated() {
+    // Remove the current page
+    this.currentPage = null;
 
-    return history;
-  }
+    // Reset the pending tree
+    PendingTree.setNextRoute(null);
+    PendingTree.setTreePathAccumulator(null);
 
-  handleRouteChange(location: Location) {
-    const pathName = location.pathname;
+    // Find the current route
+    const currentRoute = findCurrentRoute(this.routerConfig.routes, window.location.pathname);
 
-    // Find the route that matches the current path
-    const matchedRoute = this.routerConfig.routes.find((route) => {
-      return route.matcher(pathName);
-    });
+    if (currentRoute) {
+      const routeRedirectsResult = processRedirects(currentRoute);
+      const routeGuardsResult = await processGuards(currentRoute);
 
-    if (matchedRoute) {
-      // Run route guards
-      if (this.execRouteGuards(matchedRoute)) {
-        // Render the component
-        this.currentRoute = matchedRoute.component;
+      if (routeRedirectsResult && routeGuardsResult) {
+        PendingTree.setNextRoute(currentRoute);
+        PendingTree.setTreePathAccumulator(currentRoute.path);
+        this.currentPage = <currentRoute.component />;
       }
-    }
 
-    // Handle route redirects
-    if (matchedRoute?.redirectTo) {
-      // Run route guards
-      if (this.execRouteGuards(matchedRoute)) {
-        const routeData = matchedRoute.matcher(pathName);
-        const params = routeData.params;
-        
-        // Replace the route params with the actual values
-        for(const key in params) {
-          matchedRoute.redirectTo = matchedRoute.redirectTo.replace(`:${key}`, params[key]);
-        }
-
-        // Redirect to the new route
-        this.history.replace(matchedRoute.redirectTo);
-      }
+    } else {
+      this.currentPage = (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <h1>404</h1>
+          <p>Page not found</p>
+        </div>
+      );
     }
   }
 
-  navigateToRoute(path: string) {
-  }
-
-  redirectToRoute(path: string) {
-    this.history.push(path);
-  }
-
-  /**
-   * Runs the route guards for the given route and returns true if all guards pass
-   * @param {RouteData} route  
-   * @returns 
-   */
-  execRouteGuards(route: RouteData): boolean {
-    let canActivate = true;
-    if (route.guards) {
-      route.guards.forEach((guard) => {
-        if (!guard()) {
-          canActivate = false;
-        }
-      });
-    }
-    return canActivate;
-  }
-
-
-  render() {
-    return this.currentRoute;
+  public render() {
+    return (
+      <div className='router-root'>
+        { this.currentPage }
+      </div>
+    )
   }
 
 }
+

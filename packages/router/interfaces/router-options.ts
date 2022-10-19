@@ -1,4 +1,4 @@
 
 export interface RouterOptions {
-  mode?: 'history' | 'hash';
+  strategy: "hash" | "browser";
 }

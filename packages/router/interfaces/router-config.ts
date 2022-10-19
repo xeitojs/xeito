@@ -1,8 +1,7 @@
-
-import { RouterOptions } from './router-options';
-import { RouteData } from "./route-data";
+import { Route } from "./route";
+import { RouterOptions } from "./router-options";
 
 export interface RouterConfig {
-  routes: RouteData[];
-  options: RouterOptions
+  routes: Route[];
+  options?: RouterOptions;
 }
