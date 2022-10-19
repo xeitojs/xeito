@@ -10,9 +10,13 @@ import { separateProps } from "./separate-props";
  * @returns {VNode} Virtual node
  */
 export function createElement (sel: string | any, data: VNodeData = {}, ...children: VNodeChildren[]): VNode {
+
   if (sel.prototype) {
     if (sel.prototype.xeitoComponent) {
-      const component = new sel(data);
+      const componentProps = data ?? {};
+      componentProps.children = children;
+
+      const component = new sel(componentProps);
       component._vNode = component.render();
       return component._vNode;
     } else {
