@@ -8,8 +8,6 @@ export function createService(nameOrPath) {
   let name;
   let path;
 
-  console.log(emoji.emojify(':rocket: -'), chalk.green('Creating service...'));
-
   // Check if name is a path
   if (nameOrPath.includes('/')) {
     const pathParts = nameOrPath.split('/');
@@ -44,7 +42,7 @@ export function createService(nameOrPath) {
   fs.mkdirSync(path, { recursive: true });
   fs.writeFileSync(path + '/' + serviceKebabCase + '.ts', output);
 
-  console.log(emoji.emojify(':sparkles: - '), chalk.green('Service created successfully!'));
+  console.log(emoji.emojify(':sparkles: - '), chalk.green('Service created successfully at ' + (path === '.' ? './' : path) + serviceKebabCase + '.ts'));
 };
 
 const serviceName = string => {
