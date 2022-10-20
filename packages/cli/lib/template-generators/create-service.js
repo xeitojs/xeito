@@ -23,15 +23,26 @@ export function createService(nameOrPath) {
   // Capitalize first letter
   name = name[0].toUpperCase() + name.slice(1);
 
+
+  // Generate name variations
+  const serviceCamelCase = serviceName(name);
+  const serviceKebabCase = kebabCase(serviceCamelCase);
+  const servicePascalCase = serviceCamelCase[0].toUpperCase() + serviceCamelCase.slice(1);
+
+  // Notify user
+  console.log(emoji.emojify(':rocket: - '), chalk.green('Creating service: ' + servicePascalCase + '...'));
+
+  // Read template
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
   const serviceTemplate = loadTemplate('../../templates/service');
 
+  // Compile template
   const template = Handlebars.compile(serviceTemplate.toString());
-  const output = template({ componentName: name });
+  const output = template({ serviceName: servicePascalCase });
 
   // Create service and its folder
   fs.mkdirSync(path, { recursive: true });
-  fs.writeFileSync(path + '/' + kebabCase(serviceName(name)) + '.ts', output);
+  fs.writeFileSync(path + '/' + serviceKebabCase + '.ts', output);
 
   console.log(emoji.emojify(':sparkles: - '), chalk.green('Service created successfully!'));
 };
@@ -39,7 +50,7 @@ export function createService(nameOrPath) {
 const serviceName = string => {
   // Remove service from the name if it exists
   if (string.toLowerCase().includes('service')) {
-    string = string.replace('Service', '');
+    string = string.replace('service', '');
   }
 
   // Add it at the end with camel case
