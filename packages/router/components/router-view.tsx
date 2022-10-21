@@ -41,7 +41,7 @@ export class RouterView {
 
     if (currentChildRoute) {
       const routeRedirectsResult = processRedirects(currentChildRoute, this.currentPath);
-      const routeGuardsResult = await processGuards(currentChildRoute, this.currentPath);
+      const routeGuardsResult = await processGuards(currentChildRoute);
 
       if (routeRedirectsResult && routeGuardsResult) {
         PendingTree.setNextRoute(currentChildRoute);
