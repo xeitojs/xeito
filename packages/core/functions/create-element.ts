@@ -18,6 +18,21 @@ export function createElement (sel: string | any, data: VNodeData = {}, ...child
 
       const component = new sel(componentProps);
       component._vNode = component.render();
+
+      // Attach component hooks
+      component._vNode.data.hook = {
+        create: () => {
+          component.onInit && component.onInit();
+        },
+        update: () => {
+          component.onUpdate && component.onUpdate();
+        },
+        destroy: () => {
+          component.onDestroy && component.onDestroy();
+        }
+      };
+
+      // Return the component's virtual node
       return component._vNode;
     } else {
       throw new Error(`Error rendering component: The component must be decorated with @Component`);
