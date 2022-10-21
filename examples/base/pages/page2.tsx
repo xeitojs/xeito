@@ -1,4 +1,4 @@
-import { Xeito, Component } from "../../../packages/core/dist";
+import { Xeito, Component } from "../../../packages/core";
 import { RouterView } from "../../../packages/router";
 
 @Component()

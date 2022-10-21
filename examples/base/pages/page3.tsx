@@ -8,14 +8,6 @@ export class Page3 {
     return (
       <div>
         <p>Page 3 works</p>
-
-        <p>Router View Container:</p>
-        <div style={{
-          border: '1px solid black',
-          padding: '10px'
-        }}>
-          <RouterView />
-        </div>
       </div>
     );
   }

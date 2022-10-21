@@ -8,12 +8,21 @@ export class Page1 {
   render() {
     return (
       <div>
-        <p>Page1 works</p>
+        <p>
+          <span style={{marginRight: '10px'}}>Page 1 works</span>
+          <RouterLink to='/page2'>
+            <button>Page 2 (absolute)</button>
+          </RouterLink>
+        </p>
 
         <p>Link:</p>
-        <RouterLink to='/page2'>
+        <RouterLink to='/page1/page2'>
           <button>Page 2</button>
         </RouterLink>
+        <RouterLink to='/page1/page3'>
+          <button>Page 3</button>
+        </RouterLink>
+        
 
         <p>Router View Container:</p>
         <div style={{
