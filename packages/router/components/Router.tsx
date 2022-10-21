@@ -3,10 +3,10 @@ import { XeitoRouter } from '../classes/xeito-router';
 import { findCurrentRoute } from '../functions/find-current-route';
 import { RouterConfig } from '../interfaces/router-config';
 import { PendingTree } from '../utils/pending-tree';
-import { createBrowserHistory } from 'history';
 import { processRedirects } from '../functions/process-redirects';
 import { processGuards } from '../functions/process-guards';
 import { formatRouterConfig } from '../utils/format-router-config';
+import { Subscription } from 'rxjs';
 
 interface RouterProps {
   routerConfig: RouterConfig;
@@ -19,26 +19,34 @@ export class Router {
 
   private routerConfig: RouterConfig;
 
+  private previousPath: string;
+
+  private routeUpdateSubscription: Subscription;
+
   constructor({ routerConfig }: RouterProps) {
     this.routerConfig = formatRouterConfig(routerConfig);
     
     // Initialize the router history with the given strategy
     XeitoRouter.initializeHistory(this.routerConfig.options?.strategy || 'browser');
 
-    // Listen to the history changes
-    XeitoRouter.routeUpdate$.subscribe((update) => {
-      this.routeUpdated();
-    });
+    this.onInit();
+  }
 
-    // Check the initial route
+  onInit() {
+    // Listen to the history changes
+    this.routeUpdateSubscription?.unsubscribe();
+    this.routeUpdateSubscription = XeitoRouter.routeUpdate$
+      .subscribe((update) => {
+        this.routeUpdated();
+      });
     this.routeUpdated();
-    
+  }
+
+  onDestroy() {
+    this.routeUpdateSubscription.unsubscribe();
   }
 
   async routeUpdated() {
-    // Remove the current page
-    this.currentPage = null;
-
     // Reset the pending tree
     PendingTree.setNextRoute(null);
     PendingTree.setTreePathAccumulator(null);
@@ -51,12 +59,25 @@ export class Router {
       const routeGuardsResult = await processGuards(currentRoute);
 
       if (routeRedirectsResult && routeGuardsResult) {
+        
         PendingTree.setNextRoute(currentRoute);
         PendingTree.setTreePathAccumulator(currentRoute.path);
-        this.currentPage = <currentRoute.component />;
+
+        if (this.previousPath !== currentRoute.path) {
+          // Clear the current page
+          this.currentPage = null;
+          
+          // Set the current page
+          this.previousPath = currentRoute.path;
+          this.currentPage = <currentRoute.component />;
+        }
+
       }
 
     } else {
+      PendingTree.setNextRoute(null);
+      PendingTree.setTreePathAccumulator(null);
+      this.currentPage = null;
       this.currentPage = (
         <div style={{
           display: 'flex',
