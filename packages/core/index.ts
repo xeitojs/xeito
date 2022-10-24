@@ -12,6 +12,7 @@ export const Xeito = {
 // Export core decorators
 export { Component } from "./decorators/component";
 export { State } from "./decorators/state";
+export { Ref } from "./decorators/ref";
 
 // Export types
 export type { VNode } from "snabbdom";
