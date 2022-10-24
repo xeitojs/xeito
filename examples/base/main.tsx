@@ -15,31 +15,11 @@ export class Main {
       },
       {
         path: '/page1',
-        component: Page1,
-        children: [
-          {
-            path: '/page2',
-            component: Page2,
-          },
-          {
-            path: '/page3',
-            component: Page3,
-            children: [
-              {
-                path: '/',
-                component: Page1,
-              }
-            ]
-          },
-          {
-            path: '/',
-            redirectTo: '/page2',
-          }
-        ]
+        component: <Page1 />,
       },
       {
         path: '/page2',
-        component: Page2,
+        component: <Page2 />,
       }
     ]
   }
