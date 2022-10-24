@@ -29,10 +29,10 @@ export class Router {
     // Initialize the router history with the given strategy
     XeitoRouter.initializeHistory(this.routerConfig.options?.strategy || 'browser');
 
-    this.onInit();
+    this.onCreate();
   }
 
-  onInit() {
+  onCreate() {
     // Listen to the history changes
     this.routeUpdateSubscription?.unsubscribe();
     this.routeUpdateSubscription = XeitoRouter.routeUpdate$
@@ -69,7 +69,8 @@ export class Router {
           
           // Set the current page
           this.previousPath = currentRoute.path;
-          this.currentPage = <currentRoute.component />;
+
+          this.currentPage = currentRoute.component;
         }
 
       }
@@ -101,4 +102,6 @@ export class Router {
   }
 
 }
+
+declare function __decorate(decorator, target): any;
 

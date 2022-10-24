@@ -18,7 +18,7 @@ export class RouterView {
 
   constructor() {}
 
-  onInit() {
+  onCreate() {
     this.currentRoute = PendingTree.getNextRoute();
     this.currentPath = PendingTree.getTreePathAccumulator();
 
@@ -32,7 +32,7 @@ export class RouterView {
 
   // Destroy the subscription when the component is destroyed
   onDestroy() {
-    this.routeUpdateSubscription.unsubscribe(); 
+    this.routeUpdateSubscription?.unsubscribe(); 
   }
 
   async handleRouteView() {
@@ -53,7 +53,8 @@ export class RouterView {
 
           // Set the current page
           this.previousPath = currentChildRoute.path;
-          this.currentPage = <currentChildRoute.component />;
+
+          this.currentPage = currentChildRoute.component;
         }
       } else {
         PendingTree.setNextRoute(null);
