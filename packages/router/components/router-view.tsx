@@ -54,7 +54,7 @@ export class RouterView {
           // Set the current page
           this.previousPath = currentChildRoute.path;
 
-          this.currentPage = currentChildRoute.component;
+          this.currentPage = Xeito.createElement(currentChildRoute.component);
         }
       } else {
         PendingTree.setNextRoute(null);

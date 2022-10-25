@@ -69,8 +69,11 @@ export class Router {
           
           // Set the current page
           this.previousPath = currentRoute.path;
-
-          this.currentPage = currentRoute.component;
+          
+          this.currentPage = Xeito.createElement(currentRoute.component, null);
+        } else {
+          // Update the current page
+          this.currentPage = Xeito.createElement(currentRoute.component, null);
         }
 
       }
