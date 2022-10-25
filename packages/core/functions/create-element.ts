@@ -1,8 +1,9 @@
 import { h, VNode, VNodeChildren, VNodeData } from "snabbdom";
 import { RefRegistry } from "../classes/ref-registry";
+import { ComponentData } from "../interfaces/component-data";
 import { flattenChildren } from "./flatten-children";
+import { getComponentData } from "./get-component-data";
 import { separateProps } from "./separate-props";
-
 /**
  * Creates a virtual node
  * @param sel Component class or tag name
@@ -15,18 +16,24 @@ export function createElement (sel: string | any, data: VNodeData = {}, ...child
   if (sel.prototype) {
     if (sel.prototype.xeitoComponent) {
 
-      const componentProps = data ?? {};
-      componentProps.children = children;
+      // Create the component's data object
+      const componentData: ComponentData = getComponentData(data, children);
 
-      const component = new sel(componentProps);
+      // Instantiate the component with its data
+      const component = new sel(componentData);
+
+      // Render the component
       component._vNode = component.render();
 
       // Attach component hooks
       component._vNode.data.hook = {
+        init: () => {
+          component.beforeCreate && component.beforeCreate();
+        },
         insert: (vNode) => {
           // Register component ref if it has one
-          if (validateRefName(componentProps.ref)) {
-            RefRegistry.registerRef(componentProps.ref, vNode.elm);
+          if (validateRefName(componentData.props.ref)) {
+            RefRegistry.registerRef(componentData.props.ref, vNode.elm);
           }
           // Call component onInsert hook
           component.onCreate && component.onCreate();
@@ -38,8 +45,8 @@ export function createElement (sel: string | any, data: VNodeData = {}, ...child
           component.onDestroy && component.onDestroy();
 
           // Remove component ref if it has one
-          if (validateRefName(componentProps.ref)) {
-            RefRegistry.removeRef(componentProps.ref);
+          if (validateRefName(componentData.props.ref)) {
+            RefRegistry.removeRef(componentData.props.ref);
           }
         }
       };

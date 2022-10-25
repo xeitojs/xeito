@@ -23,8 +23,8 @@ export class Router {
 
   private routeUpdateSubscription: Subscription;
 
-  constructor({ routerConfig }: RouterProps) {
-    this.routerConfig = formatRouterConfig(routerConfig);
+  constructor(componentData?: any) {
+    this.routerConfig = formatRouterConfig(componentData?.props?.routerConfig);
     
     // Initialize the router history with the given strategy
     XeitoRouter.initializeHistory(this.routerConfig.options?.strategy || 'browser');

@@ -1,10 +1,33 @@
+import { ComponentData } from "../interfaces/component-data";
+
 export function Component() {
+  
+  return function _DecoratorName<T extends {new(...args: any[]): {}}>(constr: T) {
+    
+    // Mark the component as a xeito component
+    constr.prototype.xeitoComponent = true;
 
-  return function (target) {
+    // Create the component's vNode store
+    constr.prototype.VNode = constr.prototype.VNode || null;
 
-    target.prototype.xeitoComponent = true;
-    target.prototype.VNode = target.prototype.VNode || null;
+    // Create the component's properties
+    constr.prototype.props = constr.prototype.props || {};
+    constr.prototype.emitterListeners = constr.prototype.emitterListeners || {};
+    constr.prototype.children = constr.prototype.children || [];
 
+    return class extends constr {
+      constructor(...args: any) {
+
+        // Assign component data
+        const componentData: ComponentData = args[0] || {};
+        constr.prototype.props = componentData.props || {};
+        constr.prototype.children = componentData.children || {};
+        constr.prototype.emitterListeners = componentData.emitterListeners || {};
+
+        // Call the original constructor
+        super(componentData);
+      }
+    }
   }
 
 }

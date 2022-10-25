@@ -16,3 +16,4 @@ export { Ref } from "./decorators/ref";
 
 // Export types
 export type { VNode } from "snabbdom";
+export type { ComponentData } from "./interfaces/component-data";
