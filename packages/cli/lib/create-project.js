@@ -60,6 +60,13 @@ export async function createProject(name) {
           .then(() => {
             // Delete .gitkeep files
             rimraf.sync(name + '/**/.gitkeep');
+
+            // Create .xeitorc file
+            fs.writeFileSync(name + '/.xeitorc', JSON.stringify({
+              name: name,
+              projectRoot: 'src',
+              appRoot: 'src/app',
+            }, null, 2));
             
             console.log(emoji.emojify(':tada: -'), chalk.bgGreen.black('Project ready!'));
             // Next steps
