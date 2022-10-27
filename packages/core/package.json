@@ -13,6 +13,7 @@
   "author": "Samuel Bazaga",
   "license": "MIT",
   "dependencies": {
+    "nanoid": "^4.0.0",
     "snabbdom": "^3.5.1"
   }
 }
