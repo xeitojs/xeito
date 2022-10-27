@@ -1,6 +1,6 @@
 {
   "name": "@xeito/router",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Router for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
