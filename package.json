@@ -1,6 +1,6 @@
 {
   "name": "xeito",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Framework for building web applications",
   "scripts": {
     "build": "node scripts/build.mjs",
