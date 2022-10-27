@@ -7,13 +7,11 @@ export function Component() {
     // Mark the component as a xeito component
     constr.prototype.xeitoComponent = true;
 
-    // Create the component's vNode store
-    constr.prototype.VNode = constr.prototype.VNode || null;
-
     // Create the component's properties
     constr.prototype.props = constr.prototype.props || {};
     constr.prototype.emitterListeners = constr.prototype.emitterListeners || {};
     constr.prototype.children = constr.prototype.children || [];
+    constr.prototype.id = constr.prototype.id || null;
 
     return class extends constr {
       constructor(...args: any) {
