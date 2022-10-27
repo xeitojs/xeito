@@ -8,9 +8,6 @@ import { processGuards } from '../functions/process-guards';
 import { formatRouterConfig } from '../utils/format-router-config';
 import { Subscription } from 'rxjs';
 
-interface RouterProps {
-  routerConfig: RouterConfig;
-}
 
 @Component()
 export class Router {
