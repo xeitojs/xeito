@@ -5,12 +5,27 @@ import fs from 'fs';
 import emoji from 'node-emoji';
 import rimraf from 'rimraf';
 
-export function createProject(name) {
+export async function createProject(name) {
 
   // Check if we have a name
   if (!name) {
-    console.log(emoji.emojify(':x: -'), chalk.red('You must specify a project name'));
-    return;
+    // console.log(emoji.emojify(':x: -'), chalk.red('You must specify a project name'));
+    const answers = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Project name:',
+        validate: (value) => {
+          if (value.length) {
+            return true;
+          } else {
+            return 'Please enter a project name';
+          }
+        }
+      }
+    ]);
+
+    name = answers.name;
   }
 
   // Check if the name is valid
@@ -33,7 +48,7 @@ export function createProject(name) {
       message: 'Select a template',
       choices: [
         'blank',
-        // 'service-example', // Disabled for now because the template doesn't exist
+        'services-example',
         // 'complete-example' // Disabled for now because the template doesn't exist
       ]
     }
