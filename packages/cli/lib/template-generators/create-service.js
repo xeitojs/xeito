@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import fs from 'fs';
 import emoji from 'node-emoji';
 import chalk from 'chalk';
+import nodePath from 'path';
 
 export function createService(nameOrPath) {
 
@@ -38,11 +39,21 @@ export function createService(nameOrPath) {
   const template = Handlebars.compile(serviceTemplate.toString());
   const output = template({ serviceName: servicePascalCase });
 
-  // Create service and its folder
-  fs.mkdirSync(path, { recursive: true });
-  fs.writeFileSync(path + '/' + serviceKebabCase + '.ts', output);
+  // Get app root from .xeitorc
+  const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
+  const creationPath = xeitorc.appRoot + '/' + path;
 
-  console.log(emoji.emojify(':sparkles: - '), chalk.green('Service created successfully at ' + (path === '.' ? './' : path) + serviceKebabCase + '.ts'));
+  // Create service and its folder
+  fs.mkdirSync(nodePath.normalize(creationPath), { recursive: true });
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + serviceKebabCase + '.ts'), output);
+
+  console.log(
+    emoji.emojify(':sparkles: - '), 
+    chalk.green(
+      'Service created successfully at ' + 
+      nodePath.normalize(creationPath + '/' + serviceKebabCase + '.ts')
+    )
+  );
 };
 
 const serviceName = string => {

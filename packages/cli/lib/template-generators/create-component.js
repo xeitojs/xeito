@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import fs from 'fs';
 import emoji from 'node-emoji';
 import chalk from 'chalk';
+import nodePath from 'path';
 
 export function createComponent(nameOrPath) {
 
@@ -32,14 +33,24 @@ export function createComponent(nameOrPath) {
   const template = Handlebars.compile(componentTemplate.toString());
   const output = template({ componentName: name, componentStyles: kebabCase(name) });
 
+  // Get app root from .xeitorc
+  const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
+  const creationPath = xeitorc.appRoot + '/' + path;
+  
   // Create component and its folder
-  fs.mkdirSync(path + '/' + kebabCase(name), { recursive: true });
-  fs.writeFileSync(path + '/' + kebabCase(name) + '/' + kebabCase(name) + '.tsx', output);
+  fs.mkdirSync(nodePath.normalize(creationPath + '/' + kebabCase(name)), { recursive: true });
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '.tsx'), output);
 
   // Create styles file
-  fs.writeFileSync(path + '/' + kebabCase(name) + '/' + kebabCase(name) + '.module.scss', '');
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '.module.scss'), '');
 
-  console.log(emoji.emojify(':sparkles: - '), chalk.green('Component created successfully at ' + path + '/' + kebabCase(name) + '/' + kebabCase(name) + '.tsx'));
+  console.log(
+    emoji.emojify(':sparkles: -'), 
+    chalk.green(
+      'Component created successfully at ' + 
+      nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '.tsx')
+    )
+  );
 
 };
 
