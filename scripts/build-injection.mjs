@@ -8,6 +8,10 @@ export const buildInjection = async () => {
       targets: {
         main: {
           distDir: 'packages/injection/dist',
+          engines: {
+            browsers: ['last 2 years, > 1%, not dead'],
+          },
+          includeNodeModules: ['reflect-metadata', 'process'],
         },
         types: {
           distEntry: 'packages/injection/dist/index.d.ts',

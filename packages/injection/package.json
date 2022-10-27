@@ -14,5 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
   }
 }
