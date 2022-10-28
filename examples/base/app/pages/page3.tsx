@@ -1,5 +1,5 @@
-import { Xeito, Component } from "../../../packages/core"; 
-import { RouterView } from "../../../packages/router";
+import { Xeito, Component } from "../../../../packages/core"; 
+import { RouterView } from "../../../../packages/router";
 
 @Component()
 export class Page3 {
