@@ -11,9 +11,11 @@ const bundler = new Parcel({
   },
 });
 
+console.log(`Running ./examples/${demo}/index.html demo...`);
+
 console.log('Starting dev server...');
 
-await bundler.watch((error, buildEvent) => {
+bundler.watch((error, buildEvent) => {
   if (error) {
     console.error(error);
     return;
@@ -21,5 +23,7 @@ await bundler.watch((error, buildEvent) => {
 
   if (buildEvent.type === 'buildSuccess') {
     console.log(`Server running at http://localhost:1234`);
+  } else {
+    console.log(buildEvent);
   }
 });
