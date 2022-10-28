@@ -1,10 +1,11 @@
 {
   "name": "xeito",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "Framework for building web applications",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "start:example": "node scripts/run-example.mjs"
+    "start:example": "node scripts/run-example.mjs",
+    "version-bump": "node scripts/version-bump.mjs"
   },
   "workspaces": {
     "packages": [
