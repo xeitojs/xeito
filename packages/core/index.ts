@@ -1,6 +1,4 @@
-import { createElement } from "./functions/create-element";
-import { digestUpdate } from "./functions/digest-update";
-
+import 'reflect-metadata';
 import { render, html, svg, Hole, Renderable, TemplateFunction } from 'uhtml';
 
 // Export core decorators
