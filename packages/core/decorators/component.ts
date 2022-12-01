@@ -54,6 +54,10 @@ export function Component(componentMetadata: ComponentMetadata) {
       constructor(...args: any[]) {
         super(...args);
 
+        if (!this.attachShadow) {
+          throw new Error(`Invalid component, did you forget to extend XeitoElement in component '<${this._XeitoInternals.selector}>'?`);
+        }
+
         /** 
          * Set the root element to render the template in
          * If it's a shadow root, create a shadow root
