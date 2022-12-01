@@ -2,8 +2,9 @@ import 'reflect-metadata';
 import { render, html, svg, Hole, Renderable, TemplateFunction } from 'uhtml';
 
 // Export core decorators
-export { Component } from "./decorators/component";
-export { State } from "./decorators/state";
+export { Component } from './decorators/component';
+export { State } from './decorators/state';
+export { Prop } from './decorators/prop';
 
 /**
  * Re-export uhtml
