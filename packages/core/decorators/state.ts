@@ -1,4 +1,3 @@
-
 /**
  * State decorator
  * Wraps the state property with a Proxy or a getter/setter
