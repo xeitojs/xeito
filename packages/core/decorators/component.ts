@@ -31,11 +31,20 @@ export function Component(componentMetadata: ComponentMetadata) {
     });
 
     /**
+     * Handle component-specific styles
+     */
+     let componentStyles;
+     if (componentMetadata.styles) {
+       componentStyles = componentMetadata.styles.join(' ');
+     }
+
+    /**
      * Add the default _XeitoInternals object to the class
      */
     constructor.prototype._XeitoInternals = {
       DOMRoot: null,
       selector: componentMetadata.selector,
+      styles: componentStyles,
       template: null,
       actions: componentMetadata.actions || [],
       state: {},
@@ -75,6 +84,13 @@ export function Component(componentMetadata: ComponentMetadata) {
 
         // Render the template for the first time
         this._XeitoInternals.template = render(this._XeitoInternals.DOMRoot, this.render() as Renderable);
+
+        // Add the styles to the DOM
+        if (this._XeitoInternals.styles) {
+          const style = document.createElement('style');
+          style.textContent = this._XeitoInternals.styles;
+          this._XeitoInternals.DOMRoot.appendChild(style);
+        }
       }
 
       requestUpdate() {
