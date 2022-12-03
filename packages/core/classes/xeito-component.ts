@@ -10,13 +10,13 @@ export class XeitoComponent extends HTMLElement {
   render(): Hole | void {}
 
   /**
-   * On mount method desgin to be overriden by the user
+   * On mount method desgined to be overriden by the user
    * Gets called when the component is mounted (connectedCallback)
    */
-  onMount() {}
+  onCreate() {}
 
   /**
-   * On destroy method desgin to be overriden by the user
+   * On destroy method desgined to be overriden by the user
    * Gets called when the component is destroyed (disconnectedCallback)
    */
   onDestroy() {}
