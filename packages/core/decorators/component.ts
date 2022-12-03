@@ -70,14 +70,12 @@ export function Component(componentMetadata: ComponentMetadata) {
         /** 
          * Set the root element to render the template in
          * If it's a shadow root, create a shadow root
-         * If it's not a shadow root, use the element itself
+         * If it's not a shadow root, use the element itself (default)
          */
-        let DOMRoot: HTMLElement | ShadowRoot;
-        if (componentMetadata.shadow !== false) {
+        let DOMRoot: HTMLElement | ShadowRoot = this;
+        if (componentMetadata.shadow === true) {
           this.attachShadow({ mode: 'open' });
           DOMRoot = this.shadowRoot as ShadowRoot;
-        } else {
-          DOMRoot = this;
         }
         // Set the DOMRoot in the _XeitoInternals
         this._XeitoInternals.DOMRoot = DOMRoot;
