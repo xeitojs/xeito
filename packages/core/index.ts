@@ -8,6 +8,7 @@ export { Xeito } from './classes/xeito';
 export { Component } from './decorators/component';
 export { State } from './decorators/state';
 export { Prop } from './decorators/prop';
+export { Event } from './decorators/event';
 
 /**
  * Re-export uhtml
