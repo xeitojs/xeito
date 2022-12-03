@@ -11,6 +11,13 @@ export { Prop } from './decorators/prop';
 export { Event } from './decorators/event';
 export { Ref } from './decorators/ref';
 
+// Export core interfaces
+export type { ComponentMetadata } from './interfaces/component-metadata';
+export type { ElementRef } from './interfaces/element-ref';
+export type { AttributeChanges } from './interfaces/attribute-changes';
+export type { ActionResult } from './interfaces/action-result';
+export type { EventConfig } from './interfaces/event-config';
+
 /**
  * Re-export uhtml
  * Allows the user to use uhtml directly from the xeito module
