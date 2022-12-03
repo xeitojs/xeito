@@ -60,7 +60,7 @@ export class XeitoComponent extends HTMLElement {
    * Calls the onMount method
    */
   connectedCallback() {
-    this.onMount();
+    this.onCreate();
   }
 
   /**
