@@ -9,6 +9,7 @@ export { Component } from './decorators/component';
 export { State } from './decorators/state';
 export { Prop } from './decorators/prop';
 export { Event } from './decorators/event';
+export { Ref } from './decorators/ref';
 
 /**
  * Re-export uhtml
