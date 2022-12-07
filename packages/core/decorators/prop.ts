@@ -1,3 +1,5 @@
+import { AttributeChanges } from "../interfaces/attribute-changes";
+
 /**
  * Property decorator
  * Allows the user to define a custom attribute in the component tag
@@ -7,24 +9,27 @@ export function Prop() {
 
   return function _PropDecorator (target: any, key: string) {
     const name = key;
-    const type = Reflect.getMetadata('design:type', target, key).name;
 
     Object.defineProperty(target, key, {
       get: function() {
-        const attributeValue = this.getAttribute(name);
-        switch(type) {
-          case 'Number':
-            return Number(attributeValue);
-          case 'Boolean':
-            return attributeValue === 'true' ? true : false;
-          case 'Date':
-            return new Date(attributeValue);
-          default:
-            return attributeValue;
-        }
+        return this._XeitoInternals.props[name];
       },
       set: function(value) {
-        return this.setAttribute(name, value);
+        const oldValue = this._XeitoInternals.props[name];
+
+        if (oldValue === value) return;
+
+        // Create an an attributeChanges object
+        const changes: AttributeChanges = { name, oldValue, newValue: value };
+        
+        // Set the new value in the props object
+        this._XeitoInternals.props[name] = value;
+
+        // Call the onChanges method
+        this.onChanges(changes);
+
+        // Request an update of the component
+        this.requestUpdate();
       }
     });
 
