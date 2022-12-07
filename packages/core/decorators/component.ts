@@ -5,7 +5,6 @@ import { XeitoComponent } from './../classes/xeito-component';
 export function Component(componentMetadata: ComponentMetadata) {
 
   return function ComponentDecorator<T extends { new (...args: any[]): {} }>(constructor: T) {
-
     /**
      * Bind all methods to the class instance
      * This allows to use the methods in the template without the need to bind them or use arrow functions
@@ -48,7 +47,8 @@ export function Component(componentMetadata: ComponentMetadata) {
       template: null,
       actions: componentMetadata.actions || [],
       state: {},
-      props: {}
+      props: {},
+      xeitoGlobal: null
     }
 
     // Extend the XeitoComponent class for the ComponentClass to inherit the methods
@@ -57,12 +57,26 @@ export function Component(componentMetadata: ComponentMetadata) {
     // Create a new ComponentClass that extends the original class
     class ComponentClass extends constructor {
       
-      // Set the _XeitoInternals
-      private _XeitoInternals = constructor.prototype._XeitoInternals;
+      // Declare the _XeitoInternals property
+      private _XeitoInternals;
 
       constructor(...args: any[]) {
         super(...args);
 
+        // Set the _XeitoInternals from the constructor
+        this._XeitoInternals = constructor.prototype._XeitoInternals;
+        
+        // Set the global property on the component
+        this.global = this._XeitoInternals.xeitoGlobal;
+
+        /**
+         * Add the global property to the component
+         */
+        componentMetadata.imports?.forEach((component: any) => {
+          component.prototype._XeitoInternals.xeitoGlobal = this.global;
+        });
+
+        // Check if the component extends XeitoElement
         if (!this.attachShadow) {
           throw new Error(`Invalid component, did you forget to extend XeitoElement in component '<${this._XeitoInternals.selector}>'?`);
         }
@@ -108,11 +122,21 @@ export function Component(componentMetadata: ComponentMetadata) {
        */
       use(selector: string, ...args: any[]) {
         return (e: HTMLElement) => {
-          const action = this._XeitoInternals.actions.find((action: any) => action.selector === selector);
-          if (action) {
-            return new action(e.parentElement, ...args);
+          // Check if the selector is a global action
+          if (!selector.startsWith('$')) {
+            const action = this._XeitoInternals.actions.find((action: any) => action.selector === selector);
+            if (action) {
+              return new action(e.parentElement, ...args);
+            } else {
+              throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array?`);
+            }
           } else {
-            throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array?`);
+            const action = this.global[selector];
+            if (action) {
+              return action(e.parentElement, ...args);
+            } else {
+              throw new Error(`Action '${selector}' not found in global actions, did you forget to register the plugin?`);
+            }
           }
         }
       }

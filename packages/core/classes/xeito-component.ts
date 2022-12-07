@@ -5,6 +5,11 @@ import { Hole } from 'uhtml';
 export class XeitoComponent extends HTMLElement {
 
   /**
+   * Global properties object (will be populated by the parent component or the Xeito instance)
+   */
+  global: Record<string, any>;
+
+  /**
    * Render method desgin to be overriden by the user
    */
   render(): Hole | void {}
