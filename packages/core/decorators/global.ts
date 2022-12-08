@@ -1,7 +1,7 @@
 
-export function GlobalProp() {
+export function Global() {
 
-  return function _GlobalPropDecorator(target: any, key: string) {
+  return function _GlobalDecorator(target: any, key: string) {
 
     Object.defineProperty(target, key, {
       get: function() {
