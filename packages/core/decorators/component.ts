@@ -48,7 +48,7 @@ export function Component(componentMetadata: ComponentMetadata) {
       actions: componentMetadata.actions || [],
       state: {},
       props: {},
-      xeitoGlobal: null
+      global: null
     }
 
     // Extend the XeitoComponent class for the ComponentClass to inherit the methods
@@ -67,13 +67,13 @@ export function Component(componentMetadata: ComponentMetadata) {
         this._XeitoInternals = constructor.prototype._XeitoInternals;
         
         // Set the global property on the component
-        this.global = this._XeitoInternals.xeitoGlobal;
+        this.global = this._XeitoInternals.global;
 
         /**
          * Add the global property to the component
          */
         componentMetadata.imports?.forEach((component: any) => {
-          component.prototype._XeitoInternals.xeitoGlobal = this.global;
+          component.prototype._XeitoInternals.global = this.global;
         });
 
         // Check if the component extends XeitoElement
@@ -122,21 +122,17 @@ export function Component(componentMetadata: ComponentMetadata) {
        */
       use(selector: string, ...args: any[]) {
         return (e: HTMLElement) => {
-          // Check if the selector is a global action
-          if (!selector.startsWith('$')) {
-            const action = this._XeitoInternals.actions.find((action: any) => action.selector === selector);
-            if (action) {
-              return new action(e.parentElement, ...args);
-            } else {
-              throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array?`);
-            }
+          // Check if the selector is a local action
+          let action = this._XeitoInternals.actions.find((action: any) => action.selector === selector);
+          if (!action) {
+            // Check if the selector is a global action
+            action = this.global.actions.find((action: any) => action.selector === selector);
+          }
+          
+          if (action) {
+            return new action(e.parentElement, ...args);
           } else {
-            const action = this.global[selector];
-            if (action) {
-              return action(e.parentElement, ...args);
-            } else {
-              throw new Error(`Action '${selector}' not found in global actions, did you forget to register the plugin?`);
-            }
+            throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array or install the plugin?`);
           }
         }
       }

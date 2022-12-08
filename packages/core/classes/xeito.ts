@@ -1,35 +1,67 @@
 import { BehaviorSubject } from 'rxjs';
 import { render } from '../index';
+import { XeitoGlobal } from '../interfaces/xeito-global';
 import { XeitoComponent } from "./xeito-component";
+import { XeitoPlugin } from './xeito-pugin';
 
 export class Xeito {
 
-  private _rootComponent: XeitoComponent | any;
   private _rootElement: HTMLElement;
+  private plugins: Array<XeitoPlugin> = [];
 
-  public globalProperties: Record<string, any> = {};
+  public global: XeitoGlobal = {
+    properties: {},
+    actions: {},
+    components: []
+  };
 
   constructor (rootComponent: any) {
-    // Set the root component
-    this._rootComponent = rootComponent;
+    // Add the root component to the global components array
+    this.global.components.push(rootComponent);
   }
 
-  public bootstrap(rootElement: HTMLElement) {
-    // Set the root element
-    this._rootElement = rootElement;
+  /**
+   * 
+   * @param rootElement The root element to render the root component in (can be a string selector)
+   */
+  public bootstrap(rootElement: HTMLElement | string) {
+    let element: HTMLElement | Element | string = rootElement;
 
-    // Set the Xeito instance on the root component
-    this._rootComponent.prototype._XeitoInternals.xeitoGlobal = this.globalProperties;
+    // Check if the root element is a string selector and get the element
+    if (typeof rootElement === 'string') {
+      element = document.querySelector(rootElement);
+    }
+    
+    // Set the root element
+    this._rootElement = element as HTMLElement;
+
+    // Attach the global object to all the global components
+    this.attachGlobal();
 
     // Render the root component
-    render(this._rootElement, new this._rootComponent());
+    render(this._rootElement, new (this.global.components[0] as any)());
   }
 
+  /**
+   * Register a plugin to the Xeito instance
+   * @param plugin The plugin class to register
+   * @param options The options to pass to the plugin install method
+   */
   public registerPlugin(plugin: any, options?: any) {
-    // Check if plugin has an install method
-    if (plugin.install) {
-      plugin.install(this, options);
-    }
+    const pluginInstance = new plugin(this);
+    pluginInstance.install(options);
+    this.plugins.push(pluginInstance);
+  }
+
+  /**
+   * Attaches the global object to all the global components
+   * Including the root component (which is a global component)
+   * This is called during the bootstrap process
+   */
+  private attachGlobal() {
+    this.global.components.forEach((component: any) => {
+      component.prototype._XeitoInternals.global = this.global;
+    });
   }
 
 }
