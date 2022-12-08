@@ -1,5 +1,5 @@
 
-export function Global() {
+export function Global(propertyName?: string) {
 
   return function _GlobalDecorator(target: any, key: string) {
 
@@ -13,6 +13,8 @@ export function Global() {
             If so, you should get the value from the onCreate() hook instead.
           `)
         }
+
+        if(propertyName) return this.global?.properties[propertyName];
         return this.global?.properties[key];
       },
       set: function(value) {
