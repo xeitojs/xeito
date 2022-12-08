@@ -47,7 +47,7 @@ export class Xeito {
    * @param plugin The plugin class to register
    * @param options The options to pass to the plugin install method
    */
-  public registerPlugin(plugin: any, options?: any) {
+  public usePlugin(plugin: any, options?: any) {
     const pluginInstance = new plugin(this);
     pluginInstance.install(options);
     this.plugins.push(pluginInstance);
