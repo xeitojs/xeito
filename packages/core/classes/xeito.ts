@@ -2,7 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 import { render } from '../index';
 import { XeitoGlobal } from '../interfaces/xeito-global';
 import { XeitoComponent } from "./xeito-component";
-import { XeitoPlugin } from './xeito-pugin';
+import { XeitoPlugin } from './xeito-plugin';
 
 export class Xeito {
 
