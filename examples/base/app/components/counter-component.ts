@@ -1,4 +1,4 @@
-import { Component, html, State } from "../../../../packages/core";
+import { AttributeChanges, Component, html, Prop, State } from "../../../../packages/core";
 import type { ElementRef } from "../../../../packages/core";
 import { XeitoComponent } from "../../../../packages/core/classes/xeito-component";
 import { Ref } from "../../../../packages/core/decorators/ref";
@@ -30,15 +30,6 @@ export class CounterComponent extends XeitoComponent {
   @Inject() greetService: GreetService;
   @State() count: number = 0;
   @Ref() elementRef: ElementRef;
-
-  constructor() {
-    super();
-  }
-
-  onMount(): void {
-    console.log(this.elementRef)
-    console.dir(this)
-  }
 
   increment() {
     this.count++;
