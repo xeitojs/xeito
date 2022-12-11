@@ -89,5 +89,16 @@ export class XeitoComponent extends HTMLElement {
    * @param args 
    */
   use(selector: string, ...args: any[]): ActionResult | void {}
+
+  /**
+   * Slot Content
+   * It will be populated by the @Component decorator at runtime
+   * It will contain the slotted content of the component
+   * eg: <xeito-component><div slot="header">Header</div></xeito-component>
+   * slotContent.header will contain the div element
+   * This can be accessed inside the render method 
+   * eg: html`<div>${this.slotContent.header}</div>`
+   */
+  slotContent: Record<string, any> = {};
   
 }

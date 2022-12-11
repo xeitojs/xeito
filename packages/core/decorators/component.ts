@@ -60,8 +60,29 @@ export function Component(componentMetadata: ComponentMetadata) {
       // Declare the _XeitoInternals property
       private _XeitoInternals;
 
+      // Declare the componentChildren property
+      slotContent: Record<string, Element[]> = {
+        default: []
+      };
+
       constructor(...args: any[]) {
         super(...args);
+
+        // Set the SlottedContent
+        const children = Array.from(this.children);
+        if (children) {
+          for(let child in children) {
+            const slot = children[child].getAttribute('slot');
+            if (slot) {
+              if (!this.slotContent[slot]) {
+                this.slotContent[slot] = [];
+              }
+              this.slotContent[slot].push(children[child]);
+            } else {
+              this.slotContent.default.push(children[child]);
+            }
+          }
+        }
 
         // Set the _XeitoInternals from the constructor
         this._XeitoInternals = constructor.prototype._XeitoInternals;
