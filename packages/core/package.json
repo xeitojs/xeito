@@ -1,6 +1,6 @@
 {
   "name": "@xeito/core",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Core modules for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,6 +15,7 @@
   "dependencies": {
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.7",
-    "uhtml": "^3.1.0"
+    "uhtml": "^3.1.0",
+    "@xeito/injection": "^0.1.0"
   }
 }

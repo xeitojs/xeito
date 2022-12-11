@@ -1,6 +1,6 @@
 {
   "name": "@xeito/injection",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Dependency Injection for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,8 @@
   "author": "Samuel Bazaga",
   "license": "MIT",
   "dependencies": {
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "@xeito/core": "^0.1.0"
   },
   "devDependencies": {
     "process": "^0.11.10"

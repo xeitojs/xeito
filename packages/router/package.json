@@ -1,6 +1,6 @@
 {
   "name": "@xeito/router",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Router for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,8 +13,8 @@
   "author": "Samuel Bazaga",
   "license": "MIT",
   "dependencies": {
-    "@xeito/core": "^0.0.3",
-    "@xeito/injection": "^0.0.5",
+    "@xeito/core": "^0.1.0",
+    "@xeito/injection": "^0.1.0",
     "history": "^5.3.0",
     "path-to-regexp": "^6.2.1",
     "rxjs": "^7.5.7"
