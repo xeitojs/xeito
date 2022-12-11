@@ -58,10 +58,10 @@ export function Component(componentMetadata: ComponentMetadata) {
     class ComponentClass extends constructor {
       
       // Declare the _XeitoInternals property
-      private _XeitoInternals;
+      public _XeitoInternals;
 
       // Declare the componentChildren property
-      slotContent: Record<string, Element[]> = {
+      public slotContent: Record<string, Element[]> = {
         default: []
       };
 

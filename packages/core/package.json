@@ -13,6 +13,8 @@
   "author": "Samuel Bazaga",
   "license": "MIT",
   "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.5.7",
     "uhtml": "^3.1.0"
   }
 }
