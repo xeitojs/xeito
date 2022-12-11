@@ -1,17 +1,21 @@
-import { Xeito, Component } from '@xeito/core';
+import { XeitoComponent, Component, html } from '@xeito/core';
 import styles from './{{componentStyles}}.module.scss';
 
-@Component()
-export class {{componentName}} {
+@Component({
+  selector: '{{componentSelector}}',
+})
+export class {{componentName}} extends XeitoComponent {
 
-  constructor() {}
+  onCreate() {
+    console.log('{{componentName}} works!')
+  }
 
   render() {
-    return (
+    return html`
       <div>
         <p>{{componentName}} works!</p>
       </div>
-    );
+    `;
   }
 
 }

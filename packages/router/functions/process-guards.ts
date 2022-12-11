@@ -1,50 +1,48 @@
-import { XeitoRouter } from '../classes/xeito-router';
 import { Route } from '../interfaces/route';
-import { RouterGuard } from '../interfaces/router-guard';
+import { XeitoRouter } from '../interfaces/xeito-router';
 
-export async function processGuards(Route: Route, currentPath?: string): Promise<boolean> {
+export async function processGuards(route: Route, router: XeitoRouter): Promise<boolean> {
 
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     	
     let shouldContinue: boolean = true;
     let redirectRoute: string | null = null;
     
     // If the route has guards, process them
-    if (Route.guards) {
-      Route.guards.forEach(async (guard: RouterGuard) => {
-        
+    if (route.guards) {
+      for await (const guard of route.guards) {
+        const guardResult = guard(router.location().pathname);
+    
         // Check if the guard return a promise
-        if (guard instanceof Promise) {
-
-          const guardResult: boolean | string = await guard;
-
-          if (typeof guardResult === 'string') {
-            redirectRoute = guardResult;
+        if (guardResult instanceof Promise) {
+    
+          const promiseGuardResult: boolean | string = await guardResult;
+    
+          if (typeof promiseGuardResult === 'string') {
+            redirectRoute = promiseGuardResult;
           } else {
-            shouldContinue = guardResult;
+            shouldContinue = promiseGuardResult;
           }
         }
       
         // Check if the guard returns a string
-        if (typeof guard === 'string') redirectRoute = guard;
+        if (typeof guardResult === 'string') redirectRoute = guardResult;
       
         // Check if the guard returns a boolean
-        if (typeof guard === 'boolean') shouldContinue = guard;
-        
-      });
-    }
-  
-    // If there is a redirect route, redirect to it
-    if (redirectRoute) {
-      let redirectPath = redirectRoute;
-      if (currentPath) redirectPath = currentPath + redirectPath;
-      XeitoRouter.replace(redirectPath);
-      resolve(false);
-    };
-  
-    // Return if the route should continue
-    resolve(shouldContinue);
+        if (typeof guardResult === 'boolean') shouldContinue = guardResult;
+      }
+      
+      // If the guard returns a string, redirect to that route
+      if (redirectRoute) {
+        router.replace(redirectRoute);
+        resolve(false);
+      }
 
+      // Resolve the promise with the result of the guard
+      resolve(shouldContinue);
+    } else {
+      resolve(true);
+    }
   });
-  
 }
+

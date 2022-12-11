@@ -1,18 +1,13 @@
 
-// Export Xeito Router
-export { XeitoRouter } from './classes/xeito-router';
+// Export the Xeito Router plugin
+export { XeitoRouterPlugin } from './classes/xeito-router-plugin';
 
-// Export Router component
-export { Router } from "./components/router";
+// Export the Xeito Router Components
+export { RouterSlot } from './components/router-slot';
+export { RouterLink } from './components/router-link';
 
-// Export RouterView component
-export { RouterView } from "./components/router-view";
-
-// Export RouterLink component
-export { RouterLink } from "./components/router-link";
-
-// Export interfaces
-export type { Route } from "./interfaces/route";
-export type { RouterOptions } from "./interfaces/router-options";
-export type { RouterConfig } from './interfaces/router-config';
+// Export the Xeito Router Interfaces
+export type { Route } from './interfaces/route';
 export type { RouterGuard } from './interfaces/router-guard';
+export type { RouterOptions } from './interfaces/router-options';
+export type { XeitoRouter } from './interfaces/xeito-router';

@@ -1,22 +1,41 @@
-import { createElement } from "./functions/create-element";
-import { digestUpdate } from "./functions/digest-update";
-import { render } from "./functions/render";
+import 'reflect-metadata';
+import { render, html, svg, Hole, Renderable, TemplateFunction } from 'uhtml';
 
-// Export core module
-export const Xeito = {
-  createElement: createElement,
-  render: render,
-  digestUpdate: digestUpdate
-}
+// Export Xeito Application Class
+export { Xeito } from './classes/xeito';
+
+// Export the Xeito Component Class
+export { XeitoComponent } from './classes/xeito-component';
+
+// Export the Xeito Plugin Class
+export { XeitoPlugin } from './classes/xeito-plugin';
 
 // Export core decorators
-export { Component } from "./decorators/component";
-export { State } from "./decorators/state";
-export { Ref } from "./decorators/ref";
+export { Action } from './decorators/action';
+export { Component } from './decorators/component';
+export { Event } from './decorators/event';
+export { Global } from './decorators/global';
+export { Prop } from './decorators/prop';
+export { Ref } from './decorators/ref';
+export { State } from './decorators/state';
 
-// Export types
-export type { VNode } from "snabbdom";
-export type { ComponentData } from "./interfaces/component-data";
+// Export core interfaces
+export type { ActionMetadata } from './interfaces/action-metadata';
+export type { ActionResult } from './interfaces/action-result';
+export type { AttributeChanges } from './interfaces/attribute-changes';
+export type { ComponentMetadata } from './interfaces/component-metadata';
+export type { ElementRef } from './interfaces/element-ref';
+export type { EventConfig } from './interfaces/event-config';
+export type { XeitoGlobal } from './interfaces/xeito-global';
+export type { Emitter } from './classes/emitter';
 
-// Export classes
-export { Emitter } from "./classes/emitter";
+/**
+ * Re-export uhtml
+ * Allows the user to use uhtml directly from the xeito module
+ * uhtml is a library to build declarative and reactive UI via template literals tags.
+ * {@link https://github.com/WebReflection/uhtml}
+ * Xeito uses uhtml to render the component template and update the DOM
+ * Created by @WebReflection - All credits to them
+ */
+export { render, html, svg, Hole };
+export type { Renderable, TemplateFunction };
