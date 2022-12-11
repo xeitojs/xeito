@@ -27,6 +27,7 @@ export type { ComponentMetadata } from './interfaces/component-metadata';
 export type { ElementRef } from './interfaces/element-ref';
 export type { EventConfig } from './interfaces/event-config';
 export type { XeitoGlobal } from './interfaces/xeito-global';
+export type { Emitter } from './classes/emitter';
 
 /**
  * Re-export uhtml

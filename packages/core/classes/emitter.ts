@@ -2,12 +2,12 @@ import { EventConfig } from "../interfaces/event-config";
 
 /**
  * Event Emitter class
- * Used by the Event decorator to return a new Event Emitter when the property is accessed
- * The event emitter contains only a single method: emit
- * The emit method will dispatch a new CustomEvent with the given name and detail
+ * Used by the `Event` decorator to return a new Event Emitter when the property is accessed
+ * The event emitter contains only a single method: `emit`
+ * The emit method will dispatch a new `CustomEvent` with the given name and detail
  * The EventConfig is set by the decorator based on the user configuration or the reflected metadata
  */
-export class Emitter {
+export class Emitter<T> {
 
   constructor(
     private clazz: any,
