@@ -11,7 +11,7 @@ export const buildCore = () => {
           engines: {
             browsers: ['last 2 years, > 1%, not dead'],
           },
-          includeNodeModules: ['reflect-metadata', 'process'],
+          includeNodeModules: ['reflect-metadata', 'process', 'uhtml'],
         },
         types: {
           distEntry: 'packages/core/dist/index.d.ts',

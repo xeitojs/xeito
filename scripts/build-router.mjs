@@ -8,6 +8,7 @@ export const buildRouter = async () => {
       targets: {
         main: {
           distDir: 'packages/router/dist',
+          includeNodeModules: ['history', 'path-to-regexp'],
         },
         types: {
           distEntry: 'packages/router/dist/index.d.ts',
