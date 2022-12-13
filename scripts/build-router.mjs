@@ -1,41 +1,49 @@
-import {Parcel} from '@parcel/core';
+import { build } from "vite";
+import path from "path";
+import { fileURLToPath } from 'url';
+import typescript from '@rollup/plugin-typescript';
 
-// Build router
-export const buildRouter = async () => {
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+export const buildRouter = () => {
   return new Promise(async (resolve, reject) => {
-    const bundler = new Parcel({
-      entries: ['./packages/router/index.ts'],
-      targets: {
-        main: {
-          distDir: 'packages/router/dist',
-          includeNodeModules: ['history', 'path-to-regexp'],
-        },
-        types: {
-          distEntry: 'packages/router/dist/index.d.ts',
-          distDir: '.',
-          sourceMap: false,
-        }
-      },
-      defaultTargetOptions: {
-        isLibrary: true,
-        mode: 'production',
-        sourceMaps: true,
-        distDir: 'packages/router/dist',
-      }
-    });
-
     console.log('Building router...');
-    try {
-      let {bundleGraph, buildTime} = await bundler.run();
-      let bundles = bundleGraph.getBundles();
-      console.log(`✨ Built ${bundles.length} bundles in ${buildTime}ms!`);
-      console.log('------------------------------');
-      resolve();
-    } catch (err) {
-      console.log(err.diagnostics);
-      reject();
-      process.exit(1);
-    }
-
+    resolve(await build({
+      root: "packages/router",
+      base: "/dist",
+      outDir: "packages/router/dist",
+      mode: "production",
+      build: {
+        target: "es2015",
+        lib: {
+          entry: "index.ts",
+          name: "core",
+          formats: ["es"],
+          fileName: (format) => `index.js`,
+        },
+        rollupOptions: {
+          external: [
+            "@xeito/core",
+            "@xeito/injection",
+            "history",
+            "path-to-regexp",
+            "rxjs"
+          ],
+        },
+        sourcemap: true,
+      },
+      plugins: [
+        typescript({
+          tsconfig: path.resolve(__dirname, '../tsconfig.json'),
+          declaration: true,
+          declarationDir: path.resolve(__dirname, '../packages/router/dist'),
+          sourceMap: true,
+          include: ["packages/router/**/*.ts"],
+          exclude: ["node_modules", "packages/router/dist"],
+          outDir: path.resolve(__dirname, '../packages/router/dist/'),
+        })
+      ]
+    }));
   });
-}
+};
+

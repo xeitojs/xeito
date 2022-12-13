@@ -1,45 +1,48 @@
-import {Parcel} from '@parcel/core';
+import { build } from "vite";
+import path from "path";
+import { fileURLToPath } from 'url';
+import typescript from '@rollup/plugin-typescript';
 
-// Build core
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
 export const buildCore = () => {
   return new Promise(async (resolve, reject) => {
-    const bundler = new Parcel({
-      entries: ['./packages/core/index.ts'],
-      targets: {
-        main: {
-          distDir: 'packages/core/dist',
-          engines: {
-            browsers: ['last 2 years, > 1%, not dead'],
-          },
-          includeNodeModules: ['reflect-metadata', 'process', 'uhtml'],
-        },
-        types: {
-          distEntry: 'packages/core/dist/index.d.ts',
-          distDir: '.',
-          sourceMap: false,
-        }
-      },
-      defaultTargetOptions: {
-        isLibrary: true,
-        mode: 'production',
-        sourceMaps: true,
-        distDir: 'packages/core/dist',
-      }
-    });
-
     console.log('Building core...');
-    try {
-      let {bundleGraph, buildTime} = await bundler.run();
-      let bundles = bundleGraph.getBundles();
-      console.log(`✨ Built ${bundles.length} bundles in ${buildTime}ms!`);
-      console.log('------------------------------');
-      resolve();
-    } catch (err) {
-      console.log(err.diagnostics);
-      reject();
-      process.exit(1);
-    }
-
+    resolve(await build({
+      root: "packages/core",
+      base: "/dist",
+      outDir: "packages/core/dist",
+      mode: "production",
+      build: {
+        target: "es2015",
+        lib: {
+          entry: "index.ts",
+          name: "core",
+          formats: ["es"],
+          fileName: (format) => `index.js`,
+        },
+        rollupOptions: {
+          external: [
+            "@xeito/injection",
+            "reflect-metadata", 
+            "uhtml", 
+            "rxjs",
+          ],
+        },
+        sourcemap: true,
+      },
+      plugins: [
+        typescript({
+          tsconfig: path.resolve(__dirname, '../tsconfig.json'),
+          declaration: true,
+          declarationDir: path.resolve(__dirname, '../packages/core/dist'),
+          sourceMap: true,
+          include: ["packages/core/**/*.ts"],
+          exclude: ["node_modules", "packages/core/dist"],
+          outDir: path.resolve(__dirname, '../packages/core/dist/'),
+        })
+      ]
+    }));
   });
-  
-}
+};
+
