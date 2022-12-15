@@ -11,31 +11,32 @@ export function State() {
      * Define the property in the target object
      */
     Object.defineProperty(target, key, {
-      get: function() {
-        // Return the state
-        return this._XeitoInternals.state[key];
+      get() {
+        return this.getState(key);
       },
-      set: function(value) {
-
-        // If the value is an object, wrap it with a Proxy
+      set(value: any) {
+        // If the value is an object, we need to wrap it with a Proxy
+        // This way we can detect when the object changes and trigger a re-render
         if (typeof value === 'object') {
-          const proxy = new Proxy(value, {
-            deleteProperty: () => {
-              delete target[key];
+          const handler = {
+            set: (target: any, prop: string, value: any) => {
+              target[prop] = value;
               this.requestUpdate();
               return true;
             },
-            set: (target, key, value) => {
-              target[key] = value;
+            construct: (target: any, args: any) => {
+              return new target(...args);
+            },
+            deleteProperty: (target: any, prop: string) => {
+              delete target[prop];
               this.requestUpdate();
               return true;
             }
-          })
-          this._XeitoInternals.state[key] = proxy;
+          }
+          this.setState(key, new Proxy(value, handler));
         } else {
           // If the value is not an object, just set it and trigger a re-render
-          this._XeitoInternals.state[key] = value;
-          this.requestUpdate();
+          this.setState(key, value);
         }
       },
       enumerable: true,
