@@ -81,18 +81,26 @@ export class XeitoComponent extends HTMLElement {
   * @returns { Record<string, any> } Slot content object
   */
   private getSlotContent() {
-    const slotContent: Record<string, any> = {};
-    const children = Array.from(this.children);
+    const slotContent: Record<string, any> = {
+      default: []
+    };
+    const children: any[] = Array.from(this.childNodes);
     
     if (children) {
       for(let child in children) {
-        const slot = children[child].getAttribute('slot');
-        if (slot) {
-          if (!slotContent[slot]) slotContent[slot] = [];
-          slotContent[slot].push(children[child]);
+        const childEl = children[child] as Element | Node;
+        
+        if (childEl.nodeType === Node.TEXT_NODE || childEl.nodeType === Node.COMMENT_NODE) {
+          slotContent.default.push(childEl);
         } else {
-          if (!slotContent.default) slotContent.default = [];
-          slotContent.default.push(children[child]);
+          const slot = (childEl as Element).getAttribute('slot');
+          if (slot) {
+            if (!slotContent[slot]) slotContent[slot] = [];
+            slotContent[slot].push(childEl);
+          } else {
+            if (!slotContent.default) slotContent.default = [];
+            slotContent.default.push(childEl);
+          }
         }
       }
     }
