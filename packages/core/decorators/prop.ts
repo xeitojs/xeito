@@ -12,24 +12,15 @@ export function Prop() {
 
     Object.defineProperty(target, key, {
       get: function() {
-        return this._XeitoInternals.props[name];
+        return this._props[name];
       },
       set: function(value) {
-        const oldValue = this._XeitoInternals.props[name];
+        const oldValue = this._props[name];
 
         if (oldValue === value) return;
-
-        // Create an an attributeChanges object
-        const changes: AttributeChanges = { name, oldValue, newValue: value };
         
         // Set the new value in the props object
-        this._XeitoInternals.props[name] = value;
-
-        // Call the onChanges method
-        this.onChanges(changes);
-
-        // Request an update of the component
-        this.requestUpdate();
+        this.setProp(name, value);
       }
     });
 

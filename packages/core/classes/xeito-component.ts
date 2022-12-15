@@ -139,13 +139,57 @@ export class XeitoComponent extends HTMLElement {
     }
   }
 
+  /**
+   * Sets a state value and triggers an update if needed
+   * @param key Key of the state to set
+   * @param value Value to set
+   * @param triggerUpdate Whether to trigger an update or not
+   */
   setState(key: string, value: any, triggerUpdate: boolean = true) {
+    // Check if the value is the same as the current one to avoid unnecessary updates
+    if (this._state[key] === value) return;
+
+    // Set the state
     this._state[key] = value;
+
+    // Trigger an update if needed
     if (triggerUpdate) this.requestUpdate();
   }
 
-  getState(key: string) {
+  /**
+   * Returns the value of a state key
+   * @param key Key of the state to get
+   * @returns Value of the state key
+   */
+  getState(key: string): any {
     return this._state[key];
+  }
+
+  /**
+   * Sets a prop value and triggers an update if needed
+   * @param key Key of the prop to set
+   * @param value Value to set
+   */
+  setProp(key: string, value: any, triggerUpdate: boolean = true) {
+    // Create a new changes object
+    const changes: AttributeChanges = { name: key, oldValue: this._props[key], newValue: value };
+    // Call the onChanges hook
+    this.onChanges(changes);
+
+    // Set the prop
+    this._props[key] = value;
+
+    // Trigger an update if needed
+    if (triggerUpdate) this.requestUpdate();
+  }
+
+  /**
+   * Returns the value of a prop key
+   * @param key Key of the prop to get
+   * @returns Value of the prop key
+   */
+  getProp(key: string): any {
+    return this._props[key];
   }
 
   /**
@@ -183,22 +227,21 @@ export class XeitoComponent extends HTMLElement {
   */
   attributeChangedCallback(this: any, name: string, oldValue: string, newValue: string) {
     
-    const type = typeof this[name];
+    //const type = typeof this[name];
+    //
+    //switch(type) {
+    //  case 'number':
+    //  oldValue = Number(oldValue) as any;
+    //  newValue = Number(newValue) as any;
+    //  break;
+    //  case 'boolean':
+    //  oldValue = oldValue === 'true' ? true : false as any;
+    //  newValue = newValue === 'true' ? true : false as any;
+    //  break;
+    //}
     
-    switch(type) {
-      case 'number':
-      oldValue = Number(oldValue) as any;
-      newValue = Number(newValue) as any;
-      break;
-      case 'boolean':
-      oldValue = oldValue === 'true' ? true : false as any;
-      newValue = newValue === 'true' ? true : false as any;
-      break;
-    }
-    
-    const changes: AttributeChanges = { name, oldValue, newValue };
-    this.onChanges(changes);
-    this.requestUpdate();
+    // Set the prop
+    this.setProp(name, newValue);
   }
   
   /**
