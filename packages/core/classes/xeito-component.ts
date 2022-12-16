@@ -15,6 +15,9 @@ export class XeitoComponent extends HTMLElement {
   private _template: Node | Hole | Renderable;
   private _state: Record<string, any> = {};
   private _props: Record<string, any> = {};
+
+  private _IPipeIndex: number = 0;
+  private _pipeInstances: any[] = [];
   
   /**
   * Global properties object (will be populated by the parent component or the Xeito instance)
@@ -64,7 +67,7 @@ export class XeitoComponent extends HTMLElement {
     this._DOMRoot = DOMRoot;
     
     // Render the template for the first time
-    this._template = render(this._DOMRoot, this.render() as Renderable);
+    this.requestUpdate();
     
     // Add the styles to the DOM
     if (this._XeitoInternals.styles) {
@@ -139,12 +142,11 @@ export class XeitoComponent extends HTMLElement {
   * Request an update of the component
   */
   requestUpdate() {
-    if (this._template) {
-      // Use requestAnimationFrame to avoid multiple updates in the same frame
-      window.requestAnimationFrame(() => {
-        this._template = render(this._DOMRoot, this.render() as Renderable);
-      });
-    }
+    // Reset the pipe index
+    this._IPipeIndex = -1;
+
+    // Render the template
+    this._template = render(this._DOMRoot, this.render() as Renderable);
   }
 
   /**
@@ -222,6 +224,36 @@ export class XeitoComponent extends HTMLElement {
         return new action(e.parentElement, ...args);
       } else {
         throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array or install the plugin?`);
+      }
+    }
+  }
+
+  pipe(selector: string, ...args: any[]): any {
+    return () => {
+      // Increment the pipe index (used to keep track of the pipes as they are called by the template)
+      this._IPipeIndex++;
+      // Check if the pipe has been instantiated
+      if (this._pipeInstances[this._IPipeIndex]) {
+        // If it has, call the update and return the value
+        return this._pipeInstances[this._IPipeIndex].update(...args);
+      } else {
+        // If it hasn't, find the pipe and instantiate it
+
+        // Check if the selector is a local pipe
+        let pipe = this._XeitoInternals.pipes?.find((pipe: any) => pipe.selector === selector);
+        if (!pipe) {
+          // Check if the selector is a global pipe
+          pipe = this.global.pipes?.find((pipe: any) => pipe.selector === selector);
+        }
+
+        if (pipe) {
+          // Instantiate the pipe
+          this._pipeInstances[this._IPipeIndex] = new pipe();
+          // Call the update and return the value
+          return this._pipeInstances[this._IPipeIndex].update(...args);
+        } else {
+          throw new Error(`Pipe '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the pipes array or install the plugin?`);
+        }
       }
     }
   }

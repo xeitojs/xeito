@@ -1,6 +1,4 @@
-import { render, Renderable } from '../index';
 import { ComponentMetadata } from '../interfaces/component-metadata';
-import { XeitoComponent } from './../classes/xeito-component';
 
 export function Component(componentMetadata: ComponentMetadata) {
 
@@ -20,6 +18,7 @@ export function Component(componentMetadata: ComponentMetadata) {
     constructor.prototype._XeitoInternals = {
       selector: componentMetadata.selector,
       actions: componentMetadata.actions || [],
+      pipes: componentMetadata.pipes || [],
       imports: componentMetadata.imports || [],
       shadow: componentMetadata.shadow || false,
       DOMRoot: null,

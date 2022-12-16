@@ -5,4 +5,5 @@ export interface ComponentMetadata {
   shadow?: boolean;   // If the component should use shadow dom
   imports?: any[];    // Other components that should be imported to be used in the template (e.g. [CounterComponent])
   actions?: any[];    // Actions that should be imported to be used in the template (e.g. [TextColorAction])
+  pipes?: any[];      // Pipes that should be imported to be used in the template (e.g. [UpperCasePipe])
 }
