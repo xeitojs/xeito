@@ -1,4 +1,4 @@
-import { AttributeChanges, Component, html, Prop, State } from "../../../../packages/core";
+import { Component, html, Prop, State } from "../../../../packages/core";
 import type { ElementRef } from "../../../../packages/core";
 import { XeitoComponent } from "../../../../packages/core/classes/xeito-component";
 import { Ref } from "../../../../packages/core/decorators/ref";
@@ -24,21 +24,29 @@ import { GreetService } from "../services/greet-service";
       box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.8);
     }`,
   ],
+  shadow: false
 })
 export class CounterComponent extends XeitoComponent {
 
-  @Inject() greetService: GreetService;
+  //@Inject() greetService: GreetService;
   @State() count: number = 0;
-  @Ref() elementRef: ElementRef;
+  @State() arrayValue = [1, 2, 3];
+  //@Ref() elementRef: ElementRef;
+
+  onCreate() {
+    console.dir(this);
+  }
 
   increment() {
     this.count++;
+    this.arrayValue.push(this.arrayValue.length + 1);
   }
 
   render() {
     return html`
       <div>
-        <p ref=${this.elementRef}>Counter component</p>
+        <p>Counter component</p>
+        ${this.arrayValue?.map((item) => html`<p>${item}</p>`)}
         <button class="custom-button" @click=${this.increment}>Count is: ${this.count}</button>
       </div>
     `;
