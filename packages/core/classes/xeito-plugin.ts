@@ -20,8 +20,8 @@ export class XeitoPlugin {
    * @param {string} selector The selector of the action
    * @param {any} action The action function
    */
-  public registerGlobalAction(selector: string, action: any) {
-    this._xeito.global.actions[selector] = action;
+  public registerGlobalAction(action: any) {
+    this._xeito.global.actions.push(action);
   }
 
   /**
@@ -31,6 +31,15 @@ export class XeitoPlugin {
    */
   public registerGlobalProperty(selector: string, property: any) {
     this._xeito.global.properties[selector] = property;
+  }
+
+  /**
+   * Register a global pipe that can be used in any component
+   * @param {string} selector The selector of the pipe
+   * @param {any} pipe The pipe function
+   */
+  public registerGlobalPipe(pipe: any) {
+    this._xeito.global.pipes.push(pipe);
   }
 
   /**

@@ -11,8 +11,9 @@ export class Xeito {
 
   public global: XeitoGlobal = {
     properties: {},
-    actions: {},
-    components: []
+    components: [],
+    actions: [],
+    pipes: []
   };
 
   constructor (rootComponent: any) {
