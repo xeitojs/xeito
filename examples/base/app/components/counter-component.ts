@@ -35,6 +35,10 @@ export class CounterComponent extends XeitoComponent {
 
   @Prop() name: any;
 
+  onWillMount() {
+    console.log(this.greetService.greet('Xeito'));
+  }
+
   onChanges(changes: any) {
     console.log(this.name)
   }
