@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { render, html, svg, Hole, Renderable, TemplateFunction } from 'uhtml';
 
 // Export Xeito Application Class
