@@ -130,7 +130,7 @@ export class XeitoComponent extends HTMLElement {
   * Assigns the global property to the children of the component
   */
   private assignChildrenGlobal() {
-    this._XeitoInternals.children?.forEach((child: typeof XeitoComponent) => {
+    this._XeitoInternals.imports?.forEach((child: typeof XeitoComponent) => {
       child.prototype._XeitoInternals.global = this.global;
     });
   }
