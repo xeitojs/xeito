@@ -1,6 +1,6 @@
 {
   "name": "@xeito/cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Command line interface for Xeito | Framework for building web applications",
   "main": "index.js",
   "type": "module",
