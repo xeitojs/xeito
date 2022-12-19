@@ -1,6 +1,7 @@
 import { AttributeChanges } from '../interfaces/attribute-changes';
 import { ActionResult } from '../interfaces/action-result';
 import { Hole, render, Renderable } from 'uhtml';
+import { XeitoInternals } from '../interfaces/xeito-internals';
 
 export class XeitoComponent extends HTMLElement {
   
@@ -9,7 +10,7 @@ export class XeitoComponent extends HTMLElement {
   * Will be populated by the @Component decorator 
   * with the component's metadata
   */
-  private _XeitoInternals: Record<string, any> = {};
+  private _XeitoInternals: XeitoInternals = {};
   
   private _DOMRoot: HTMLElement | ShadowRoot;
   private _template: Node | Hole | Renderable;

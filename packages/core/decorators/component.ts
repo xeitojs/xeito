@@ -20,12 +20,11 @@ export function Component(componentMetadata: ComponentMetadata) {
       actions: componentMetadata.actions || [],
       pipes: componentMetadata.pipes || [],
       imports: componentMetadata.imports || [],
+      services: componentMetadata.services || [],
       shadow: componentMetadata.shadow || false,
       DOMRoot: null,
       styles: componentStyles,
       template: null,
-      state: {},
-      props: {},
       global: null
     }
 

@@ -20,6 +20,7 @@ export { Ref } from './decorators/ref';
 export { State } from './decorators/state';
 
 // Export core interfaces
+export type { Emitter } from './classes/emitter';
 export type { ActionMetadata } from './interfaces/action-metadata';
 export type { ActionResult } from './interfaces/action-result';
 export type { AttributeChanges } from './interfaces/attribute-changes';
@@ -28,7 +29,7 @@ export type { ElementRef } from './interfaces/element-ref';
 export type { EventConfig } from './interfaces/event-config';
 export type { PipeMetadata } from './interfaces/pipe-metadata';
 export type { XeitoGlobal } from './interfaces/xeito-global';
-export type { Emitter } from './classes/emitter';
+export type { XeitoInternals } from './interfaces/xeito-internals';
 
 /**
  * Re-export uhtml
