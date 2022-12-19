@@ -1,21 +1,20 @@
-import 'reflect-metadata';
 
 /**
- * Dependency Injection Module for Xeito Framework (https://github.com/aerotoad/xeito)
- * Simplified implementation based on TypeDI (https://github.com/typestack/typedi)
- * Licensed under MIT License
+ * Injection module for Xeito Framework
+ * Can be used to inject services into components
+ * eg: @Inject() greetService: GreetService; (Decorator will use the property name as service name to look for)
+ * eg: @Inject('greetService') greetService: GreetService; (Decorator will use the string as service name to look for)
+ * 
+ * To create a service, use the Injectable decorator
+ * eg: @Injectable({ selector: 'greetService' }) export class GreetService { ... }
  */
 
-
-// Check if Reflect metadata is available
-if (typeof Reflect === 'undefined' || typeof Reflect.getMetadata === 'undefined') {
-  throw new Error('reflect-metadata shim is required when using class decorators');
-}
-
-// Export all the classes
-export { Container } from './classes/container';
+// Export core class (Registry)
 export { Registry } from './classes/registry';
 
-// Export all the decorators
-export { Inject } from './decorators/inject';
+// Export decorators
 export { Injectable } from './decorators/injectable';
+export { Inject } from './decorators/inject';
+
+// Export interfaces
+export type { InjectableMetadata } from './interfaces/injectable-metadata';

@@ -8,38 +8,28 @@ import { AttributeChanges } from "../interfaces/attribute-changes";
 export function Prop() {
 
   return function _PropDecorator (target: any, key: string) {
-    const name = key;
 
     Object.defineProperty(target, key, {
-      get: function() {
-        return this._XeitoInternals.props[name];
+      get() {
+        return this.getProp(key);
       },
-      set: function(value) {
-        const oldValue = this._XeitoInternals.props[name];
+      set(value: any) {
+        const oldValue = this.getProp(key)
 
         if (oldValue === value) return;
 
-        // Create an an attributeChanges object
-        const changes: AttributeChanges = { name, oldValue, newValue: value };
-        
         // Set the new value in the props object
-        this._XeitoInternals.props[name] = value;
-
-        // Call the onChanges method
-        this.onChanges(changes);
-
-        // Request an update of the component
-        this.requestUpdate();
+        this.setProp(key, value);
       }
     });
 
     // Update observed attributes
     const observedAttributes = target.constructor.observedAttributes || [];
-    if (!observedAttributes.includes(name)) {
-      observedAttributes.push(name);
+    if (!observedAttributes.includes(key)) {
+      observedAttributes.push(key);
       target.constructor.observedAttributes = observedAttributes;
     } else {
-      console.warn(`Attribute '${name}' is already observed in component '<${target._XeitoInternals.selector}>'.`);
+      console.warn(`Attribute '${key}' is already observed in component '<${target._XeitoInternals.selector}>'.`);
     }
 
   }

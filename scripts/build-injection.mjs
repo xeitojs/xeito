@@ -1,44 +1,46 @@
-import {Parcel} from '@parcel/core';
+import { build } from "vite";
+import path from "path";
+import { fileURLToPath } from 'url';
+import typescript from '@rollup/plugin-typescript';
 
-// Build injection
-export const buildInjection = async () => {
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+export const buildInjection = () => {
   return new Promise(async (resolve, reject) => {
-    const bundler = new Parcel({
-      entries: ['./packages/injection/index.ts'],
-      targets: {
-        main: {
-          distDir: 'packages/injection/dist',
-          engines: {
-            browsers: ['last 2 years, > 1%, not dead'],
-          },
-          includeNodeModules: ['reflect-metadata', 'process'],
-        },
-        types: {
-          distEntry: 'packages/injection/dist/index.d.ts',
-          distDir: '.',
-          sourceMap: false,
-        }
-      },
-      defaultTargetOptions: {
-        isLibrary: true,
-        mode: 'production',
-        sourceMaps: true,
-        distDir: 'packages/injection/dist',
-      }
-    });
-
     console.log('Building injection...');
-    try {
-      let {bundleGraph, buildTime} = await bundler.run();
-      let bundles = bundleGraph.getBundles();
-      console.log(`✨ Built ${bundles.length} bundles in ${buildTime}ms!`);
-      console.log('------------------------------');
-      resolve();
-    } catch (err) {
-      console.log(err.diagnostics);
-      reject();
-      process.exit(1);
-    }
-
+    resolve(await build({
+      root: "packages/injection",
+      base: "/dist",
+      outDir: "packages/injection/dist",
+      mode: "production",
+      build: {
+        target: "es2015",
+        lib: {
+          entry: "index.ts",
+          name: "core",
+          formats: ["es"],
+          fileName: (format) => `index.js`,
+        },
+        rollupOptions: {
+          external: [
+            "@xeito/core",
+            "reflect-metadata",
+          ],
+        },
+        sourcemap: true,
+      },
+      plugins: [
+        typescript({
+          tsconfig: path.resolve(__dirname, '../tsconfig.json'),
+          declaration: true,
+          declarationDir: path.resolve(__dirname, '../packages/injection/dist'),
+          sourceMap: true,
+          include: ["packages/injection/**/*.ts"],
+          exclude: ["node_modules", "packages/injection/dist"],
+          outDir: path.resolve(__dirname, '../packages/injection/dist/'),
+        })
+      ]
+    }));
   });
-}
+};
+

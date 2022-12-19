@@ -1,6 +1,8 @@
 import { Injectable } from "../../../../packages/injection";
 
-@Injectable()
+@Injectable({
+  selector: 'greetService'
+})
 export class GreetService {
 
   greet(name: string) {

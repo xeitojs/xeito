@@ -1,6 +1,6 @@
 {
   "name": "@xeito/core",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Core modules for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,9 +13,8 @@
   "author": "Samuel Bazaga",
   "license": "MIT",
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
+    "@xeito/injection": "^0.1.4",
     "rxjs": "^7.5.7",
-    "uhtml": "^3.1.0",
-    "@xeito/injection": "^0.1.2"
+    "uhtml": "^3.1.0"
   }
 }

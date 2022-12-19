@@ -1,84 +1,44 @@
-import { ContainerID } from './../types/container-id';
-import { Container } from './container';
+
 export class Registry {
 
   /**
-   *  Map with all the created custom containers
-   * @type {Map<ContainerID, Container>}
-   * */ 
-  private static readonly containerMap: Map<ContainerID, Container> = new Map();
+   * Map with all the registered services
+   * @type {Map<string, any>}
+   */
+  private static readonly serviceMap: Map<string, any> = new Map();
 
   /**
-   * Default global container, not stored in the containerMap
-   * @type {Container}	
+   * Register a service instance in the registry
+   * @param name name of the service
+   * @param service service instance
    */
-  public static readonly globalContainer: Container = new Container('default');
-
-  /**
-   * Get a container by its ID
-   * @param {ContainerID} id
-   * @returns {ContainerID} 
-   * @throws {Error} If the container is not found
-   */
-  public static registerContainer(container: Container): ContainerID {
-    
-    // Check if the container passed is valid
-    if (container instanceof Container === false) {
-      throw new Error('Container must be an instance of Container');
+  public static registerService(name: string, service: any): void {
+    if (this.serviceMap.has(name)) {
+      console.warn(`Service ${name} already exists, overwriting`);
     }
-
-    // Check if the container is already registered
-    if (this.containerMap.has(container.id)) {
-      throw new Error(`Container ${container.id} already exists`);
-    }
-
-    // Check if the container is the global container
-    if (container.id === this.globalContainer.id) {
-      throw new Error(`Container ${container.id} is the global container`);
-    }
-
-    // Register the container
-    this.containerMap.set(container.id, container);
-
-    return container.id;
+    this.serviceMap.set(name, service);
   }
 
   /**
-   * Checks if a container exists by its ID
-   * @param {ContainerID} id
-   * @returns {boolean} 
+   * Get a service instance from the registry
+   * @param name name of the service
+   * @returns service instance
+   * @throws {Error} if the service is not found
    */
-  public static containerExists(id: ContainerID): boolean {
-    return this.containerMap.has(id);
+  public static getService(name: string): any {
+    if (!this.serviceMap.has(name)) {
+      throw new Error(`Service ${name} not found. Did you forget to register it?`);
+    }
+    return this.serviceMap.get(name);
   }
 
   /**
-   * Returns the container for the given ID and throws an error if it doesn't exist
-   * @param {ContainerID} id
-   * @returns {Container} 
+   * Checks if a service exists in the registry
+   * @param name name of the service
+   * @returns true if the service exists, false otherwise
    */
-  public static getContainer(id: ContainerID): Container {
-    const existingContainer = this.containerMap.get(id);
-    
-    if (existingContainer === undefined) {
-      throw new Error(`Container ${id} does not exist`);
-    }
-
-    return existingContainer;
-  }
-
-  /**
-   * Removes a container from the registry and throws an error if it doesn't exist
-   * @param {ContainerID} id
-   * @returns {boolean}
-   */
-  public static removeContainer(id: ContainerID): boolean {
-    
-    if (this.containerExists(id) === false) {
-      throw new Error(`Container ${id} does not exist`);
-    }
-
-    return this.containerMap.delete(id);
+  public static serviceExists(name: string): boolean {
+    return this.serviceMap.has(name);
   }
 
 }

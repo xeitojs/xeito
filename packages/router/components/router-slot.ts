@@ -22,7 +22,7 @@ export class RouterSlot extends XeitoComponent {
 
   private destroy$: Subject<boolean> = new Subject();
 
-  onCreate(): void {
+  onDidMount(): void {
     // Subscribe to route updates
     this.router.routeUpdate
       .pipe(takeUntil(this.destroy$))

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { render, html, svg, Hole, Renderable, TemplateFunction } from 'uhtml';
 
 // Export Xeito Application Class
@@ -15,6 +14,7 @@ export { Action } from './decorators/action';
 export { Component } from './decorators/component';
 export { Event } from './decorators/event';
 export { Global } from './decorators/global';
+export { Pipe } from './decorators/pipe';
 export { Prop } from './decorators/prop';
 export { Ref } from './decorators/ref';
 export { State } from './decorators/state';
@@ -26,6 +26,7 @@ export type { AttributeChanges } from './interfaces/attribute-changes';
 export type { ComponentMetadata } from './interfaces/component-metadata';
 export type { ElementRef } from './interfaces/element-ref';
 export type { EventConfig } from './interfaces/event-config';
+export type { PipeMetadata } from './interfaces/pipe-metadata';
 export type { XeitoGlobal } from './interfaces/xeito-global';
 export type { Emitter } from './classes/emitter';
 
