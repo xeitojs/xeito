@@ -14,7 +14,7 @@ export class XeitoComponent extends HTMLElement {
   private _DOMRoot: HTMLElement | ShadowRoot;
   private _template: Node | Hole | Renderable;
   private _state: Map<string, any> = new Map();
-  private _props: Record<string, any> = {};
+  private _props: Map<string, any> = new Map();
 
   private _IPipeIndex: number = 0;
   private _pipeInstances: any[] = [];
@@ -204,16 +204,24 @@ export class XeitoComponent extends HTMLElement {
    * @param value Value to set
    */
   setProp(key: string, value: any) {
-    // Create a new changes object
-    const changes: AttributeChanges = { name: key, oldValue: this._props[key], newValue: value };
-    // Call the onChanges hook
-    this.onChanges(changes);
+    // Check if the prop has been set before to avoid unnecessary updates
+    if (this._props.has(key)) {
+      // If the prop has been set before, check if the value is the same as the current one to avoid unnecessary updates
 
-    // Set the prop
-    this._props[key] = value;
+      // Create a new changes object
+      const changes: AttributeChanges = { name: key, oldValue: this._props.get(key), newValue: value };
+      // Call the onChanges hook
+      this.onChanges(changes);
 
-    // Trigger an update
-    this.requestUpdate();
+      // Set the prop
+      this._props.set(key, value);
+
+      // Trigger an update
+      this.requestUpdate();
+    } else {
+      // If the prop hasn't been set before, set it
+      this._props.set(key, value);
+    }
   }
 
   /**
@@ -222,7 +230,7 @@ export class XeitoComponent extends HTMLElement {
    * @returns Value of the prop key
    */
   getProp(key: string): any {
-    return this._props[key];
+    return this._props.get(key);
   }
 
   /**
@@ -289,20 +297,6 @@ export class XeitoComponent extends HTMLElement {
   * @param newValue 
   */
   attributeChangedCallback(this: any, name: string, oldValue: string, newValue: string) {
-    
-    //const type = typeof this[name];
-    //
-    //switch(type) {
-    //  case 'number':
-    //  oldValue = Number(oldValue) as any;
-    //  newValue = Number(newValue) as any;
-    //  break;
-    //  case 'boolean':
-    //  oldValue = oldValue === 'true' ? true : false as any;
-    //  newValue = newValue === 'true' ? true : false as any;
-    //  break;
-    //}
-    
     // Set the prop
     this.setProp(name, newValue);
   }
