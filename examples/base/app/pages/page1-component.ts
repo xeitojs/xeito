@@ -20,11 +20,7 @@ export class Page1Component extends XeitoComponent {
   @State() params: string = 'initial value';
 
   @State() stringToTriggerPipe: string = 'sample text';
-  private holder: string;
-
-  onCreate() {
-    console.dir(this);
-  }
+  @State() stringToTriggerProp: any = {value: 'initial value', label: 'initial label'};
 
   goToRoot() {
     this.router.push('/page1');
@@ -32,6 +28,14 @@ export class Page1Component extends XeitoComponent {
 
   goToPage3() {
     this.router.push(`/page1/${this.params}/page3`);
+  }
+
+  changeProps() {
+    const dateMiliseconds = new Date().getMilliseconds().toString();
+    this.stringToTriggerProp = {
+      value: dateMiliseconds,
+      label: dateMiliseconds + '_label'
+    };
   }
 
   render() {
@@ -42,6 +46,8 @@ export class Page1Component extends XeitoComponent {
         <span>Page2</span>
         <span slot="button">-></span>
       </router-link>
+      <br/>
+      <button @click=${this.changeProps}>Change props</button>
 
       <br>
       <input type="text" @input=${(e)=>this.params = e.target.value} value=${this.params}>
@@ -53,7 +59,7 @@ export class Page1Component extends XeitoComponent {
       <p>${this.pipe('uppercase', this.stringToTriggerPipe, {data: 'somedata'})}</p>
       <p>${this.pipe('uppercase', 'fixed string', {data: 'somedata'})}</p>
 
-      <app-counter />
+      <app-counter .name=${this.stringToTriggerProp} />
 
       <router-slot></router-slot>
     `;

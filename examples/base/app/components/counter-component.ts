@@ -2,8 +2,8 @@ import { Component, html, Prop, State } from "../../../../packages/core";
 import type { ElementRef } from "../../../../packages/core";
 import { XeitoComponent } from "../../../../packages/core/classes/xeito-component";
 import { Ref } from "../../../../packages/core/decorators/ref";
-import { Inject } from "../../../../packages/injection/dist";
 import { GreetService } from "../services/greet-service";
+import { Inject } from "../../../../packages/injection";
 
 @Component({
   selector: 'app-counter',
@@ -28,26 +28,32 @@ import { GreetService } from "../services/greet-service";
 })
 export class CounterComponent extends XeitoComponent {
 
-  //@Inject() greetService: GreetService;
+  @Inject() greetService: GreetService;
   @State() count: number = 0;
   @State() arrayValue = [1, 2, 3];
-  //@Ref() elementRef: ElementRef;
+  @Ref() elementRef: ElementRef;
 
-  onCreate() {
-    console.dir(this);
+  @Prop() name: any;
+
+  onChanges(changes: any) {
+    console.log(this.name)
   }
 
   increment() {
     this.count++;
-    this.arrayValue.push(this.arrayValue.length + 1);
+  }
+
+  addElement() {
+    this.arrayValue = [...this.arrayValue, this.arrayValue.length + 1];
   }
 
   render() {
     return html`
-      <div>
-        <p>Counter component</p>
-        ${this.arrayValue?.map((item) => html`<p>${item}</p>`)}
+      <div ref=${this.elementRef}>
+        <p>Counter component: ${this.name.value}</p>
+        ${this.arrayValue.map((item) => html`<p>${item}</p>`)}
         <button class="custom-button" @click=${this.increment}>Count is: ${this.count}</button>
+        <button class="custom-button" @click=${this.addElement}>Add item to array</button>
       </div>
     `;
   }
