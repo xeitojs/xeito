@@ -11,11 +11,17 @@ export function Pipe(pipeMetadata: PipeMetadata) {
 
       selector: string = pipeMetadata.selector;
       previousValue: any;
+      previousArgs: any[];
+      previousResult: any;
 
       update(value: any, ...args: any[]) {
-        if (value !== this.previousValue) {
+        if (value !== this.previousValue || args !== this.previousArgs) {
           this.previousValue = value;
-          return this['transform'](value, ...args);
+          this.previousArgs = args;
+          this.previousResult = this['transform'](value, ...args);
+          return this.previousResult;
+        } else {
+          return this.previousResult;
         }
       }
 
