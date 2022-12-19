@@ -13,7 +13,6 @@
   "author": "Samuel Bazaga",
   "license": "MIT",
   "dependencies": {
-    "@xeito/core": "^0.1.3",
-    "reflect-metadata": "^0.1.13"
+    "@xeito/core": "^0.1.3"
   }
 }
