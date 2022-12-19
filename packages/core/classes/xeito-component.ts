@@ -13,7 +13,7 @@ export class XeitoComponent extends HTMLElement {
   
   private _DOMRoot: HTMLElement | ShadowRoot;
   private _template: Node | Hole | Renderable;
-  private _state: Record<string, any> = {};
+  private _state: Map<string, any> = new Map();
   private _props: Record<string, any> = {};
 
   private _IPipeIndex: number = 0;
@@ -50,9 +50,6 @@ export class XeitoComponent extends HTMLElement {
     // Assign the children global
     this.assignChildrenGlobal();
     
-    // Bind the methods to the class instance
-    this.bindMethods();
-    
     /** 
     * Set the root element to render the template in
     * If it's a shadow root, create a shadow root
@@ -65,18 +62,35 @@ export class XeitoComponent extends HTMLElement {
     }
     // Set the DOMRoot in the _XeitoInternals
     this._DOMRoot = DOMRoot;
-    
-    // Render the template for the first time
-    this.requestUpdate();
-    
-    // Add the styles to the DOM
+
+    // Call the onInit method
+    this.onInit();
+  }
+
+  /**
+  * Native connectedCallback
+  * Will be called when the component is connected to the DOM
+  * 
+  */
+  connectedCallback() {
+    // Call the onWillMount method
+    this.onWillMount();
+
+    // If the component has styles, add them to the DOM
     if (this._XeitoInternals.styles) {
       const style = document.createElement('style');
       style.textContent = this._XeitoInternals.styles;
       this._DOMRoot.appendChild(style);
     }
-    
-    this.onWillCreate();
+
+    // Bind the methods to the class instance
+    this.bindMethods();
+
+    // Render the component for the first time
+    this.requestUpdate();
+
+    // Call the onDidMount method
+    this.onDidMount();
   }
   
   /**
@@ -155,15 +169,24 @@ export class XeitoComponent extends HTMLElement {
    * @param value Value to set
    * @param triggerUpdate Whether to trigger an update or not
    */
-  setState(key: string, value: any, triggerUpdate: boolean = true) {
-    // Check if the value is the same as the current one to avoid unnecessary updates
-    if (this._state[key] === value) return;
+  setState(key: string, value: any) {
 
-    // Set the state
-    this._state[key] = value;
+    // Check if the state has been set before to avoid unnecessary updates
+    if (this._state.has(key)) {
 
-    // Trigger an update if needed
-    if (triggerUpdate) this.requestUpdate();
+      // Check if the value is the same as the current one to avoid unnecessary updates
+      if (this._state.get(key) === value) return;
+
+      // Set the state
+      this._state.set(key, value);
+
+      this.requestUpdate();
+    } else {
+      // If the state hasn't been set before, set it
+      this._state.set(key, value);
+    }
+
+    
   }
 
   /**
@@ -172,15 +195,15 @@ export class XeitoComponent extends HTMLElement {
    * @returns Value of the state key
    */
   getState(key: string): any {
-    return this._state[key];
+    return this._state.get(key)
   }
 
   /**
-   * Sets a prop value and triggers an update if needed
+   * Sets a prop value and triggers an update
    * @param key Key of the prop to set
    * @param value Value to set
    */
-  setProp(key: string, value: any, triggerUpdate: boolean = true) {
+  setProp(key: string, value: any) {
     // Create a new changes object
     const changes: AttributeChanges = { name: key, oldValue: this._props[key], newValue: value };
     // Call the onChanges hook
@@ -189,8 +212,8 @@ export class XeitoComponent extends HTMLElement {
     // Set the prop
     this._props[key] = value;
 
-    // Trigger an update if needed
-    if (triggerUpdate) this.requestUpdate();
+    // Trigger an update
+    this.requestUpdate();
   }
 
   /**
@@ -285,19 +308,11 @@ export class XeitoComponent extends HTMLElement {
   }
   
   /**
-  * Native connectedCallback
-  * Calls the onMount method
-  */
-  connectedCallback() {
-    this.onCreate();
-  }
-  
-  /**
   * Native disconnectedCallback
-  * Calls the onDestroy method
+  * Calls the onWillUnmount method
   */
   disconnectedCallback() {
-    this.onDestroy();
+    this.onUnmount();
   }
   
   /**
@@ -305,19 +320,17 @@ export class XeitoComponent extends HTMLElement {
   */
   render(): Hole | void {}
   
-  onWillCreate() {}
-  
   /**
-  * On mount method desgined to be overriden by the user
-  * Gets called when the component is mounted (connectedCallback)
-  */
-  onCreate() {}
-  
-  /**
-  * On destroy method desgined to be overriden by the user
-  * Gets called when the component is destroyed (disconnectedCallback)
-  */
-  onDestroy() {}
+   * Lifecycle methods desgin to be overriden by the user
+   * onInit: Called when the component is initialized (constructor)
+   * onWillMount: Called before the first render (connectedCallback)
+   * onDidMount: Called after the first render (connectedCallback)
+   * onUnmount: Called when the component is unmounted (disconnectedCallback)
+   */
+  onInit(): any {}
+  onWillMount(): any {}
+  onDidMount(): any {}
+  onUnmount(): any {}
   
   /**
   * On changes method desgin to be overriden by the user
@@ -325,6 +338,5 @@ export class XeitoComponent extends HTMLElement {
   * @param { AttributeChanges } changes Attribute changes object
   */
   onChanges(changes: AttributeChanges) {}
-  
-  
+    
 }
