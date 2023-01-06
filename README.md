@@ -15,7 +15,8 @@
 <p align="center">
   <a href="https://www.npmjs.com/@xeito/core">
     <img src="https://img.shields.io/npm/v/@xeito/core.svg?logo=npm&logoColor=fff&label=NPM+package&color=f59e0b" alt="Xeito on npm" />
-  </a>&nbsp;
+  </a>
+  &nbsp;
   <a href="https://github.com/aerotoad/xeito/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/aerotoad/xeito" alt="License" />
   </a>
