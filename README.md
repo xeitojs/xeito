@@ -3,8 +3,7 @@
 <p align="center">
   <!--<img src="aio/src/assets/images/logos/angular/angular.png" alt="angular-logo" width="120px" height="120px"/>-->
   <br>
-  <i>Xeito is a typescript framework for building web applications
-    <br> by leveraging web standards.</i>
+  <i>Xeito is a typescript framework for building web applications</i>
   <br>
 </p>
 
