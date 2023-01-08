@@ -19,6 +19,9 @@ export class XeitoComponent extends HTMLElement {
 
   private _IPipeIndex: number = 0;
   private _pipeInstances: any[] = [];
+
+  // Dirty flag to manage batched updates
+  private _dirty: boolean = false;
   
   /**
   * Global properties object (will be populated by the parent component or the Xeito instance)
@@ -88,7 +91,7 @@ export class XeitoComponent extends HTMLElement {
     this.bindMethods();
 
     // Render the component for the first time
-    this.requestUpdate();
+    this._update();
 
     // Call the onDidMount method
     this.onDidMount();
@@ -155,8 +158,33 @@ export class XeitoComponent extends HTMLElement {
 
   /**
   * Request an update of the component
+  * This will schedule an update of the template (batching updates by using a promise)
   */
   requestUpdate() {
+    if (!this._dirty) {
+      this._dirty = true;
+      Promise.resolve().then(() => {
+        this._update();
+        this._dirty = false;
+      });
+    }
+  }
+
+  /**
+   * Force an update of the component (no batching)
+   * This will update the template immediately without batching
+   * This should be used with caution as it can cause performance issues
+   */
+  forceUpdate() {
+    this._update();
+  }
+
+  /**
+   * Update the component
+   * This will render the template and update the DOM
+   * It will also reset the pipe index before rendering
+   */
+  private _update() {
     // Reset the pipe index
     this._IPipeIndex = -1;
 
