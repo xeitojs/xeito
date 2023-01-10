@@ -5,7 +5,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "start:example": "node scripts/run-example.mjs",
-    "version-bump": "node scripts/version-bump.mjs"
+    "version-bump": "node scripts/version-bump.mjs",
+    "publish": "node scripts/publish.mjs"
   },
   "workspaces": {
     "packages": [
