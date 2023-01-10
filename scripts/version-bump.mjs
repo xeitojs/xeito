@@ -1,4 +1,5 @@
 import { exec } from 'child_process';
+import standardVersion from 'commit-and-tag-version';
 
 const args = process.argv.slice(2);
 const type = args[0];
@@ -20,6 +21,16 @@ const bump = (type, param, cb) => {
 
 bump(type, null,  () => {
   bump(type, '--workspaces', () => {
-    console.log('done');
+
+    console.log('Version updated');
+    
+    console.log('Generating changelog...');
+    standardVersion({
+      skip: {
+        bump: true,
+        commit: true
+      }
+    });
+
   });
 });
