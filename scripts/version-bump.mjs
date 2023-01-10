@@ -1,37 +1,39 @@
-import { exec } from 'child_process';
 import standardVersion from 'commit-and-tag-version';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const args = process.argv.slice(2);
 const type = args[0];
 const shouldCommit = args[1] === 'commit';
+const noChangelog = args[2] === 'no-changelog';
 
-const bump = (type, param, cb) => {
-
-  let cmd = `npm version --commit-hooks false --git-tag-version false ${type}`;
-  if (param) cmd += ` ${param}`;
-
-  exec(cmd, (err, stdout, stderr) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(stdout);
-    cb();
+// Get all package.json files inside of packages
+const getPackages = () => {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const packages = fs.readdirSync(path.resolve(__dirname, '../packages'));
+  return packages.map((pkg) => {
+    return path.resolve(__dirname, `../packages/${pkg}/package.json`);
   });
-};
+}
 
-bump(type, null,  () => {
-  bump(type, '--workspaces', () => {
+// Create bumpFiles object array
+let filesToBump = getPackages();
+filesToBump.push('package.json');
+filesToBump = filesToBump.map((filename) => {
+  return {
+    filename: filename,
+    type: 'json',
+  }
+});
 
-    console.log('Version updated');
-    
-    console.log('Generating changelog...');
-    standardVersion({
-      skip: {
-        bump: true,
-        commit: !shouldCommit,
-      }
-    });
-
-  });
+// Run Standard Version
+standardVersion({
+  releaseAs: type,
+  skip: {
+    commit: !shouldCommit,
+    tag: !shouldCommit,
+    changelog: noChangelog,
+  },
+  bumpFiles: filesToBump
 });
