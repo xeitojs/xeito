@@ -3,6 +3,7 @@ import standardVersion from 'commit-and-tag-version';
 
 const args = process.argv.slice(2);
 const type = args[0];
+const shouldCommit = args[1] === 'commit';
 
 const bump = (type, param, cb) => {
 
@@ -28,7 +29,7 @@ bump(type, null,  () => {
     standardVersion({
       skip: {
         bump: true,
-        commit: true
+        commit: !shouldCommit,
       }
     });
 
