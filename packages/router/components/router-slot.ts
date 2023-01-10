@@ -29,7 +29,7 @@ export class RouterSlot extends XeitoComponent {
       .subscribe((update: Update) => {
         this.routerInternal.pathAccumulator.next('');
         this.routerInternal.previousRoute.next({children: this.routerInternal.routes} as any);
-        this.handleRouteUpdate();    
+        this.handleRouteUpdate();
       });
 
     // Handle initial route
@@ -43,23 +43,28 @@ export class RouterSlot extends XeitoComponent {
     const previousRoute = this.routerInternal.previousRoute.getValue();
 
     let matchedRoute;
-    for(let route of previousRoute.children) {
-      let routePath = `${this.routerInternal.pathAccumulator.getValue() ?? ''}${route.path}`;
 
-      const fn = match(routePath, { decode: decodeURIComponent, end: false });
-      const result = fn(currentURL);
-      
-      if (result) {
-        matchedRoute = route;
+    // Make sure the children exist to prevent runtime errors while rendering
+    if (previousRoute.children) {
 
-        // Update the params if the route is the last matched route
-        const fullFn = match(routePath, { decode: decodeURIComponent, end: true });
-        const matched = fullFn(currentURL);
-        if (matched && matched.path === currentURL) {
-          this.routerInternal.params.next(result.params);
+      for(let route of previousRoute.children) {
+        let routePath = `${this.routerInternal.pathAccumulator.getValue() ?? ''}${route.path}`;
+
+        const fn = match(routePath, { decode: decodeURIComponent, end: false });
+        const result = fn(currentURL);
+
+        if (result) {
+          matchedRoute = route;
+
+          // Update the params if the route is the last matched route
+          const fullFn = match(routePath, { decode: decodeURIComponent, end: true });
+          const matched = fullFn(currentURL);
+          if (matched && matched.path === currentURL) {
+            this.routerInternal.params.next(result.params);
+          }
+
+          break;
         }
-
-        break;
       }
     }
 
