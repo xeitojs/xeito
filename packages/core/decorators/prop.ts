@@ -1,5 +1,3 @@
-import { AttributeChanges } from "../interfaces/attribute-changes";
-
 /**
  * Property decorator
  * Allows the user to define a custom attribute in the component tag
