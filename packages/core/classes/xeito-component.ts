@@ -1,4 +1,4 @@
-import { AttributeChanges } from '../interfaces/attribute-changes';
+import { PropChange } from '../interfaces/prop-change';
 import { ActionResult } from '../interfaces/action-result';
 import { Hole, render, Renderable } from 'uhtml';
 import { XeitoInternals } from '../interfaces/xeito-internals';
@@ -238,9 +238,9 @@ export class XeitoComponent extends HTMLElement {
       // If the prop has been set before, check if the value is the same as the current one to avoid unnecessary updates
 
       // Create a new changes object
-      const changes: AttributeChanges = { name: key, oldValue: this._props.get(key), newValue: value };
+      const change: PropChange = { name: key, oldValue: this._props.get(key), newValue: value };
       // Call the onChanges hook
-      this.onChanges(changes);
+      this.onPropChange(change);
 
       // Set the prop
       this._props.set(key, value);
@@ -357,9 +357,9 @@ export class XeitoComponent extends HTMLElement {
   
   /**
   * On changes method desgin to be overriden by the user
-  * Gets called when an attribute changes (attributeChangedCallback)
-  * @param { AttributeChanges } changes Attribute changes object
+  * Gets called when an attribute/property changes (attributeChangedCallback)
+  * @param { PropChange } change Prop changes object
   */
-  onChanges(changes: AttributeChanges) {}
+  onPropChange(change: PropChange) {}
     
 }

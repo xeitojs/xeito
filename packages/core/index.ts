@@ -23,7 +23,7 @@ export { State } from './decorators/state';
 export type { Emitter } from './classes/emitter';
 export type { ActionMetadata } from './interfaces/action-metadata';
 export type { ActionResult } from './interfaces/action-result';
-export type { AttributeChanges } from './interfaces/attribute-changes';
+export type { PropChange } from './interfaces/prop-change';
 export type { ComponentMetadata } from './interfaces/component-metadata';
 export type { ElementRef } from './interfaces/element-ref';
 export type { EventConfig } from './interfaces/event-config';

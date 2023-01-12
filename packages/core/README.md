@@ -59,11 +59,11 @@ npm install @xeito/core
 - `Emitter`: The interface for event emitters.
 - `ActionMetadata`: The interface for action metadata (decorator).
 - `ActionResult`: The interface for action results (return value).
-- `AttributeChanges`: The interface for attribute changes (in `onChange()` method)
 - `ComponentMetadata`: The interface for component metadata (decorator).
 - `ElementRef`: The interface for element references (for `Ref()` decorator).
 - `EventConfig`: The interface for event configuration (in `Event()` decorator).
 - `PipeMetadata`: The interface for pipe metadata (decorator).
+- `PropChange`: The interface for prop changes (parameter of the `onPropChange()` method).
 
 ## Re-exports from [µhtml](https://github.com/WebReflection/uhtml):
 - `html`: Tag for template literals that creates the template.
