@@ -12,6 +12,12 @@
   ],
   "author": "Samuel Bazaga",
   "license": "MIT",
+  "keywords": [
+    "Xeito",
+    "Framework",
+    "Web",	
+    "Typescript"
+  ],
   "dependencies": {
     "@xeito/injection": "^0.1.5",
     "rxjs": "^7.5.7",
