@@ -20,6 +20,10 @@
   <a href="https://github.com/aerotoad/xeito/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/aerotoad/xeito" alt="License" />
   </a>
+  &nbsp;
+  <a href="#" disabled>
+    <img src="https://img.shields.io/badge/Project%20Status-Alpha-yellow?logo=git&logoColor=white" alt="Project Status" />
+  </a>
 </p>
 
 <hr>
