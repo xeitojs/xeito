@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.8](https://github.com/aerotoad/xeito/compare/v0.1.7...v0.1.8) (2023-01-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* onChanges() method replaced by onPropChange().
+* Interface AttributeChanges renamed as PropChange.
+
+* !refactor(props): Rename mehthod an interface for prop changes  ([bd1e241](https://github.com/aerotoad/xeito/commit/bd1e241b41e352d4a7382546190cc967d846145a))
+
 ### [0.1.7](https://github.com/aerotoad/xeito/compare/v0.1.6...v0.1.7) (2023-01-10)
 
 ### [0.1.6](https://github.com/aerotoad/xeito/compare/v0.0.6...v0.1.6) (2023-01-10)
