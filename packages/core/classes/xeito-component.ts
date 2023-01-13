@@ -251,6 +251,11 @@ export class XeitoComponent extends HTMLElement {
       // Set the prop
       this._props.set(key, value);
 
+      // Trigger the watchers for the key is there are any
+      this._watchers?.get(key)?.forEach((watcher: string) => {
+        this[watcher]({ name: key, value });
+      });
+
       // Trigger an update
       this.requestUpdate();
     } else {
