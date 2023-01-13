@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.10](https://github.com/aerotoad/xeito/compare/v0.1.9...v0.1.10) (2023-01-13)
+
+
+### Features
+
+* **watch:** Add watcher support for properties ([70798f2](https://github.com/aerotoad/xeito/commit/70798f2ae4712f626e67f989b51915708ee87921))
+
 ### [0.1.9](https://github.com/aerotoad/xeito/compare/v0.1.8...v0.1.9) (2023-01-13)
 
 
