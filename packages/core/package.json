@@ -1,6 +1,6 @@
 {
   "name": "@xeito/core",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Core modules for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,7 @@
   "keywords": [
     "Xeito",
     "Framework",
-    "Web",	
+    "Web",
     "Typescript"
   ],
   "dependencies": {

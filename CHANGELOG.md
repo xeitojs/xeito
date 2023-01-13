@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.9](https://github.com/aerotoad/xeito/compare/v0.1.8...v0.1.9) (2023-01-13)
+
+
+### Features
+
+* **watch:** Add `@Watch()` decorator ([b0b43bd](https://github.com/aerotoad/xeito/commit/b0b43bd99c9a70f78022ac6e3bb63ce300fe38e3))
+
 ### [0.1.8](https://github.com/aerotoad/xeito/compare/v0.1.7...v0.1.8) (2023-01-12)
 
 
