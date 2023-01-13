@@ -64,6 +64,7 @@ npm install @xeito/core
 - `EventConfig`: The interface for event configuration (in `Event()` decorator).
 - `PipeMetadata`: The interface for pipe metadata (decorator).
 - `PropChange`: The interface for prop changes (parameter of the `onPropChange()` method).
+- `WatchUpdate`: The interface for watch updates (parameter of a method decorated with `@Watch()`).
 
 ## Re-exports from [µhtml](https://github.com/WebReflection/uhtml):
 - `html`: Tag for template literals that creates the template.
