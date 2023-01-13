@@ -20,7 +20,7 @@ export class AppComponent extends XeitoComponent {
   @Watch('$count', '$name')
   watchCount(update: WatchUpdate) {
     if (update.name === '$count') {
-      console.log('count changed', update.value);
+      //console.log('count changed', update.value);
       this.color = 'color: #' + Math.floor(Math.random()*16777215).toString(16);
     }
     if (update.name === '$name') {
@@ -45,6 +45,7 @@ export class AppComponent extends XeitoComponent {
         <button @click=${()=> this.$count++}>Count is: ${this.$count}</button>
         <button @click=${()=> this.$name = this.makeid(5) + ' ' + this.makeid(5)}>Name is: ${this.$name}</button>
       </div>
+      <counter-component count=${this.$count}></counter-component>
     `;
   }
 
