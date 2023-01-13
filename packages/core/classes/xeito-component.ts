@@ -16,6 +16,7 @@ export class XeitoComponent extends HTMLElement {
   private _template: Node | Hole | Renderable;
   private _state: Map<string, any> = new Map();
   private _props: Map<string, any> = new Map();
+  private _watchers: Map<string, string[]>;
 
   private _IPipeIndex: number = 0;
   private _pipeInstances: any[] = [];
@@ -209,6 +210,11 @@ export class XeitoComponent extends HTMLElement {
       // Set the state
       this._state.set(key, value);
 
+      // Trigger the watchers for the key is there are any
+      this._watchers?.get(key)?.forEach((watcher: string) => {
+        this[watcher]({ name: key, value });
+      });
+
       this.requestUpdate();
     } else {
       // If the state hasn't been set before, set it
@@ -361,5 +367,4 @@ export class XeitoComponent extends HTMLElement {
   * @param { PropChange } change Prop changes object
   */
   onPropChange(change: PropChange) {}
-    
 }
