@@ -81,13 +81,6 @@ export class XeitoComponent extends HTMLElement {
     // Call the onWillMount method
     this.onWillMount();
 
-    // If the component has styles, add them to the DOM
-    if (this._XeitoInternals.styles) {
-      const style = document.createElement('style');
-      style.textContent = this._XeitoInternals.styles;
-      this._DOMRoot.appendChild(style);
-    }
-
     // Bind the methods to the class instance
     this.bindMethods();
 

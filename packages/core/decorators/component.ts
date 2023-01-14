@@ -5,14 +5,6 @@ export function Component(componentMetadata: ComponentMetadata) {
   return function ComponentDecorator(constructor: any) {
 
     /**
-     * Handle component-specific styles
-     */
-     let componentStyles;
-     if (componentMetadata.styles) {
-       componentStyles = componentMetadata.styles.join(' ');
-     }
-
-    /**
      * Add the default _XeitoInternals object to the class
      */
     constructor.prototype._XeitoInternals = {
@@ -23,7 +15,6 @@ export function Component(componentMetadata: ComponentMetadata) {
       services: componentMetadata.services || [],
       shadow: componentMetadata.shadow || false,
       DOMRoot: null,
-      styles: componentStyles,
       template: null,
       global: null
     }
