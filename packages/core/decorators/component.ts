@@ -1,8 +1,23 @@
 import { ComponentMetadata } from '../interfaces/component-metadata';
+import { validateSelector, ValidateSelectorResult } from './../functions/validate-selector';
 
 export function Component(componentMetadata: ComponentMetadata) {
 
   return function ComponentDecorator(constructor: any) {
+
+    // Validate the selector
+    if (!componentMetadata.selector) {
+      throw new Error('Component selector is required');
+    }
+
+    const result: ValidateSelectorResult = validateSelector(componentMetadata.selector);
+    if (!result.isValid) {
+      throw new Error(`Component selector '${componentMetadata.selector}' is invalid: ${result.message}`);
+    } else {
+      if (result.message) {
+        console.warn(`Component selector '${componentMetadata.selector}' is not recommended: ${result.message}`);
+      }
+    }
 
     /**
      * Add the default _XeitoInternals object to the class
