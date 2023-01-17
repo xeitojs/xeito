@@ -18,6 +18,11 @@ export class XeitoComponent extends HTMLElement {
   private _props: Map<string, any> = new Map();
   private _watchers: Map<string, string[]>;
 
+  // Action controls
+  private _IActionIndex: number = 0;
+  private _actionInstances: any[] = [];
+
+  // Pipe controls
   private _IPipeIndex: number = 0;
   private _pipeInstances: any[] = [];
 
@@ -277,17 +282,31 @@ export class XeitoComponent extends HTMLElement {
   */
   use(selector: string, ...args: any[]): ActionResult | void {
     return (e: HTMLElement) => {
-      // Check if the selector is a local action
-      let action = this._XeitoInternals.actions.find((action: any) => action.selector === selector);
-      if (!action) {
-        // Check if the selector is a global action
-        action = this.global.actions.find((action: any) => action.selector === selector);
-      }
-      
-      if (action) {
-        return new action(e.parentElement, ...args);
+      // Increment the action index (used to keep track of the actions as they are called by the template)
+      this._IActionIndex++;
+      // Check if the action has been instantiated
+      if (this._actionInstances[this._IActionIndex]) {
+        // If it has, call the clean method and update method
+        this._actionInstances[this._IActionIndex].clean();
+        return this._actionInstances[this._IActionIndex].update(e.parentElement, ...args);
       } else {
-        throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array or install the plugin?`);
+        // If it hasn't, find the action and instantiate it
+
+        // Check if the selector is a local action
+        let action = this._XeitoInternals.actions?.find((action: any) => action.selector === selector);
+        if (!action) {
+          // Check if the selector is a global action
+          action = this.global.actions?.find((action: any) => action.selector === selector);
+        }
+
+        if (action) {
+          // Instantiate the action
+          this._actionInstances[this._IActionIndex] = new action();
+          // Return the value
+          return this._actionInstances[this._IActionIndex].update(e.parentElement, ...args);
+        } else {
+          throw new Error(`Action '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the actions array or install the plugin?`);
+        } 
       }
     }
   }
@@ -340,6 +359,10 @@ export class XeitoComponent extends HTMLElement {
   */
   disconnectedCallback() {
     this.onUnmount();
+
+    // Clean the actions and pipes
+    this._actionInstances.forEach((action: any) => action.clean());
+    this._pipeInstances.forEach((pipe: any) => pipe.clean());
   }
   
   /**
