@@ -24,7 +24,7 @@ export class RouterSlot extends XeitoComponent {
 
   onDidMount(): void {
     // Subscribe to route updates
-    this.router.routeUpdate
+    this.routerInternal.routeUpdate
       .pipe(takeUntil(this.destroy$))
       .subscribe((update: Update) => {
         this.routerInternal.pathAccumulator.next('');
@@ -38,7 +38,7 @@ export class RouterSlot extends XeitoComponent {
 
   async handleRouteUpdate() {
 
-    const currentURL = this.router.location().pathname;
+    const currentURL = this.router.getLocation().pathname;
 
     const previousRoute = this.routerInternal.previousRoute.getValue();
 
@@ -79,7 +79,6 @@ export class RouterSlot extends XeitoComponent {
 
       if (matchedRoute.guards && matchedRoute.guards.length > 0) {
         shouldContinue = await processGuards(matchedRoute, this.router);
-        console.log(shouldContinue)
       }
 
       if (shouldContinue) {

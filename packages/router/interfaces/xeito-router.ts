@@ -1,10 +1,10 @@
 import { Location, Update } from 'history';
-import { Observable } from 'rxjs';
+import { RouteParams } from './route-params';
 
 export interface XeitoRouter {
-  routeUpdate: Observable<Update>;
-  params: Observable<any>;
-  location: () => Location;
+  onRouteUpdate: (callback: (update: Update) => void) => Function;
+  getRouteParams: () => RouteParams;
+  getLocation: () => Location;
   push: (path: string, state?: any) => void;
   replace: (path: string, state?: any) => void;
   go: (n: number) => void;

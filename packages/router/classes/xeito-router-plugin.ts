@@ -13,11 +13,14 @@ export class XeitoRouterPlugin extends XeitoPlugin {
   // Global history instance
   private history: History;
 
-  // Observable that emits the route update
+  // Subject that emits the route update
   private routeUpdate$: Subject<Update> = new Subject();
 
-  // Observable that emits the current route params
-  private params$: Subject<any> = new Subject();
+  // Keep the last route update
+  private lastRouteUpdate: Update;
+
+  // BehaviourSubject that emits the current route params
+  private params$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   // Array of routes to be used by the router
   private routes: Route[];
@@ -66,6 +69,7 @@ export class XeitoRouterPlugin extends XeitoPlugin {
     // and store the active update
     this.history.listen((update: Update) => {
       this.routeUpdate$.next(update);
+      this.lastRouteUpdate = update;
     });
   }
 
@@ -78,9 +82,12 @@ export class XeitoRouterPlugin extends XeitoPlugin {
    */
   getRouterInstance(): XeitoRouter {
     return {
-      routeUpdate: this.routeUpdate$.asObservable(),
-      params: this.params$.asObservable(),
-      location: () => this.history.location,
+      onRouteUpdate: (callback: (update: Update) => void) => { 
+        callback(this.lastRouteUpdate);
+        return this.history.listen(callback);
+      },
+      getRouteParams: () => this.params$.getValue(),
+      getLocation: () => this.history.location,
       push: (path: string, state?: any) => this.history.push(path, state),
       replace: (path: string, state?: any) => this.history.replace(path, state),
       go: (delta: number) => this.history.go(delta),
@@ -97,6 +104,7 @@ export class XeitoRouterPlugin extends XeitoPlugin {
    */
   getRouterInternalInstance(): RouterInternal {
     return {
+      routeUpdate: this.routeUpdate$,
       routes: this.routes,
       params: this.params$,
       previousRoute: new BehaviorSubject({children: this.routes} as Route),
