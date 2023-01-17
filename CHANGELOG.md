@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.11](https://github.com/aerotoad/xeito/compare/v0.1.10...v0.1.11) (2023-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* Actions now need a `setup()` method to work.
+ 
+- Now it's possible to add a `cleanup()` method to an action that gets called on every update to allow event management.
+- Now it's possible to add a `destroy()` method to a pipe that will be called when a commponent unmounts.
+* **styles:** Styles in decorator are no longer supported. Styles can now be added to the template normally by using the `style` tag.
+
+### Features
+
+* Add cleanup and destroy methods to actions and pipes ([75efbd2](https://github.com/aerotoad/xeito/commit/75efbd2b6dc54dce0f8917a24e3a3f602c028983))
+* **component:** Validate component tag ([cc641fc](https://github.com/aerotoad/xeito/commit/cc641fcf20f811f085a381476020ac0ced931765))
+
+
+* **styles:** Remove styles from component metadata ([ed18323](https://github.com/aerotoad/xeito/commit/ed183237531bc52aef88eef8d966fbb0f2b927b3))
+
 ### [0.1.10](https://github.com/aerotoad/xeito/compare/v0.1.9...v0.1.10) (2023-01-13)
 
 
