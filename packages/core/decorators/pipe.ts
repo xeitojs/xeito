@@ -25,6 +25,13 @@ export function Pipe(pipeMetadata: PipeMetadata) {
         }
       }
 
+      clean() {
+        this.previousValue = null;
+        this.previousArgs = null;
+        this.previousResult = null;
+        this['destroy'] && this['destroy']();
+      }
+
     }
   }
 
