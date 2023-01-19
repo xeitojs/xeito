@@ -36,11 +36,25 @@ To find the full documentation and more links go to the main [README file](https
 ## Table of Contents
 - [Xeito Store](#xeito-store)
 - [Table of Contents](#table-of-contents)
+- [Exports](#exports)
+  - [Classes](#classes)
+  - [Interfaces](#interfaces)
 - [What is a store?](#what-is-a-store)
 - [WriteStore](#writestore)
   - [Updater function](#updater-function)
 - [ReadStore](#readstore)
 - [Mixed Store](#mixed-store)
+
+## Exports
+
+### Classes
+- `WriteStore`: A store that can be written to and read from.
+- `ReadStore`: A store that can only be read from.
+- `MixedStore`: A store that depends on other stores.
+
+### Interfaces
+- `Updater`: A function that can be passed to a store to update its value.
+- `Subscription`: Object returned from a store's `subscribe` method. Contains a `unsubscribe` method to unsubscribe from the store.
 
 ## What is a store?
 
