@@ -13,7 +13,8 @@
       "packages/core",
       "packages/injection",
       "packages/router",
-      "packages/cli"
+      "packages/cli",
+      "packages/store"
     ]
   },
   "repository": {
