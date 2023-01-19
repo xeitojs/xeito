@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.12](https://github.com/aerotoad/xeito/compare/v0.1.11...v0.1.12) (2023-01-19)
+
+
+### Features
+
+* **router:** Update router to use functions and replace observables  ([bc51358](https://github.com/aerotoad/xeito/commit/bc5135812edffba2402c9c655eeb7d085cc1bb62))
+* **store:** Add first implementation of stores ([580d14d](https://github.com/aerotoad/xeito/commit/580d14dbe7cf07879d356b9da7a70ecd33a92e8d))
+* **store:** Add support for stores in state decorated properties ([35b2ef0](https://github.com/aerotoad/xeito/commit/35b2ef02fd32c8d2870aea49aaaedcbdaf2ccf49))
+
+
+### Bug Fixes
+
+* **router:** Add missing exports ([8d36149](https://github.com/aerotoad/xeito/commit/8d36149b4a48eb8b246b65a93555d66230da4936))
+* **store:** Add missing index file to project ([57f3681](https://github.com/aerotoad/xeito/commit/57f3681d7dfeaf032f9046185aace0d1719df022))
+
 ### [0.1.11](https://github.com/aerotoad/xeito/compare/v0.1.10...v0.1.11) (2023-01-17)
 
 
