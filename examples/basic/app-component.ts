@@ -1,6 +1,7 @@
-import { Watch } from '@xeito/core/decorators/watch';
 import { XeitoComponent, Component, html, State } from '../../packages/core';
-import type { WatchUpdate } from '../../packages/core/interfaces/watch-update';
+import { MixedStore } from '../../packages/store/classes/mixed-store';
+import { ReadStore } from '../../packages/store/classes/read-store';
+import { WriteStore } from '../../packages/store/classes/write-store';
 import { CounterComponent } from './counter-component';
 
 @Component({
@@ -11,45 +12,42 @@ import { CounterComponent } from './counter-component';
 })
 export class AppComponent extends XeitoComponent {
     
-  @State() $count = 0;
-  @State() $name = 'John Doe';
-  @State() $age = 30;
+  @State() counter = new WriteStore(0);
+  @State() derived = new MixedStore(this.counter, (counter) => counter * 2);
 
-  @State() color: string = 'color: red';
+  readCounter = new WriteStore(1);
+  readCounter2 = new WriteStore(0);
 
-  @Watch('$count', '$name')
-  watchCount(update: WatchUpdate) {
-    if (update.name === '$count') {
-      //console.log('count changed', update.value);
-      this.color = 'color: #' + Math.floor(Math.random()*16777215).toString(16);
-    }
-    if (update.name === '$name') {
-      console.log('name changed', update.value);
-    }
+  custom = new MixedStore([this.readCounter, this.readCounter2], ([one, two]) => {
+    return one + two;
+  });
+
+  sub = this.custom.subscribe((val) => console.log(val));
+
+  reset() {
+    this.readCounter2.set(this.readCounter2.value + 1)
+    this.counter.set(0);
   }
 
-  makeid(length) {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
+  increment() {
+    this.counter.update(n => n + 1);
+  }
+
+  decrement() {
+    this.counter.update(n => n - 1);
+  }
 
   render() {
     return html`
-      <h1 style=${this.color}>Hello World!</h1>
+      <h1>Hello World!</h1>
+      <h2>The count is: ${this.counter.value}</h2>
+      <p>Derived: ${this.derived.value}</p>
       <div>
-        <button @click=${()=> this.$count++}>Count is: ${this.$count}</button>
-        <button @click=${()=> this.$name = this.makeid(5) + ' ' + this.makeid(5)}>Name is: ${this.$name}</button>
+        <button @click=${this.reset}>Reset</button>
+        <button @click=${this.decrement}>-</button>
+        <button @click=${this.increment}>+</button>
       </div>
-      <counter-component count=${this.$count}></counter-component>
     `;
   }
 
 }
-
-//<counter-component count="7"></counter-component>
-//<counter-component .count=${9}></counter-component>
