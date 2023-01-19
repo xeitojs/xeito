@@ -1,6 +1,5 @@
 import { XeitoComponent, Component, html, State } from '../../packages/core';
 import { MixedStore } from '../../packages/store/classes/mixed-store';
-import { ReadStore } from '../../packages/store/classes/read-store';
 import { WriteStore } from '../../packages/store/classes/write-store';
 import { CounterComponent } from './counter-component';
 
