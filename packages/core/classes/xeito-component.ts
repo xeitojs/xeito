@@ -26,6 +26,10 @@ export class XeitoComponent extends HTMLElement {
   private _IPipeIndex: number = 0;
   private _pipeInstances: any[] = [];
 
+  // Store controls
+  private _stores: Map<string, any> = new Map();
+  private _storeSubscriptions: Map<string, any> = new Map();
+
   // Dirty flag to manage batched updates
   private _dirty: boolean = false;
   
@@ -272,6 +276,36 @@ export class XeitoComponent extends HTMLElement {
   }
 
   /**
+   * Sets a store and subscribes to it to trigger updates when it changes
+   * @param key Key of the property that contains the store
+   * @param store The store to set
+   */
+  setStore(key: string, store: any) {
+    // Create a new subscription to the store
+    const subscription = store.subscribe(() => {
+      // We get a value upon subscription
+      if (!this._stores.has(key)) {
+        // If the store hasn't been set before, set it (without requesting an update)
+        this._stores.set(key, store);
+      } else {
+        // If the store has been set before, request an update
+        this.requestUpdate();
+      }
+    });
+
+    this._storeSubscriptions.set(key, subscription);
+  }
+
+  /**
+   * Returns the store for the given key
+   * @param key Key of the property that contains the store
+   * @returns The store
+   */
+  getStore(key: string): any {
+    return this._stores.get(key);
+  }
+
+  /**
   * Use method (Use an action inside the component)
   * The 'use' method is used to provide actions to the template
   * Actions have to be provided in the Component decorator options
@@ -311,6 +345,15 @@ export class XeitoComponent extends HTMLElement {
     }
   }
 
+  /**
+   * Pipe method (Use a pipe inside the component)
+   * The 'pipe' method is used to provide pipes to the template
+   * Pipes have to be provided in the Component decorator options
+   * eg: @Component({ pipes: [Pipe1, Pipe2] })
+   * @param selector 
+   * @param args 
+   * @returns 
+   */
   pipe(selector: string, ...args: any[]): any {
     return () => {
       // Increment the pipe index (used to keep track of the pipes as they are called by the template)
@@ -363,6 +406,8 @@ export class XeitoComponent extends HTMLElement {
     // Clean the actions and pipes
     this._actionInstances.forEach((action: any) => action.clean());
     this._pipeInstances.forEach((pipe: any) => pipe.clean());
+    // Unsubscribe from the stores
+    this._storeSubscriptions.forEach((subscription: any) => subscription.unsubscribe());
   }
   
   /**
@@ -388,4 +433,5 @@ export class XeitoComponent extends HTMLElement {
   * @param { PropChange } change Prop changes object
   */
   onPropChange(change: PropChange) {}
+
 }

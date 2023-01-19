@@ -1,3 +1,5 @@
+import { decorateStore } from "../functions/decorate-store";
+
 /**
  * State decorator
  * Wraps the state property with a Proxy or a getter/setter
@@ -6,7 +8,7 @@
 export function State() {
   
   return function _StateDecorator(target: any, key: string) {
-    
+
     /**
      * Define the property in the target object
      */
@@ -15,11 +17,14 @@ export function State() {
         return this.getState(key);
       },
       set(value: any) {
-        this.setState(key, value);
+        if (value.subscribe instanceof Function) {
+          decorateStore(this, key, value);
+        } else {
+          this.setState(key, value);
+        }
       },
       enumerable: true,
       configurable: true
     });
-
   }
 }
