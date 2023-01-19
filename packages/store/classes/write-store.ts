@@ -1,3 +1,4 @@
+import { Subscription } from "../interfaces/subscription";
 import { Updater } from "../interfaces/updater";
 import { Store } from "./store";
 
@@ -16,11 +17,22 @@ export class WriteStore<T> extends Store<T> {
     // Set the initial value and store the updater
     this._value = initialValue;
     this._updater = updater;
+  }
 
-    // If the store has an updater, we start it
-    if (this._updater) {
-      this.callUpdater(this._updater);
+  /**
+   * Override the subscribe method
+   * @param listener Listener function
+   * @returns Subscription
+   */
+  public subscribe(listener: Function): Subscription {
+    if (this._complete) return; // Don't subscribe if the store is complete
+    // If the store has not been started, call the updater
+    if (!this._started) {
+      this._started = true; // Set the started flag to true
+      this.callUpdater(this._value); // Call the updater with the initial value
     }
+    // Return a subscription
+    return super.subscribe(listener);
   }
 
   /**
@@ -37,7 +49,7 @@ export class WriteStore<T> extends Store<T> {
    */
   update(updater: Updater) {
     this._updater = updater;
-    this.callUpdater(this._updater);
+    this.callUpdater(this._value);
   }
 
 }

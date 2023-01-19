@@ -1,4 +1,4 @@
-import { Subscription } from "../interfaces/subscription";
+import type { Subscription } from "../interfaces/subscription";
 import { Updater } from "../interfaces/updater";
 import { Store } from "./store";
 
@@ -37,9 +37,15 @@ export class MixedStore<T> extends Store<T> {
    */
   private createSubscriptions() {
     this._stores.forEach((store: Store<any>, index: number) => {
+      this._values[index] = store.value; // Get the initial values of the stores
       this._subscriptions.push(store.subscribe((value: any) => {
         this._values[index] = value;
-        this.handleUpdater(this._updater);
+        
+        if (this._started) {
+          // Convert the values array to a single value if there is only one store
+          const values = this._stores.length === 1 ? this._values[0] : this._values;
+          this.callUpdater(values);
+        }
       }));
     });
   }
@@ -52,13 +58,19 @@ export class MixedStore<T> extends Store<T> {
     super.complete();
   }
 
-  private handleUpdater(updater: Updater) {
-    let values = this._values.length === 1 ? this._values[0] : this._values;
-    const updaterResult = updater(values, this.set.bind(this));
-    if (typeof updaterResult === 'function') {
-      this._endUpdater = updaterResult;
-    } else if (updaterResult !== undefined) {
-      this.set(updaterResult);
+  /**
+   * Override the subscribe method
+   */
+  public subscribe(listener: Function): Subscription {
+    if (this._complete) return; // Don't subscribe if the store is complete
+    // If the store has not been started, call the updater
+    if (!this._started) {
+      this._started = true; // Set the started flag to true
+      // Convert the values array to a single value if there is only one store
+      const values = this._values.length === 1 ? this._values[0] : this._values;
+      this.callUpdater(values);
     }
+    // Return a subscription
+    return super.subscribe(listener);
   }
 }

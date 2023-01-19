@@ -11,6 +11,7 @@ export class Store<T> {
   protected _updater: Updater | undefined;         // The updater function
   protected _endUpdater: Function | undefined;     // The end updater function (returned by the updater function)
   protected _complete: boolean = false;            // Whether the store is complete or not
+  protected _started: boolean = false;             // Whether the store has started or not
 
   /**
    * Value getter
@@ -71,14 +72,16 @@ export class Store<T> {
    * Checks if the updater result is a function or a value
    * If it's a function, we store it as the end updater
    * If it's a value, we set the store with it
-   * @param updater Updater function
+   * @param value The value to be passed to the updater
    */
-  protected callUpdater(updater: Updater) {
-    const updaterResult = updater(this._value, this.set.bind(this));
-    if (typeof updaterResult === "function") {
-      this._endUpdater = updaterResult;
-    } else if (updaterResult !== undefined) {
-      this.set(updaterResult);
+  protected callUpdater(value: any | any[]) {
+    if (this._updater) {
+      const updaterResult = this._updater(value, this.set.bind(this));
+      if (typeof updaterResult === "function") {
+        this._endUpdater = updaterResult;
+      } else if (updaterResult !== undefined) {
+        this.set(updaterResult);
+      }
     }
   }
   
