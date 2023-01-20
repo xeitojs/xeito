@@ -1,5 +1,5 @@
 import { XeitoPlugin } from '@xeito/core';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { MixedStore, WriteStore } from '@xeito/store';
 import { createBrowserHistory, createHashHistory, createMemoryHistory, History, Update } from 'history';
 import { RouterOptions } from "../interfaces/router-options";
 import { XeitoRouter } from '../interfaces/xeito-router';
@@ -13,14 +13,14 @@ export class XeitoRouterPlugin extends XeitoPlugin {
   // Global history instance
   private history: History;
 
-  // Subject that emits the route update
-  private routeUpdate$: Subject<Update> = new Subject();
+  // WriteStore that emits the route update
+  private $routeUpdate: WriteStore<Update> = new WriteStore(null);
 
-  // Keep the last route update
-  private lastRouteUpdate: Update;
+  // WriteStore that emits the current location
+  private $location: WriteStore<any> = new WriteStore(null);
 
-  // BehaviourSubject that emits the current route params
-  private params$: BehaviorSubject<any> = new BehaviorSubject(null);
+  // WriteStore that emits the current route params
+  private $params: WriteStore<any> = new WriteStore(null);
 
   // Array of routes to be used by the router
   private routes: Route[];
@@ -65,12 +65,15 @@ export class XeitoRouterPlugin extends XeitoPlugin {
     else if (strategy === 'memory') this.history = createMemoryHistory();
     else this.history = createBrowserHistory();
 
-    // Notify the route update observable when the history changes
+    // Notify the route update store when the history changes
     // and store the active update
     this.history.listen((update: Update) => {
-      this.routeUpdate$.next(update);
-      this.lastRouteUpdate = update;
+      this.$routeUpdate.set(update);
+      this.$location.set(update.location);
     });
+    
+    // Set the initial location in the store
+    this.$location.set(this.history.location);
   }
 
   /**
@@ -82,12 +85,9 @@ export class XeitoRouterPlugin extends XeitoPlugin {
    */
   getRouterInstance(): XeitoRouter {
     return {
-      onRouteUpdate: (callback: (update: Update) => void) => { 
-        callback(this.lastRouteUpdate);
-        return this.history.listen(callback);
-      },
-      getRouteParams: () => this.params$.getValue(),
-      getLocation: () => this.history.location,
+      routeUpdate: new MixedStore(this.$routeUpdate, (value) => value),
+      routeParams: new MixedStore(this.$params, (value) => value),
+      location: new MixedStore(this.$location, (value) => value),
       push: (path: string, state?: any) => this.history.push(path, state),
       replace: (path: string, state?: any) => this.history.replace(path, state),
       go: (delta: number) => this.history.go(delta),
@@ -104,11 +104,12 @@ export class XeitoRouterPlugin extends XeitoPlugin {
    */
   getRouterInternalInstance(): RouterInternal {
     return {
-      routeUpdate: this.routeUpdate$,
+      routeUpdate: this.$routeUpdate as any,
       routes: this.routes,
-      params: this.params$,
-      previousRoute: new BehaviorSubject({children: this.routes} as Route),
-      pathAccumulator: new BehaviorSubject(''),
+      params: this.$params as any,
+      previousRoute: new WriteStore({children: this.routes} as Route) as any,
+      pathAccumulator: new WriteStore('') as any,
+      history: this.history,
     };
   }
 

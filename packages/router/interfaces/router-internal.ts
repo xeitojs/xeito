@@ -1,10 +1,12 @@
+import { WriteStore } from '@xeito/store';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Route } from "./route";
 
 export interface RouterInternal {
-  routeUpdate: Subject<any>;
+  routeUpdate: WriteStore<any>;
   routes: Route[];
-  params: Subject<any>;
-  previousRoute: BehaviorSubject<Route>;
-  pathAccumulator: BehaviorSubject<string>;
+  params: WriteStore<any>;
+  previousRoute: WriteStore<Route>;
+  pathAccumulator: WriteStore<string>;
+  history: any;	
 }

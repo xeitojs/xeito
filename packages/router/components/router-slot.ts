@@ -1,7 +1,6 @@
 import { XeitoComponent, Component, html, Global } from '@xeito/core';
 import { Update } from 'history';
 import { match } from 'path-to-regexp';
-import { Subject, takeUntil } from 'rxjs';
 import { processGuards } from '../functions/process-guards';
 import { Route } from '../interfaces/route';
 import type { RouterInternal } from '../interfaces/router-internal';
@@ -12,35 +11,29 @@ import type { XeitoRouter } from '../interfaces/xeito-router';
 })
 export class RouterSlot extends XeitoComponent {
 
-  instanceNumber: number = Math.floor(Math.random() * 1000);
-  instanceIdentifier: number[] = new Array(10).map(() => Math.floor(Math.random() * 1000));
-
   @Global() router: XeitoRouter;
   @Global() routerInternal: RouterInternal;
 
   component: XeitoComponent;
-
-  private destroy$: Subject<boolean> = new Subject();
+  historySubscription: any;
 
   onDidMount(): void {
     // Subscribe to route updates
-    this.routerInternal.routeUpdate
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((update: Update) => {
-        this.routerInternal.pathAccumulator.next('');
-        this.routerInternal.previousRoute.next({children: this.routerInternal.routes} as any);
-        this.handleRouteUpdate();
-      });
+    this.historySubscription = this.routerInternal.history.listen((update: Update) => {
+      this.routerInternal.pathAccumulator.set('');
+      this.routerInternal.previousRoute.set({children: this.routerInternal.routes} as any);
+      this.handleRouteUpdate();
+    });
 
     // Handle initial route
     this.handleRouteUpdate();
   }
 
   async handleRouteUpdate() {
+    this.router.location.subscribe(() => {});
+    const currentURL = this.router.location.value.pathname;
 
-    const currentURL = this.router.getLocation().pathname;
-
-    const previousRoute = this.routerInternal.previousRoute.getValue();
+    const previousRoute = this.routerInternal.previousRoute.value;
 
     let matchedRoute;
 
@@ -48,7 +41,7 @@ export class RouterSlot extends XeitoComponent {
     if (previousRoute.children) {
 
       for(let route of previousRoute.children) {
-        let routePath = `${this.routerInternal.pathAccumulator.getValue() ?? ''}${route.path}`;
+        let routePath = `${this.routerInternal.pathAccumulator.value ?? ''}${route.path}`;
 
         const fn = match(routePath, { decode: decodeURIComponent, end: false });
         const result = fn(currentURL);
@@ -60,7 +53,7 @@ export class RouterSlot extends XeitoComponent {
           const fullFn = match(routePath, { decode: decodeURIComponent, end: true });
           const matched = fullFn(currentURL);
           if (matched && matched.path === currentURL) {
-            this.routerInternal.params.next(result.params);
+            this.routerInternal.params.set(result.params);
           }
 
           break;
@@ -82,8 +75,8 @@ export class RouterSlot extends XeitoComponent {
       }
 
       if (shouldContinue) {
-        this.routerInternal.previousRoute.next(matchedRoute);
-        this.routerInternal.pathAccumulator.next(this.routerInternal.pathAccumulator.getValue() + matchedRoute.path);
+        this.routerInternal.previousRoute.set(matchedRoute);
+        this.routerInternal.pathAccumulator.set(this.routerInternal.pathAccumulator.value + matchedRoute.path);
         this.handleRoute(matchedRoute);
       }
     }
@@ -102,9 +95,8 @@ export class RouterSlot extends XeitoComponent {
     this.append(this.component);
   }
 
-  onDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+  onUnmount(): void {
+    this.historySubscription && this.historySubscription();
   }
 
   render() {
