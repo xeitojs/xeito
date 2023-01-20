@@ -19,6 +19,6 @@
     "Typescript"
   ],
   "dependencies": {
-    "@xeito/core": "^0.1.5"
+    "@xeito/core": "^0.1.13"
   }
 }
