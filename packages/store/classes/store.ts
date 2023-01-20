@@ -6,7 +6,7 @@ import { Updater } from "../interfaces/updater";
  */
 export class Store<T> {
 
-  protected _value: T = null                       // The current of the store
+  protected _value: T | undefined = undefined;     // The current of the store
   protected _listeners: Set<Function> = new Set()  // List of listeners
   protected _updater: Updater | undefined;         // The updater function
   protected _endUpdater: Function | undefined;     // The end updater function (returned by the updater function)
