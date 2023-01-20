@@ -27,6 +27,37 @@ filesToBump = filesToBump.map((filename) => {
   }
 });
 
+const getNextVersion = (version, type) => {
+  switch(type) {
+    case 'major':
+      return `${parseInt(version.split('.')[0]) + 1}.0.0`;
+    case 'minor':
+      return `${version.split('.')[0]}.${parseInt(version.split('.')[1]) + 1}.0`;
+    case 'patch':
+      return `${version.split('.')[0]}.${version.split('.')[1]}.${parseInt(version.split('.')[2]) + 1}`;
+    default:
+      return version;
+  }
+}
+
+// Bump version in the dependencies of all packages
+const bumpDependencies = () => {
+  const packages = getPackages();
+  packages.forEach((pkg) => {
+    const packageJson = JSON.parse(fs.readFileSync(pkg, 'utf8'));
+    packageJson.dependencies = packageJson.dependencies || {};
+    for(const dependency in packageJson.dependencies) {
+      if(dependency.startsWith('@xeito')) {
+        packageJson.dependencies[dependency] = `^${getNextVersion(packageJson.version, type)}`;
+      }
+    }
+    fs.writeFileSync(pkg, JSON.stringify(packageJson, null, 2));
+  });
+}
+
+// Bump version in the dependencies of all packages
+bumpDependencies();
+
 // Run Standard Version
 standardVersion({
   releaseAs: type,
