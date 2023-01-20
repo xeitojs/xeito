@@ -18,8 +18,6 @@ export class UppercasePipe {
     return str;
   }
 
-  destroy() {
-    console.log('destroy');
-  }
+  destroy() {}
 
 }

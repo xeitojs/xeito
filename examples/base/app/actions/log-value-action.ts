@@ -6,11 +6,9 @@ import { Action } from "@xeito/core";
 export class LogValueAction {
 
   setup(element: any, ...args: any[]) {
-    console.log(element, ...args);
+    //console.log(element, ...args);
   }
 
-  cleanup() {
-    console.log('cleanup');
-  }
+  cleanup() {}
 
 }

@@ -7,24 +7,7 @@ import { Inject } from "../../../../packages/injection";
 
 @Component({
   selector: 'app-counter',
-  styles: [
-    `.custom-button { 
-      background-color: #2b2b2b;
-      color: #fff;
-      border: 0;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    }
-    .custom-button:hover {
-      background-color: #1b1b1b;
-      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.8);
-    }`,
-  ],
-  shadow: false
+  shadow: true
 })
 export class CounterComponent extends XeitoComponent {
 
@@ -36,7 +19,7 @@ export class CounterComponent extends XeitoComponent {
   @Prop() name: any;
 
   onWillMount() {
-    console.log(this.greetService.greet('Xeito'));
+    //console.log(this.greetService.greet('Xeito'));
   }
 
   onChanges(changes: any) {
@@ -53,6 +36,23 @@ export class CounterComponent extends XeitoComponent {
 
   render() {
     return html`
+      <style>
+        .custom-button { 
+          background-color: #2b2b2b;
+          color: #fff;
+          border: 0;
+          border-radius: 4px;
+          padding: 10px 20px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+        }
+        .custom-button:hover {
+          background-color: #1b1b1b;
+          box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.8);
+        }
+      </style>
       <div ref=${this.elementRef}>
         <p>Counter component: ${this.name.value}</p>
         ${this.arrayValue.map((item) => html`<p>${item}</p>`)}
