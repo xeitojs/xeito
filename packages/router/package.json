@@ -1,6 +1,6 @@
 {
   "name": "@xeito/router",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "description": "Router for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,9 +19,9 @@
     "Typescript"
   ],
   "dependencies": {
-    "@xeito/core": "^0.1.13",
-    "@xeito/injection": "^0.1.13",
-    "@xeito/store": "^0.1.13",
+    "@xeito/core": "^0.2.0",
+    "@xeito/injection": "^0.2.0",
+    "@xeito/store": "^0.2.0",
     "history": "^5.3.0",
     "path-to-regexp": "^6.2.1"
   }

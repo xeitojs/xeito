@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.0](https://github.com/aerotoad/xeito/compare/v0.1.13...v0.2.0) (2023-01-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **router:** `onRouteUpdate` is now called `routeUpdate` and is a MixedStore.
+* **router:** `getRouteParams` is now called `routeParams` and is a MixedStore.
+* **router:** `getLocation` is now called `location` and is a MixedStore.
+
+### Features
+
+* **router:** Migrate router from Rxjs to Xeito Stores ([27278da](https://github.com/aerotoad/xeito/commit/27278dab345b7303f7c6a15d92cda67a7472f8d9))
+* **store:** Add set check to emit only once a value has been set ([e2ceb59](https://github.com/aerotoad/xeito/commit/e2ceb595b357b0c30c9366b2fea8e7d8f0e09e23))
+
+
+### Bug Fixes
+
+* **store:** Remove wrong complete check ([847a960](https://github.com/aerotoad/xeito/commit/847a960c642a15b2d39296018bec4c73e4091246))
+
 ### [0.1.13](https://github.com/aerotoad/xeito/compare/v0.1.12...v0.1.13) (2023-01-20)
 
 
