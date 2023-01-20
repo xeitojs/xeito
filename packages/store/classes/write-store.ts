@@ -25,7 +25,6 @@ export class WriteStore<T> extends Store<T> {
    * @returns Subscription
    */
   public subscribe(listener: Function): Subscription {
-    if (this._complete) return; // Don't subscribe if the store is complete
     // If the store has not been started, call the updater
     if (!this._started) {
       this._started = true; // Set the started flag to true
