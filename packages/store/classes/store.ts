@@ -11,6 +11,7 @@ export class Store<T> {
   protected _updater: Updater | undefined;         // The updater function
   protected _endUpdater: Function | undefined;     // The end updater function (returned by the updater function)
   protected _started: boolean = false;             // Whether the store has started or not
+  protected _set: boolean = false;                // Whether the store has been set for the first time or not
 
   /**
    * Value getter
@@ -28,6 +29,7 @@ export class Store<T> {
    * @param value The new value of the store
    */
   protected set(value: T): void {
+    this._set = true;
     // Update the value
     this._value = value;
     // Call all the listeners with the new value
@@ -50,8 +52,8 @@ export class Store<T> {
   public subscribe(listener: Function): Subscription {
     // Add the listener to the list
     this._listeners.add(listener);
-    // If the store has a value, call the listener with the value
-    if (this._value !== null) listener(this._value);
+    // Call the listener with the value
+    this._set && listener(this._value);
     
     // Return a Subscription object
     return {
