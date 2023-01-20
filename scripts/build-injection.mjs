@@ -23,8 +23,7 @@ export const buildInjection = () => {
         },
         rollupOptions: {
           external: [
-            "@xeito/core",
-            "reflect-metadata",
+            "@xeito/core"
           ],
         },
         sourcemap: true,

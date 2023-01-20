@@ -25,6 +25,7 @@ export const buildRouter = () => {
           external: [
             "@xeito/core",
             "@xeito/injection",
+            "@xeito/store",
             "history",
             "path-to-regexp",
             "rxjs"

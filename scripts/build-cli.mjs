@@ -23,8 +23,13 @@ export const buildCLI = () => {
         },
         rollupOptions: {
           external: [
-            "@xeito/core",
-            "reflect-metadata",
+            "chalk",
+            "commander",
+            "degit",
+            "handlebars",
+            "inquirer",
+            "node-emoji",
+            "rimraf"
           ],
         },
         sourcemap: true,

@@ -24,9 +24,8 @@ export const buildCore = () => {
         rollupOptions: {
           external: [
             "@xeito/injection",
-            "reflect-metadata", 
-            "uhtml", 
-            "rxjs",
+            "@xeito/store",
+            "uhtml"
           ],
         },
         sourcemap: true,
