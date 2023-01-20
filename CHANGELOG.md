@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.1.13](https://github.com/aerotoad/xeito/compare/v0.1.12...v0.1.13) (2023-01-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **store:** Stores no longer 'complete' on last unsubscribe, they are kept alive.
+* **store:** The endUpdater function gets called before every updater call.
+
+### Features
+
+* **store:** Remove complete store state and call endUpdater on callback ([f5e90f9](https://github.com/aerotoad/xeito/commit/f5e90f9c829d2173e2274c3f5240df9305e6be9e))
+
 ### [0.1.12](https://github.com/aerotoad/xeito/compare/v0.1.11...v0.1.12) (2023-01-19)
 
 
