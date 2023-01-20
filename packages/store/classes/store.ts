@@ -10,7 +10,6 @@ export class Store<T> {
   protected _listeners: Set<Function> = new Set()  // List of listeners
   protected _updater: Updater | undefined;         // The updater function
   protected _endUpdater: Function | undefined;     // The end updater function (returned by the updater function)
-  protected _complete: boolean = false;            // Whether the store is complete or not
   protected _started: boolean = false;             // Whether the store has started or not
 
   /**
@@ -29,7 +28,6 @@ export class Store<T> {
    * @param value The new value of the store
    */
   protected set(value: T): void {
-    if (this._complete) return; // If the store is complete, we don't update it
     // Update the value
     this._value = value;
     // Call all the listeners with the new value
@@ -38,11 +36,9 @@ export class Store<T> {
 
   /**
    * Complete method
-   * Completes the store, preventing it from being updated 
    * Calls the end updater if it exists
    */
   public complete(): void {
-    this._complete = true;
     this._endUpdater && this._endUpdater();
   }
 
@@ -76,10 +72,16 @@ export class Store<T> {
    */
   protected callUpdater(value: any | any[]) {
     if (this._updater) {
+      // Call the end updater if it exists
+      this._endUpdater && this._endUpdater();
+      // Call the updater
       const updaterResult = this._updater(value, this.set.bind(this));
+
+      // If the updater result is a function, we store it as the end updater
       if (typeof updaterResult === "function") {
         this._endUpdater = updaterResult;
       } else if (updaterResult !== undefined) {
+        // If the updater result is a value, we set the store with it
         this.set(updaterResult);
       }
     }

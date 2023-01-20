@@ -54,7 +54,6 @@ export class MixedStore<T> extends Store<T> {
    * Override the complete method to unsubscribe from all stores
    */
   public complete() {
-    this._subscriptions.forEach((subscription) => subscription.unsubscribe());
     super.complete();
   }
 
@@ -62,7 +61,6 @@ export class MixedStore<T> extends Store<T> {
    * Override the subscribe method
    */
   public subscribe(listener: Function): Subscription {
-    if (this._complete) return; // Don't subscribe if the store is complete
     // If the store has not been started, call the updater
     if (!this._started) {
       this._started = true; // Set the started flag to true
