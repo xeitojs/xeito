@@ -1,0 +1,14 @@
+import { Pipe } from '@xeito/core';
+
+@Pipe({
+  selector: '{{pipeSelector}}'
+})
+export class {{pipeName}} {
+  
+  transform(value: any, ...args: any[]) {
+    return value;
+  }
+
+  destroy() {}
+
+}

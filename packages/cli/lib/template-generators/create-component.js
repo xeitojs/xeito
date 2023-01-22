@@ -22,6 +22,11 @@ export function createComponent(nameOrPath) {
   // Capitalize first letter
   name = name[0].toUpperCase() + name.slice(1);
 
+  // Check if the name ends with component (remove it if it does)
+  if (name.endsWith('Component')) {
+    name = name.replace('Component', '');
+  }
+
   // Notify user
   console.log(emoji.emojify(':rocket: -'), chalk.green('Creating component: ' + name + '...'));
 
@@ -39,16 +44,16 @@ export function createComponent(nameOrPath) {
   
   // Create component and its folder
   fs.mkdirSync(nodePath.normalize(creationPath + '/' + kebabCase(name)), { recursive: true });
-  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '.ts'), output);
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '-component' + '.ts'), output);
 
   // Create styles file
-  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '.module.scss'), '');
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '-component' + '.module.scss'), '');
 
   console.log(
     emoji.emojify(':sparkles: -'), 
     chalk.green(
       'Component created successfully at ' + 
-      nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '.ts')
+      nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '-component' + '.ts')
     )
   );
 

@@ -1,6 +1,8 @@
 import { Command } from 'commander';
 import { createComponent } from './template-generators/create-component.js';
 import { createService } from './template-generators/create-service.js';
+import { createAction } from './template-generators/create-action.js';
+import { createPipe } from './template-generators/create-pipe.js';
 import emoji from 'node-emoji';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -13,28 +15,17 @@ export function generateFiles(type, name) {
     .description('Create a new component')
     .action((name) => {
       if (!name) {
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'name',
-            message: 'Component name: ',
-            validate: (value) => {
-              if (!value.match(/^[a-zA-Z0-9-\/]+$/)) {
-                return 'Invalid component name';
-              }
-              return true;
-            }
-          }
-        ]).then((answers) => {
-          createComponent(answers.name);
-        });
+        getGeneratorName('Component')
+          .then((name) => {
+            createComponent(name);
+          })
+          .catch(() => {return})
       } else {
-        // Validate the name
-        if (!name.match(/^[a-zA-Z0-9-\/]+$/)) {
-          console.log(emoji.emojify(':x: -'), chalk.red('Invalid component name'));
+        if (validateName(name)) {
+          createComponent(name);
+        } else {
           return;
         }
-        createComponent(name);
       }
     });
 
@@ -43,28 +34,55 @@ export function generateFiles(type, name) {
     .description('Create a new service')
     .action((name) => {
       if (!name) {
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'name',
-            message: 'Service name: ',
-            validate: (value) => {
-              if (!value.match(/^[a-zA-Z0-9-\/]+$/)) {
-                return 'Invalid service name';
-              }
-              return true;
-            }
-          }
-        ]).then((answers) => {
-          createService(answers.name);
-        });
+        getGeneratorName('Service')
+          .then((name) => {
+            createComponent(name);
+          })
+          .catch(() => {return})
       } else {
-        // Validate the name
-        if (!name.match(/^[a-zA-Z0-9-\/]+$/)) {
-          console.log(emoji.emojify(':x: -'), chalk.red('Invalid service name'));
+        if (validateName(name)) {
+          createComponent(name);
+        } else {
           return;
         }
-        createService(name);
+      }
+    });
+
+  program.command('action [actionName]')
+    .alias('a')
+    .description('Create a new action')
+    .action((name) => {
+      if (!name) {
+        getGeneratorName('Action')
+          .then((name) => {
+            createAction(name);
+          })
+          .catch(() => {return})
+      } else {
+        if (validateName(name)) {
+          createAction(name);
+        } else {
+          return;
+        }
+      }
+    });
+
+  program.command('pipe [pipeName]')
+    .alias('p')
+    .description('Create a new pipe')
+    .action((name) => {
+      if (!name) {
+        getGeneratorName('Pipe')
+          .then((name) => {
+            createPipe(name);
+          })
+          .catch(() => {return})
+      } else {
+        if (validateName(name)) {
+          createPipe(name);
+        } else {
+          return;
+        }
       }
     });
 
@@ -77,31 +95,59 @@ export function generateFiles(type, name) {
         name: 'type',
         message: 'Select a type',
         choices: [
-          'component',
-          'service'
+          {
+            name: `${emoji.emojify(':package:')} component`,
+            value: 'component'
+          },
+          {
+            name: `${emoji.emojify(':syringe:')} service`,
+            value: 'service'
+          },
+          {
+            name: `${emoji.emojify(':minidisc:')} action`,
+            value: 'action'
+          },
+          {
+            name: `${emoji.emojify(':nut_and_bolt:')} pipe`,
+            value: 'pipe'
+          },
+          {
+            name: `${emoji.emojify(':x:')} Cancel & Exit`,
+            value: 'cancel'
+          }
         ]
-      },
-      {
-        type: 'input',
-        name: 'name',
-        message: 'Enter a name: '
       }
     ]).then((answers) => {
+      console.log(answers.type)
       if (answers.type === 'component') {
-        // Validate the name it can include a path
-        if (!answers.name.match(/^[a-zA-Z0-9-\/]+$/)) {
-          console.log(emoji.emojify(':x: -'), chalk.red('Invalid component name'));
-          return;
-        }
-        createComponent(answers.name);
+
+        getGeneratorName('Component').then((answers) => {
+          createComponent(name);
+        }).catch(() => {return})
+
       } else if (answers.type === 'service') {
-        // Validate the name
-        if (!answers.name.match(/^[a-zA-Z0-9-\/]+$/)) {
-          console.log(emoji.emojify(':x: -'), chalk.red('Invalid service name'));
-          return;
-        }
-        createService(answers.name);
+
+        getGeneratorName('Service').then((name) => {
+          createService(name);
+        }).catch(() => {return})
+
+      } else if (answers.type === 'action') {
+
+        getGeneratorName('Action').then((name) => {
+          createAction(name);
+        }).catch(() => {return})
+
+      } else if (answers.type === 'pipe') {
+
+        getGeneratorName('Pipe').then((name) => {
+          createPipe(name);
+        }).catch(() => {return})
+
+      } else if (answers.type === 'cancel') {
+        console.log(emoji.emojify(':x: -'), chalk.red('Cancelled'));
+        process.exit(0);
       }
+    
     });
   });
 
@@ -109,9 +155,50 @@ export function generateFiles(type, name) {
   if (type) args = [type];
   if (name) args.push(name);
 
-  program.parse(args,{
+  program.parse(args, {
     from: 'user'
   });
 }
 
+function getGeneratorName(type) {
+  return new Promise((resolve, reject) => {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: `${type} name: `
+      }
+    ]).then((answers) => {
+      // Validate the name
+      if (!validateName(answers.name)) {
+        reject();
+      } else {
+        resolve(answers.name);
+      }
+    });
+  });
+}
 
+function validateName(name) {
+  if (!name) {
+    console.log(emoji.emojify(':x: -'), chalk.red('Invalid name'));
+    return false;
+  } else if (!name.match(/^[a-zA-Z0-9-\/]+$/)) {
+    console.log(emoji.emojify(':x: -'), chalk.red('Invalid name'));
+    return false;
+  } else {
+    return true;
+  }
+}
+
+/**
+ * 
+`${emoji.emojify(':box:')} component`,
+          `${emoji.emojify('')} service`,
+          `${emoji.emojify('')} action`,
+          `${emoji.emojify('')} pipe`,
+          `${emoji.emojify(':x:')} cancel & exit`
+
+
+
+ */

@@ -37,7 +37,7 @@ export function createService(nameOrPath) {
 
   // Compile template
   const template = Handlebars.compile(serviceTemplate.toString());
-  const output = template({ serviceName: servicePascalCase });
+  const output = template({ servicePascalCase: servicePascalCase, serviceKebabCase: serviceKebabCase });
 
   // Get app root from .xeitorc
   const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));

@@ -6,7 +6,7 @@ import styles from './{{componentStyles}}.module.scss';
 })
 export class {{componentName}} extends XeitoComponent {
 
-  onCreate() {
+  onDidMount() {
     console.log('{{componentName}} works!')
   }
 
