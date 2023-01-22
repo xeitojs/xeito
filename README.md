@@ -1,14 +1,14 @@
 <h1 align="center">Xeito - Harness the power of the web.</h1>
 
 <p align="center">
-  <img src="https://aerotoad.github.io/xeito-docs/images/logo_gradient.svg" alt="xeito-logo" width="150px" height="150px"/>
+  <img src="https://xeito.dev/images/logo_gradient.svg" alt="xeito-logo" width="150px" height="150px"/>
   <br><br>
   <i>Xeito is a typescript framework for building web applications</i>
   <br>
 </p>
 
 <p align="center">
-  <a href="https://aerotoad.github.io/xeito-docs/"><strong>Xeito Documentation</strong></a>
+  <a href="https://xeito.dev"><strong>Xeito Documentation</strong></a>
   <br>
 </p>
 
@@ -32,20 +32,20 @@
 
 Get started with Xeito, learn the fundamentals and explore advanced topics on the documentation website.
 
-- [Introduction](https://aerotoad.github.io/xeito-docs/guide/introduction.html)
-- [Quick Start](https://aerotoad.github.io/xeito-docs/guide/quick-start.html)
-- [Template Syntax](https://aerotoad.github.io/xeito-docs/essentials/template-syntax.html)
-- [Component Structure](https://aerotoad.github.io/xeito-docs/components/structure.html)
+- [Introduction](https://xeito.dev/guide/introduction)
+- [Quick Start](https://xeito.dev/guide/quick-start)
+- [Template Syntax](https://xeito.dev/essentials/template-syntax)
+- [Component Structure](https://xeito.dev/components/structure)
 
 ### Reusability
 
-- [Services](https://aerotoad.github.io/xeito-docs/reusability/services.html)
-- [Actions](https://aerotoad.github.io/xeito-docs/reusability/actions.html)
-- [Pipes](https://aerotoad.github.io/xeito-docs/reusability/pipes.html)
+- [Services](https://xeito.dev/reusability/services)
+- [Actions](https://xeito.dev/reusability/actions)
+- [Pipes](https://xeito.dev/reusability/pipes)
 
 ### Advanced
 
-- [Plugins](https://aerotoad.github.io/xeito-docs/reusability/plugins.html)
+- [Plugins](https://xeito.dev/reusability/plugins)
 
 
 ## Development Setup
