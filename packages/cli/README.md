@@ -1,7 +1,7 @@
 <h1 align="center">Xeito - Harness the power of the web.</h1>
 
 <p align="center">
-  <img src="https://aerotoad.github.io/xeito-docs/images/logo_gradient.svg" alt="xeito-logo" width="150px" height="150px"/>
+  <img src="https://xeito.dev/images/logo_gradient.svg" alt="xeito-logo" width="150px" height="150px"/>
   <br><br>
   <i>Xeito is a typescript framework for building web applications</i>
   <br>
