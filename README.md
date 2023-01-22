@@ -32,20 +32,20 @@
 
 Get started with Xeito, learn the fundamentals and explore advanced topics on the documentation website.
 
-- [Introduction](https://xeito.dev/guide/introduction.html)
-- [Quick Start](https://xeito.dev/guide/quick-start.html)
-- [Template Syntax](https://xeito.dev/essentials/template-syntax.html)
-- [Component Structure](https://xeito.dev/components/structure.html)
+- [Introduction](https://xeito.dev/guide/introduction)
+- [Quick Start](https://xeito.dev/guide/quick-start)
+- [Template Syntax](https://xeito.dev/essentials/template-syntax)
+- [Component Structure](https://xeito.dev/components/structure)
 
 ### Reusability
 
-- [Services](https://xeito.dev/reusability/services.html)
-- [Actions](https://xeito.dev/reusability/actions.html)
-- [Pipes](https://xeito.dev/reusability/pipes.html)
+- [Services](https://xeito.dev/reusability/services)
+- [Actions](https://xeito.dev/reusability/actions)
+- [Pipes](https://xeito.dev/reusability/pipes)
 
 ### Advanced
 
-- [Plugins](https://xeito.dev/reusability/plugins.html)
+- [Plugins](https://xeito.dev/reusability/plugins)
 
 
 ## Development Setup
