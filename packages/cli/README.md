@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://aerotoad.github.io/xeito-docs/"><strong>Xeito Documentation</strong></a>
+  <a href="https://xeito.dev"><strong>Xeito Documentation</strong></a>
   <br>
 </p>
 
