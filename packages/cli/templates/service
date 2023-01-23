@@ -1,9 +1,9 @@
 import { Injectable } from '@xeito/injection';
 
 @Injectable({
-  selector: '{{serviceKebabCase}}',
+  selector: '{{selectorName}}',
 })
-export class {{servicePascalCase}} {
+export class {{className}} {
 
   constructor() {}
 

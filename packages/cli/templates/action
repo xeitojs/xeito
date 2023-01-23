@@ -1,12 +1,12 @@
 import { Action } from '@xeito/core';
 
 @Action({
-  selector: '{{actionSelector}}'
+  selector: '{{selectorName}}'
 })
-export class {{actionName}} {
+export class {{className}} {
 
   setup(element: HTMLElement) {
-    console.log('{{actionName}} works!')
+    console.log('{{className}} works!')
   }
 
   cleanup() {}

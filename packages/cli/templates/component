@@ -1,19 +1,19 @@
 import { XeitoComponent, Component, html } from '@xeito/core';
-import styles from './{{componentStyles}}.module.scss';
+import styles from './{{stylesPath}}.module.scss';
 
 @Component({
-  selector: '{{componentSelector}}',
+  selector: '{{selectorName}}',
 })
-export class {{componentName}} extends XeitoComponent {
+export class {{className}} extends XeitoComponent {
 
   onDidMount() {
-    console.log('{{componentName}} works!')
+    console.log('{{className}} works!');
   }
 
   render() {
     return html`
       <div>
-        <p>{{componentName}} works!</p>
+        <p>{{className}} works!</p>
       </div>
     `;
   }

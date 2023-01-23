@@ -3,6 +3,7 @@ import fs from 'fs';
 import emoji from 'node-emoji';
 import chalk from 'chalk';
 import nodePath from 'path';
+import { kebabCase, pascalCase, camelCase } from 'case-anything';
 
 export function createAction(nameOrPath) {
 
@@ -22,13 +23,13 @@ export function createAction(nameOrPath) {
   // Turn name to pascal case (e.g. my-action | myAction -> MyAction)
   name = pascalCase(name);
 
-  // If the name is suffixed with "Action", remove it
-  if (name.endsWith('Action')) {
-    name = name.replace('Action', '');
+  // If the name doesnt end with Action, add it
+  if (!name.endsWith('Action')) {
+    name = name + 'Action';
   }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.green('Creating action: ' + actionName(name) + '...'));
+  console.log(emoji.emojify(':rocket: -'), chalk.green('Creating action: ' + name + '...'));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
@@ -37,8 +38,8 @@ export function createAction(nameOrPath) {
   // Compile template
   const template = Handlebars.compile(actionTemplate.toString());
   const output = template({
-    actionSelector: kebabCase(actionName(name)),
-    actionName: actionName(name)
+    className: pascalCase(name),
+    selectorName: camelCase(name)
   });
 
   // Get app root from .xeitorc
@@ -47,34 +48,15 @@ export function createAction(nameOrPath) {
 
   // Create action and its folder
   fs.mkdirSync(nodePath.normalize(creationPath), { recursive: true });
-  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '-action' + '.ts'), output);
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts'), output);
 
   console.log(
     emoji.emojify(':sparkles: -'), 
     chalk.green(
       'Action created successfully at ' + 
-      nodePath.normalize(creationPath + '/' + kebabCase(name) + '-action' + '.ts')
+      nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts')
     )
   );
 
 }
 
-const actionName = string => {
-  let pascal = pascalCase(string);
-  if (!pascal.endsWith('Action')) {
-    pascal = pascal + 'Action';
-  }
-  return pascal;
-}
-
-const kebabCase = string => string
-  .replace(/([a-z])([A-Z])/g, "$1-$2")
-  .replace(/[\s_]+/g, '-')
-  .toLowerCase();
-
-const pascalCase = string => string
-  .replace(/([a-z])([A-Z])/g, "$1-$2")
-  .replace(/[\s_]+/g, '-')
-  .split('-')
-  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-  .join('');

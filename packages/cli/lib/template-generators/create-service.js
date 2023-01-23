@@ -3,6 +3,7 @@ import fs from 'fs';
 import emoji from 'node-emoji';
 import chalk from 'chalk';
 import nodePath from 'path';
+import { kebabCase, pascalCase, camelCase } from 'case-anything';
 
 export function createService(nameOrPath) {
 
@@ -19,17 +20,16 @@ export function createService(nameOrPath) {
     path = '.';
   }
 
-  // Capitalize first letter
-  name = name[0].toUpperCase() + name.slice(1);
+  // Turn name to pascal case (e.g. my-service | myService -> MyService)
+  name = pascalCase(name);
 
-
-  // Generate name variations
-  const serviceCamelCase = serviceName(name);
-  const serviceKebabCase = kebabCase(serviceCamelCase);
-  const servicePascalCase = serviceCamelCase[0].toUpperCase() + serviceCamelCase.slice(1);
+  // If the name doesnt end with Service, add it
+  if (!name.endsWith('Service')) {
+    name = name + 'Service';
+  }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: - '), chalk.green('Creating service: ' + servicePascalCase + '...'));
+  console.log(emoji.emojify(':rocket: - '), chalk.green('Creating service: ' + name + '...'));
 
   // Read template
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
@@ -37,7 +37,10 @@ export function createService(nameOrPath) {
 
   // Compile template
   const template = Handlebars.compile(serviceTemplate.toString());
-  const output = template({ servicePascalCase: servicePascalCase, serviceKebabCase: serviceKebabCase });
+  const output = template({
+    className: pascalCase(name),
+    selectorName: camelCase(name)
+  });
 
   // Get app root from .xeitorc
   const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
@@ -45,29 +48,14 @@ export function createService(nameOrPath) {
 
   // Create service and its folder
   fs.mkdirSync(nodePath.normalize(creationPath), { recursive: true });
-  fs.writeFileSync(nodePath.normalize(creationPath + '/' + serviceKebabCase + '.ts'), output);
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts'), output);
 
   console.log(
     emoji.emojify(':sparkles: - '), 
     chalk.green(
       'Service created successfully at ' + 
-      nodePath.normalize(creationPath + '/' + serviceKebabCase + '.ts')
+      nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts')
     )
   );
 };
 
-const serviceName = string => {
-  // Remove service from the name if it exists
-  if (string.toLowerCase().includes('service')) {
-    string = string.replace('service', '');
-  }
-
-  // Add it at the end with camel case
-  return string[0].toLowerCase() + string.slice(1) + 'Service';
-}
-  
-
-const kebabCase = string => string
-  .replace(/([a-z])([A-Z])/g, "$1-$2")
-  .replace(/[\s_]+/g, '-')
-  .toLowerCase();

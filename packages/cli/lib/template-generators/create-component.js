@@ -3,10 +3,12 @@ import fs from 'fs';
 import emoji from 'node-emoji';
 import chalk from 'chalk';
 import nodePath from 'path';
+import { kebabCase, pascalCase } from 'case-anything';
 
 export function createComponent(nameOrPath) {
 
   let name;
+  let nameWithoutComponent;
   let path;
 
   // Check if name is a path
@@ -19,13 +21,16 @@ export function createComponent(nameOrPath) {
     path = '.';
   }
 
-  // Capitalize first letter
-  name = name[0].toUpperCase() + name.slice(1);
+  // Turn name to pascal case (e.g. my-component | myComponent -> MyComponent)
+  name = pascalCase(name);
 
-  // Check if the name ends with component (remove it if it does)
-  if (name.endsWith('Component')) {
-    name = name.replace('Component', '');
+  // If the name doesnt end with Component, add it
+  if (!name.endsWith('Component')) {
+    name = name + 'Component';
   }
+
+  // Remove Component from name to get the name without component (for path creation)
+  nameWithoutComponent = name.replace('Component', '');
 
   // Notify user
   console.log(emoji.emojify(':rocket: -'), chalk.green('Creating component: ' + name + '...'));
@@ -36,30 +41,29 @@ export function createComponent(nameOrPath) {
 
   // Compile template
   const template = Handlebars.compile(componentTemplate.toString());
-  const output = template({ componentName: name, componentStyles: kebabCase(name), componentSelector: 'app-' + kebabCase(name) });
+  const output = template({ 
+    className: name, 
+    selectorName: kebabCase('app-' + name),
+    stylesPath: kebabCase(name)
+  });
 
   // Get app root from .xeitorc
   const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
   const creationPath = xeitorc.appRoot + '/' + path;
   
   // Create component and its folder
-  fs.mkdirSync(nodePath.normalize(creationPath + '/' + kebabCase(name)), { recursive: true });
-  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '-component' + '.ts'), output);
+  fs.mkdirSync(nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent)), { recursive: true });
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent) + '/' + kebabCase(name) + '.ts'), output);
 
   // Create styles file
-  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '-component' + '.module.scss'), '');
+  fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent) + '/' + kebabCase(name) + '.module.scss'), '');
 
   console.log(
     emoji.emojify(':sparkles: -'), 
     chalk.green(
       'Component created successfully at ' + 
-      nodePath.normalize(creationPath + '/' + kebabCase(name) + '/' + kebabCase(name) + '-component' + '.ts')
+      nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent) + '/' + kebabCase(name) + '.ts')
     )
   );
 
 };
-
-const kebabCase = string => string
-  .replace(/([a-z])([A-Z])/g, "$1-$2")
-  .replace(/[\s_]+/g, '-')
-  .toLowerCase();

@@ -21,6 +21,7 @@
     "Typescript"
   ],
   "dependencies": {
+    "case-anything": "^2.1.10",
     "chalk": "^5.1.2",
     "commander": "^9.4.1",
     "degit": "^2.8.4",
