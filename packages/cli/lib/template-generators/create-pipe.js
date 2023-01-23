@@ -29,7 +29,7 @@ export function createPipe(nameOrPath) {
   }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.green('Creating pipe: ' + name + '...'));
+  console.log(emoji.emojify(':rocket: -'), chalk.blueBright('Creating pipe: ' + name + '...'));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));

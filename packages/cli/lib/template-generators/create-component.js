@@ -33,7 +33,7 @@ export function createComponent(nameOrPath) {
   nameWithoutComponent = name.replace('Component', '');
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.green('Creating component: ' + name + '...'));
+  console.log(emoji.emojify(':rocket: -'), chalk.blueBright('Creating component: ' + name + '...'));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));

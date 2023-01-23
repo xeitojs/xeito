@@ -29,7 +29,7 @@ export function createService(nameOrPath) {
   }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: - '), chalk.green('Creating service: ' + name + '...'));
+  console.log(emoji.emojify(':rocket: - '), chalk.blueBright('Creating service: ' + name + '...'));
 
   // Read template
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));

@@ -29,7 +29,7 @@ export function createAction(nameOrPath) {
   }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.green('Creating action: ' + name + '...'));
+  console.log(emoji.emojify(':rocket: -'), chalk.blueBright('Creating action: ' + name + '...'));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
