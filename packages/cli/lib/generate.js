@@ -36,12 +36,12 @@ export function generateFiles(type, name) {
       if (!name) {
         getGeneratorName('Service')
           .then((name) => {
-            createComponent(name);
+            createService(name);
           })
           .catch(() => {return})
       } else {
         if (validateName(name)) {
-          createComponent(name);
+          createService(name);
         } else {
           return;
         }
