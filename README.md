@@ -12,7 +12,6 @@
   <p align="center">
     <a href="https://xeito.dev"><strong>www.xeito.dev</strong></a>
   </p>
-  <br />
 </p>
 
 
