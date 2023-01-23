@@ -1,6 +1,6 @@
 {
   "name": "@xeito/core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Core modules for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,8 +19,8 @@
     "Typescript"
   ],
   "dependencies": {
-    "@xeito/injection": "^0.2.0",
-    "@xeito/store": "^0.2.0",
+    "@xeito/injection": "^0.2.1",
+    "@xeito/store": "^0.2.1",
     "uhtml": "^3.1.0"
   }
 }

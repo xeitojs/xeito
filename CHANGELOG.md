@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.2.1](https://github.com/aerotoad/xeito/compare/v0.2.0...v0.2.1) (2023-01-23)
+
+
+### Features
+
+* **CLI:** Add generators for Pipes and Actions ([4e4d06a](https://github.com/aerotoad/xeito/commit/4e4d06a728d683bf75259b1f0f46edbf1469a66b))
+
+
+### Bug Fixes
+
+* Service command now calls createService instead of createComponent ([9848076](https://github.com/aerotoad/xeito/commit/984807669e6f14c2b395480a1ea7ff0de748b66b))
+* Use case-anything to make generators more resilient ([06863da](https://github.com/aerotoad/xeito/commit/06863da032e6dbac39e1e40a2069721bc5d31de7))
+
 ## [0.2.0](https://github.com/aerotoad/xeito/compare/v0.1.13...v0.2.0) (2023-01-20)
 
 
