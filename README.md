@@ -47,8 +47,15 @@
 
 Xeito is a framework for building efficient, scalable web applications using Typescript. It combines some of the best features of [Angular](https://angular.io/), [Vue](https://vuejs.org/), [React](https://reactjs.org/) and [Svelte](https://svelte.dev/) to provide you with amazing tools to build your next web application. Combining elements of Object Oriented Programming, Functional Programming and Reactive Programming, Xeito provides a unique development experience that is both powerful and easy to use.
 
+Xeito doesn't try to reinvent the wheel, but rather provide a set of tools that can be used to build applications in a way that is familiar to developers. It is built on top of the [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) standard, adding the necessary abstractions and handling the boilerplate and complexity
+of the underlying technology.
+
+_Bear in mind that, while Xeito components are ultimately registered as custom elements, these are not designed to work outside of the Xeito runtime_
+
 Under the hood, Xeito makes use of [µhtml](https://github.com/WebReflection/uhtml) to handle DOM updates and the template system, providing a VirtualDOM-less implementation with all of the advantages of more traditional JSX implementations.
 With a small footprint, Xeito also has a [Reactive Store system](https://xeito.dev/stores/what-is-a-store) very similar to [svelte/store](https://svelte.dev/docs#run-time-svelte-store) that can be used to share application state across components and services.
+
+You can read more about these and many other features in the documentation website at [xeito.dev](https://xeito.dev).
 
 _**Note:** The framework is still in its early stages of development and is not yet ready for production use. However, you can try it out and give feedback on the [Github Discussions](https://github.com/aerotoad/xeito/discussions)_
 
