@@ -116,22 +116,22 @@ Below you can find a list of the most important guides to get you started with X
 
 - [Introduction](https://xeito.dev/guide/introduction)
 - [Quick Start](https://xeito.dev/guide/quick-start)
-- [Template Syntax](https://xeito.dev/essentials/template-syntax)
-- [Component Structure](https://xeito.dev/components/structure)
+- [Template Syntax](https://xeito.dev/guide/essentials/template-syntax)
+- [Component Structure](https://xeito.dev/guide/components/structure)
 
 **Reusability**
 
-- [Services](https://xeito.dev/reusability/services)
-- [Actions](https://xeito.dev/reusability/actions)
-- [Pipes](https://xeito.dev/reusability/pipes)
+- [Services](https://xeito.dev/guide/reusability/services)
+- [Actions](https://xeito.dev/guide/reusability/actions)
+- [Pipes](https://xeito.dev/guide/reusability/pipes)
 
 **Reactivity**
 
-- [What is a Store?](https://xeito.dev/stores/what-is-a-store)
+- [What is a Store?](https://xeito.dev/guide/stores/what-is-a-store)
 
 **Advanced**
 
-- [Plugins](https://xeito.dev/reusability/plugins)
+- [Plugins](https://xeito.dev/guide/reusability/plugins)
 
 ## Stay in Touch
 
