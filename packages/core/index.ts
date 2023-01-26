@@ -18,6 +18,7 @@ export { Pipe } from './decorators/pipe';
 export { Prop } from './decorators/prop';
 export { Ref } from './decorators/ref';
 export { State } from './decorators/state';
+export { Watch } from './decorators/watch';
 
 // Export core interfaces
 export type { Emitter } from './classes/emitter';
