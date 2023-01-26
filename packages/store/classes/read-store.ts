@@ -1,40 +1,62 @@
 import { Subscription } from "../interfaces/subscription";
-import { Updater } from "../interfaces/updater";
-import { Store } from "./store";
 
-/**
- * ReadStore is a store that can only be read from
- * The set method is not available
- * It relies on the updater function to update the value
- * @example
- * const store = new ReadStore(0, (set) => {
- *  const interval = setInterval(() => {
- *   set((value) => value + 1); // Increment the value
- *  }, 1000);
- *  return () => clearInterval(interval); // Return a function to clear the interval
- * });
- */
-export class ReadStore<T> extends Store<T> {
+export class ReadStore<T> {
 
-  constructor(initialValue: T, updater?: Updater) {
-    super();
-    this._value = initialValue;
-    this._updater = updater;
+  protected _value: T;
+  protected _listeners: Set<(value: T) => void> = new Set();
+  protected _callback: (set: (value: any) => void) => () => void;
+  protected _killCallback: () => void | undefined;
+
+  constructor(value?: T, callback?: (set: (value: any) => void) => () => void) {
+    this._value = value;
+    this._callback = callback;
+  }
+
+  public get value(): T {
+    return this._value;
   }
 
   /**
-   * Override the subscribe method
-   * @param listener Listener function
-   * @returns Subscription
+   * Sets the value of the store and calls all the listeners
+   * @param value The new value
    */
-  public subscribe(listener: Function): Subscription {
-    // If the store has not been started, call the updater
-    if (!this._started) {
-      this._started = true;          // Set the started flag to true
-      this.callUpdater(this._value); // Call the updater with the initial value
+  protected set(value: T) {
+    // Set the value
+    this._value = value;
+    // Call all the listeners with the new value
+    this._listeners.forEach(listener => listener(this._value));
+  }
+
+  /**
+   * Subscribe to the store
+   * @param listener A function that takes the current value and returns the new value
+   * @returns A subscription object with an unsubscribe method
+   */
+  public subscribe(listener: (value: T) => void): Subscription {
+    
+    // If there are no listeners, call the callback if it exists
+    if (this._listeners.size === 0) {
+      this._killCallback = this._callback && this._callback(this.set.bind(this));
     }
-    // Return a subscription
-    return super.subscribe(listener);
+
+    // Call the listener with the current value
+    listener(this._value);
+
+    // Add the listener to the set of listeners
+    this._listeners.add(listener);
+
+    // Return a subscription object
+    return {
+      unsubscribe: () => {
+        // Remove the listener from the set of listeners
+        this._listeners.delete(listener);
+
+        // If there are no more listeners, call the callback killer if it exists
+        if (this._listeners.size === 0) {
+          this._killCallback && this._killCallback();
+        }
+      }
+    } as Subscription;
   }
 
 }

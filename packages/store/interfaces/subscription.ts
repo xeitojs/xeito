@@ -1,4 +1,4 @@
 
 export interface Subscription {
-  unsubscribe: Function;
+  unsubscribe(): void;
 }
