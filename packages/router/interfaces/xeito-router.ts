@@ -1,11 +1,11 @@
-import { MixedStore } from '@xeito/store';
+import { ReadStore } from '@xeito/store';
 import { Location, Update } from 'history';
 import { RouteParams } from './route-params';
 
 export interface XeitoRouter {
-  routeUpdate: MixedStore<Update>;
-  routeParams: MixedStore<RouteParams>;
-  location: MixedStore<Location>;
+  routeUpdate: ReadStore<Update>;
+  routeParams: ReadStore<RouteParams>;
+  location: ReadStore<Location>;
   push: (path: string, state?: any) => void;
   replace: (path: string, state?: any) => void;
   go: (n: number) => void;

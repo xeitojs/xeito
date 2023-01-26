@@ -1,12 +1,13 @@
 import { XeitoPlugin } from '@xeito/core';
-import { MixedStore, WriteStore } from '@xeito/store';
-import { createBrowserHistory, createHashHistory, createMemoryHistory, History, Update } from 'history';
+import { DerivedStore, ReadStore, WriteStore } from '@xeito/store';
+import { createBrowserHistory, createHashHistory, createMemoryHistory, History, Location, Update } from 'history';
 import { RouterOptions } from "../interfaces/router-options";
 import { XeitoRouter } from '../interfaces/xeito-router';
 import { RouterInternal } from '../interfaces/router-internal';
 import { Route } from '../interfaces/route';
 import { RouterSlot } from '../components/router-slot';
 import { RouterLink } from '../components/router-link';
+import { RouteParams } from '../interfaces/route-params';
 
 export class XeitoRouterPlugin extends XeitoPlugin {
 
@@ -21,6 +22,13 @@ export class XeitoRouterPlugin extends XeitoPlugin {
 
   // WriteStore that emits the current route params
   private $params: WriteStore<any> = new WriteStore(null);
+  private $paramsDerived: DerivedStore<any> = new DerivedStore(this.$params, (params) => {
+    if (params) {
+      return params;
+    } else {
+      return {};
+    }
+  });
 
   // Array of routes to be used by the router
   private routes: Route[];
@@ -85,9 +93,9 @@ export class XeitoRouterPlugin extends XeitoPlugin {
    */
   getRouterInstance(): XeitoRouter {
     return {
-      routeUpdate: new MixedStore(this.$routeUpdate, (value) => value),
-      routeParams: new MixedStore(this.$params, (value) => value),
-      location: new MixedStore(this.$location, (value) => value),
+      routeUpdate: new DerivedStore(this.$routeUpdate, (value) => value) as unknown as ReadStore<Update>,
+      routeParams: this.$paramsDerived as unknown as ReadStore<RouteParams>,
+      location: new DerivedStore(this.$location, (value) => value) as unknown as ReadStore<Location>,
       push: (path: string, state?: any) => this.history.push(path, state),
       replace: (path: string, state?: any) => this.history.replace(path, state),
       go: (delta: number) => this.history.go(delta),
