@@ -60,6 +60,12 @@ export class XeitoComponent extends HTMLElement {
     
     // Set the global property
     this.global = this._XeitoInternals.global;
+
+    // Merge the global config with the _XeitoInternals
+    this._XeitoInternals = Object.assign({}, this.global.config, this._XeitoInternals);
+
+    // Make sure the shadow property is correctly set
+    this._XeitoInternals.shadow = this._XeitoInternals.shadow ?? this.global.config.shadow;
     
     // Assign the children global
     this.assignChildrenGlobal();

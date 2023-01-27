@@ -1,4 +1,5 @@
 import { XeitoComponent } from "../classes/xeito-component";
+import { XeitoGlobalConfig } from "./xeito-global-config";
 
 export interface XeitoGlobal {
 
@@ -7,5 +8,6 @@ export interface XeitoGlobal {
   pipes: any[];
   actions: any[];
   styleSheets: CSSStyleSheet[];
+  config: XeitoGlobalConfig;
 
 }
