@@ -1,11 +1,10 @@
-import { BehaviorSubject } from 'rxjs';
 import { render } from '../index';
 import { XeitoGlobal } from '../interfaces/xeito-global';
-import { XeitoComponent } from "./xeito-component";
 import { XeitoPlugin } from './xeito-plugin';
 import { XtForComponent } from '../components/xt-for-component';
 import { XtIfComponent } from '../components/xt-if-component';
 import { XtSwitchComponent } from '../components/xt-switch-component';
+import { XeitoGlobalConfig } from '../interfaces/xeito-global-config';
 
 export class Xeito {
 
@@ -17,12 +16,16 @@ export class Xeito {
     components: [],
     actions: [],
     pipes: [],
-    styleSheets: []
+    styleSheets: [],
+    config: {shadow: true},
   };
 
-  constructor (rootComponent: any) {
+  constructor (rootComponent: any, globalConfig?: XeitoGlobalConfig) {
     // Add the root component to the global components array
     this.global.components.push(rootComponent);
+
+    // If global config is provided, add it to the global config
+    if (globalConfig) this.global.config = globalConfig;
 
     // Register default global components
     this.global.components.push(XtForComponent);

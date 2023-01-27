@@ -28,7 +28,7 @@ export function Component(componentMetadata: ComponentMetadata) {
       pipes: componentMetadata.pipes || [],
       imports: componentMetadata.imports || [],
       services: componentMetadata.services || [],
-      shadow: componentMetadata.shadow !== undefined ? componentMetadata.shadow : true,
+      shadow: componentMetadata.shadow,
       DOMRoot: null,
       template: null,
       global: null,
