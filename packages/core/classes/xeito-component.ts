@@ -73,6 +73,14 @@ export class XeitoComponent extends HTMLElement {
     if (this._XeitoInternals.shadow === true) {
       this.attachShadow({ mode: 'open' });
       DOMRoot = this.shadowRoot as ShadowRoot;
+
+      // Add the component stylesheets and the global stylesheets to the shadow root
+      const globalStyleSheets = this.global.styleSheets;
+      const componentStyleSheets = this._XeitoInternals.componentStyleSheet;
+      const styleSheets = [...globalStyleSheets, componentStyleSheets];
+      DOMRoot.adoptedStyleSheets = styleSheets;
+
+      console.log(Object.assign([], DOMRoot.adoptedStyleSheets))
     }
     // Set the DOMRoot in the _XeitoInternals
     this._DOMRoot = DOMRoot;

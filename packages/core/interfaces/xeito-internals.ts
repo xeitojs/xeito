@@ -7,7 +7,7 @@ export interface XeitoInternals {
   services?: any[];
   shadow?: boolean;
   DOMRoot?: Element | HTMLElement | Node | null;
-  styles?: any;
   template?: Element | HTMLElement | Node | null;
   global?: Record<string, any>;
+  componentStyleSheet?: CSSStyleSheet[];
 }

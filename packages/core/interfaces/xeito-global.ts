@@ -6,5 +6,6 @@ export interface XeitoGlobal {
   components: Array<typeof XeitoComponent>;
   pipes: any[];
   actions: any[];
+  styleSheets: CSSStyleSheet[];
 
 }

@@ -16,7 +16,8 @@ export class Xeito {
     properties: {},
     components: [],
     actions: [],
-    pipes: []
+    pipes: [],
+    styleSheets: []
   };
 
   constructor (rootComponent: any) {
@@ -60,6 +61,13 @@ export class Xeito {
     const pluginInstance = new plugin(this);
     pluginInstance.install(options);
     this.plugins.push(pluginInstance);
+  }
+
+  /**
+   * 
+   */
+  public useStyleSheet(styleSheet: CSSStyleSheet) {
+    this.global.styleSheets.push(styleSheet);
   }
 
   /**
