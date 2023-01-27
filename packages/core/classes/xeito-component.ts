@@ -79,8 +79,6 @@ export class XeitoComponent extends HTMLElement {
       const componentStyleSheets = this._XeitoInternals.componentStyleSheet;
       const styleSheets = [...globalStyleSheets, componentStyleSheets];
       DOMRoot.adoptedStyleSheets = styleSheets;
-
-      console.log(Object.assign([], DOMRoot.adoptedStyleSheets))
     }
     // Set the DOMRoot in the _XeitoInternals
     this._DOMRoot = DOMRoot;
