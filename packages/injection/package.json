@@ -18,7 +18,5 @@
     "Web",
     "Typescript"
   ],
-  "dependencies": {
-    "@xeito/core": "^0.2.1"
-  }
+  "dependencies": {}
 }

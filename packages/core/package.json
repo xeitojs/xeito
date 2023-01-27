@@ -19,8 +19,6 @@
     "Typescript"
   ],
   "dependencies": {
-    "@xeito/injection": "^0.2.1",
-    "@xeito/store": "^0.2.1",
     "uhtml": "^3.1.0"
   }
 }
