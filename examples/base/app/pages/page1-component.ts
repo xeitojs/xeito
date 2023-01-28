@@ -22,6 +22,18 @@ export class Page1Component extends XeitoComponent {
   @State() stringToTriggerPipe: string = 'sample text';
   @State() stringToTriggerProp: any = {value: 'initial value', label: 'initial label'};
 
+  private sub;
+
+  onDidMount() {
+    this.sub = this.router.routeParams.subscribe((params) => {
+      console.log(params);
+    });
+  }
+
+  onUnmount() {
+    this.sub.unsubscribe();
+  }
+
   goToRoot() {
     this.router.push('/page1');
   }
