@@ -14,10 +14,9 @@ export class RouterSlot extends XeitoComponent {
   @Global() router: XeitoRouter;
   @Global() routerInternal: RouterInternal;
 
-  component: XeitoComponent;
+  @State() component: XeitoComponent;
   historySubscription: any;
-
-  onDidMount(): void {
+  onWillMount(): void {
     // Subscribe to route updates
     this.historySubscription = this.routerInternal.history.listen((update: Update) => {
       this.routerInternal.pathAccumulator.set('');
@@ -90,9 +89,6 @@ export class RouterSlot extends XeitoComponent {
       // Handle 404
       this.component = null;
     }
-    
-    this.innerHTML = '';
-    this.append(this.component);
   }
 
   onUnmount(): void {
@@ -100,7 +96,7 @@ export class RouterSlot extends XeitoComponent {
   }
 
   render() {
-    return html``;
+    return html`${this.component}`;
   }
 
 }
