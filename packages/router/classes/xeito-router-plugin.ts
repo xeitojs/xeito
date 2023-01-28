@@ -22,13 +22,6 @@ export class XeitoRouterPlugin extends XeitoPlugin {
 
   // WriteStore that emits the current route params
   private $params: WriteStore<any> = new WriteStore(null);
-  private $paramsDerived: DerivedStore<any> = new DerivedStore(this.$params, (params) => {
-    if (params) {
-      return params;
-    } else {
-      return {};
-    }
-  });
 
   // Array of routes to be used by the router
   private routes: Route[];
@@ -94,7 +87,7 @@ export class XeitoRouterPlugin extends XeitoPlugin {
   getRouterInstance(): XeitoRouter {
     return {
       routeUpdate: new DerivedStore(this.$routeUpdate, (value) => value) as unknown as ReadStore<Update>,
-      routeParams: this.$paramsDerived as unknown as ReadStore<RouteParams>,
+      routeParams: this.$params as unknown as ReadStore<RouteParams>,
       location: new DerivedStore(this.$location, (value) => value) as unknown as ReadStore<Location>,
       push: (path: string, state?: any) => this.history.push(path, state),
       replace: (path: string, state?: any) => this.history.replace(path, state),

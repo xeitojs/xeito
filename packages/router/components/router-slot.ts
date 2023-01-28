@@ -1,4 +1,4 @@
-import { XeitoComponent, Component, html, Global } from '@xeito/core';
+import { XeitoComponent, Component, html, Global, State } from '@xeito/core';
 import { Update } from 'history';
 import { match } from 'path-to-regexp';
 import { processGuards } from '../functions/process-guards';
@@ -29,7 +29,6 @@ export class RouterSlot extends XeitoComponent {
   }
 
   async handleRouteUpdate() {
-    this.router.location.subscribe(() => {});
     const currentURL = this.router.location.value.pathname;
 
     const previousRoute = this.routerInternal.previousRoute.value;
@@ -52,7 +51,9 @@ export class RouterSlot extends XeitoComponent {
           const fullFn = match(routePath, { decode: decodeURIComponent, end: true });
           const matched = fullFn(currentURL);
           if (matched && matched.path === currentURL) {
-            this.routerInternal.params.set(result.params);
+            if (JSON.stringify(this.routerInternal.params.value) !== JSON.stringify(result.params)) {
+              this.routerInternal.params.set(result.params);
+            }
           }
 
           break;
