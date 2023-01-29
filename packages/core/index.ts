@@ -33,6 +33,9 @@ export type { WatchUpdate } from './interfaces/watch-update';
 export type { XeitoGlobal } from './interfaces/xeito-global';
 export type { XeitoInternals } from './interfaces/xeito-internals';
 
+// Export functions
+export { css } from './functions/css-tag';
+
 /**
  * Re-export uhtml
  * Allows the user to use uhtml directly from the xeito module
