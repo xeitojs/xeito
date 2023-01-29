@@ -20,12 +20,9 @@ export class Xeito {
     config: {shadow: true},
   };
 
-  constructor (rootComponent: any, globalConfig?: XeitoGlobalConfig) {
+  constructor (rootComponent: any) {
     // Add the root component to the global components array
     this.global.components.push(rootComponent);
-
-    // If global config is provided, add it to the global config
-    if (globalConfig) this.global.config = globalConfig;
 
     // Register default global components
     this.global.components.push(XtForComponent);
@@ -67,7 +64,17 @@ export class Xeito {
   }
 
   /**
-   * 
+   * Overwrite the default global config
+   * @param config The global config to use
+   */
+  public useConfig(config: XeitoGlobalConfig) {
+    this.global.config = config;
+  }
+
+  /**
+   * Add a global stylesheet
+   * Global stylesheets are added to the global object and then loaded by all components
+   * @param styleSheet The stylesheet to add
    */
   public useStyleSheet(styleSheet: CSSStyleSheet) {
     this.global.styleSheets.push(styleSheet);
