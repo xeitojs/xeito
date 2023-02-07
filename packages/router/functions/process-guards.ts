@@ -11,7 +11,7 @@ export async function processGuards(route: Route, router: XeitoRouter): Promise<
     // If the route has guards, process them
     if (route.guards) {
       for await (const guard of route.guards) {
-        const guardResult = guard(router.location().pathname);
+        const guardResult = guard(router.location.value.pathname);
     
         // Check if the guard return a promise
         if (guardResult instanceof Promise) {
