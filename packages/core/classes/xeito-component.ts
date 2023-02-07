@@ -82,7 +82,11 @@ export class XeitoComponent extends HTMLElement {
 
       // Add the component stylesheets and the global stylesheets to the shadow root
       const globalStyleSheets = this.global.styleSheets;
-      const componentStyleSheets = this._XeitoInternals.componentStyleSheet;
+      let componentStyleSheets = this._XeitoInternals.componentStyleSheet;
+
+      // Make sure the componentStyleSheets is an array
+      if (!Array.isArray(componentStyleSheets)) componentStyleSheets = [componentStyleSheets];
+
       let styleSheets = [];
       if (componentStyleSheets) styleSheets = [...globalStyleSheets, ...componentStyleSheets];
       DOMRoot.adoptedStyleSheets = styleSheets;
