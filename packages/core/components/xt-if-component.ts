@@ -13,10 +13,10 @@ export class XtIfComponent extends XeitoComponent {
   render() {
     return html`
       ${this.when ? html`
-        <div>${this.slotContent.default}</div>
+        ${this.slotContent.default}
       `: null}
-      ${!this.when ? html`
-        <div>${this.slotContent.else}</div>
+      ${!this.when && this.slotContent.else ? html`
+        ${this.slotContent.else}
       `: null}
     `;
   }
