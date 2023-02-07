@@ -30,7 +30,6 @@ export class XtSwitchComponent extends XeitoComponent {
 
   parseContent() {
     const children = Array.from(this.children);
-    console.log(children)
     children.forEach((child: any) => {
       const condition = child.case;
       if (condition && condition !== 'default') {
