@@ -183,7 +183,7 @@ export class XeitoComponent extends HTMLElement {
   requestUpdate() {
     if (!this._dirty) {
       this._dirty = true;
-      Promise.resolve().then(() => {
+      queueMicrotask(() => {
         this._update();
         this._dirty = false;
       });
