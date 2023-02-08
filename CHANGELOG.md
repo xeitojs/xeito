@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.2.2](https://github.com/aerotoad/xeito/compare/v0.2.1...v0.2.2) (2023-02-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** All components use shadowDOM by default now, unless specified otherwise in the `@Component()` decorator.
+* **router:** Properties that were MixedStore before now are exposed as ReadStore
+* **store:** MixedStore has been renamed as DerivedStore.
+* **store:** Constructor callbacks and update methods now work the same as svelte/store
+
+### Features
+
+* **core:** Add ability to provide global configuration ([80d0dad](https://github.com/aerotoad/xeito/commit/80d0dad10b55e482bdaa2d956642258391372b1a))
+* **core:** Add ability to provide global configuration ([0a8e2be](https://github.com/aerotoad/xeito/commit/0a8e2bea19750a55707424eafd6a702251a68244))
+* **core:** Add support for scoped styles and global styles ([1370549](https://github.com/aerotoad/xeito/commit/1370549077ffe0b846bd41d054a7ab20177b4bac))
+* **core:** Add support for shadowMode in component metadata ([f83d5b9](https://github.com/aerotoad/xeito/commit/f83d5b93bb1760594c9ab5801cd64f3ba84621cf))
+* **flow:** Add basic flow control components ([495b0a9](https://github.com/aerotoad/xeito/commit/495b0a9fdc8fcecf7a05680779f5676345727829))
+
+
+### Bug Fixes
+
+* Add missing export for the `css` tag ([43f5fc2](https://github.com/aerotoad/xeito/commit/43f5fc24e4414d271bcb9d90ab3998abe3ecb481))
+* **core:** Add missing `@Watch()` export ([cdbc3da](https://github.com/aerotoad/xeito/commit/cdbc3da5290379c43fd72be3e1cde1769b8a09f9))
+* **core:** Don't add null styles ([8c83183](https://github.com/aerotoad/xeito/commit/8c83183beb521a050fa737e1a8e3d094f9256f39))
+* **core:** Styles can be either array or css tag ([220e1ee](https://github.com/aerotoad/xeito/commit/220e1eee892e6fadc6d66e6d601b15b59e5fa0e1))
+* **core:** Wrong array type ([41aeca7](https://github.com/aerotoad/xeito/commit/41aeca7711cfd50d34ecce3a4aac25189f9067bb))
+* Load stylesheets correctly when none are provided by the component ([a31f494](https://github.com/aerotoad/xeito/commit/a31f49428dbd5b27399823c1e7687fa2cf24e8ad))
+* Remove leftover log ([2b57ca0](https://github.com/aerotoad/xeito/commit/2b57ca0406c3586ec2d0e105c44c1b70d11653bb))
+* Remove leftover log ([d9893a9](https://github.com/aerotoad/xeito/commit/d9893a92c1ed82c83be3d75861f1ced44ad907aa))
+* **router:** Router params now only emit on diferent value ([b076338](https://github.com/aerotoad/xeito/commit/b076338c23c64dc99975e5320284d7ab42c20f53))
+* **router:** Router slot now works with shadow dom and light dom ([b9e3d60](https://github.com/aerotoad/xeito/commit/b9e3d60ef760baaf8a9d891a88f45f671d0252f7))
+* **router:** Use location store instead of function ([148b8bb](https://github.com/aerotoad/xeito/commit/148b8bbee5b5e3ab759fc71ba880f27704532205))
+
+
+* **router:** Use new store types ([164f0b8](https://github.com/aerotoad/xeito/commit/164f0b808d8982e38adfe7b8d7faaee458d2e9cf))
+* **store:** Refactor stores and simplify logic  ([334e225](https://github.com/aerotoad/xeito/commit/334e2257e5e9addc50cc2f573640a1bc6a3dd6fb))
+
 ### [0.2.1](https://github.com/aerotoad/xeito/compare/v0.2.0...v0.2.1) (2023-01-23)
 
 
