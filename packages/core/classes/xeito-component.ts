@@ -85,7 +85,7 @@ export class XeitoComponent extends HTMLElement {
       let componentStyleSheets = this._XeitoInternals.componentStyleSheet;
 
       // Make sure the componentStyleSheets is an array
-      if (!Array.isArray(componentStyleSheets)) componentStyleSheets = [componentStyleSheets];
+      if (componentStyleSheets && !Array.isArray(componentStyleSheets)) componentStyleSheets = [componentStyleSheets];
 
       let styleSheets = [];
       if (componentStyleSheets) styleSheets = [...globalStyleSheets, ...componentStyleSheets];
