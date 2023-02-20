@@ -61,9 +61,6 @@ export class XeitoComponent extends HTMLElement {
     // Set the global property
     this.global = this._XeitoInternals.global;
 
-    // Merge the global config with the _XeitoInternals
-    this._XeitoInternals = Object.assign({}, this.global.config, this._XeitoInternals);
-
     // Make sure the shadow property is correctly set
     this._XeitoInternals.shadow = this._XeitoInternals.shadow ?? this.global.config.shadow;
     
@@ -79,17 +76,6 @@ export class XeitoComponent extends HTMLElement {
     if (this._XeitoInternals.shadow === true) {
       this.attachShadow({ mode: 'open' });
       DOMRoot = this.shadowRoot as ShadowRoot;
-
-      // Add the component stylesheets and the global stylesheets to the shadow root
-      const globalStyleSheets = this.global.styleSheets;
-      let componentStyleSheets = this._XeitoInternals.componentStyleSheet;
-
-      // Make sure the componentStyleSheets is an array
-      if (componentStyleSheets && !Array.isArray(componentStyleSheets)) componentStyleSheets = [componentStyleSheets];
-
-      let styleSheets = [];
-      if (componentStyleSheets) styleSheets = [...globalStyleSheets, ...componentStyleSheets];
-      DOMRoot.adoptedStyleSheets = styleSheets;
     }
     // Set the DOMRoot in the _XeitoInternals
     this._DOMRoot = DOMRoot;

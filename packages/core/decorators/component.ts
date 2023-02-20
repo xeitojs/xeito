@@ -28,11 +28,10 @@ export function Component(componentMetadata: ComponentMetadata) {
       pipes: componentMetadata.pipes || [],
       imports: componentMetadata.imports || [],
       services: componentMetadata.services || [],
-      shadow: componentMetadata.shadow,
+      shadow: componentMetadata.shadow ?? true,
       DOMRoot: null,
       template: null,
-      global: null,
-      componentStyleSheet: constructor.styles && constructor.styles() || null,
+      global: null
     }
 
     /**

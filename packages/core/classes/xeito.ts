@@ -4,7 +4,6 @@ import { XeitoPlugin } from './xeito-plugin';
 import { XtForComponent } from '../components/xt-for-component';
 import { XtIfComponent } from '../components/xt-if-component';
 import { XtSwitchComponent } from '../components/xt-switch-component';
-import { XeitoGlobalConfig } from '../interfaces/xeito-global-config';
 
 export class Xeito {
 
@@ -15,9 +14,7 @@ export class Xeito {
     properties: {},
     components: [],
     actions: [],
-    pipes: [],
-    styleSheets: [],
-    config: {shadow: true},
+    pipes: []
   };
 
   constructor (rootComponent: any) {
@@ -61,23 +58,6 @@ export class Xeito {
     const pluginInstance = new plugin(this);
     pluginInstance.install(options);
     this.plugins.push(pluginInstance);
-  }
-
-  /**
-   * Overwrite the default global config
-   * @param config The global config to use
-   */
-  public useConfig(config: XeitoGlobalConfig) {
-    this.global.config = config;
-  }
-
-  /**
-   * Add a global stylesheet
-   * Global stylesheets are added to the global object and then loaded by all components
-   * @param styleSheet The stylesheet to add
-   */
-  public useStyleSheet(styleSheet: CSSStyleSheet) {
-    this.global.styleSheets.push(styleSheet);
   }
 
   /**
