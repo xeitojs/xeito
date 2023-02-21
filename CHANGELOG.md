@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.3.1](https://github.com/aerotoad/xeito/compare/v0.3.0...v0.3.1) (2023-02-21)
+
 ## [0.3.0](https://github.com/aerotoad/xeito/compare/v0.2.2...v0.3.0) (2023-02-21)
 
 
