@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.3.0](https://github.com/aerotoad/xeito/compare/v0.2.2...v0.3.0) (2023-02-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** `static styles()` and the `css` tag are no longer supported (xeito now relies on global css and bundler scoping)
+* **core:** `Xeito.useStylesheet()` has been removed
+* **core:** `Xeito.useConfig()` has been removed, shadowDOM can be toggled per component only.
+
+* **core:** Remove support for shadow styles and global config ([5c94fa6](https://github.com/aerotoad/xeito/commit/5c94fa6f3b705cb42218233664c67c9e761102fc))
+
 ### [0.2.2](https://github.com/aerotoad/xeito/compare/v0.2.1...v0.2.2) (2023-02-08)
 
 
