@@ -1,11 +1,13 @@
 import Handlebars from 'handlebars';
 import fs from 'fs';
 import emoji from 'node-emoji';
-import chalk from 'chalk';
+import color from 'picocolors';
 import nodePath from 'path';
 import { kebabCase, pascalCase } from 'case-anything';
+import { getXeitoConfig } from '../../../utils/get-xeito-config.js';
+import { intro, outro } from '@clack/prompts';
 
-export function createComponent(nameOrPath) {
+export async function createComponent(nameOrPath) {
 
   let name;
   let nameWithoutComponent;
@@ -33,11 +35,11 @@ export function createComponent(nameOrPath) {
   nameWithoutComponent = name.replace('Component', '');
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.blueBright('Creating component: ' + name + '...'));
+  intro(emoji.emojify(':rocket: ') + color.blue(`Creating component ${name}...`));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
-  const componentTemplate = loadTemplate('../../templates/component');
+  const componentTemplate = loadTemplate('../templates/component');
 
   // Compile template
   const template = Handlebars.compile(componentTemplate.toString());
@@ -47,9 +49,14 @@ export function createComponent(nameOrPath) {
     stylesPath: kebabCase(name)
   });
 
-  // Get app root from .xeitorc
-  const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
-  const creationPath = xeitorc.appRoot + '/' + path;
+  // Get creation path from xeito.config.json
+  const xeitoConfig = getXeitoConfig();
+  let creationPath = '';
+  if (xeitoConfig.base) {
+    creationPath = xeitoConfig.base + '/' + path;
+  } else {
+    creationPath = path;
+  }
   
   // Create component and its folder
   fs.mkdirSync(nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent)), { recursive: true });
@@ -58,10 +65,10 @@ export function createComponent(nameOrPath) {
   // Create styles file
   fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent) + '/' + kebabCase(name) + '.module.scss'), '');
 
-  console.log(
-    emoji.emojify(':sparkles: -'), 
-    chalk.green(
-      'Component created successfully at ' + 
+  outro(
+    emoji.emojify(':sparkles: ') +
+    color.green('Component created successfully at: ') +
+    color.blue(
       nodePath.normalize(creationPath + '/' + kebabCase(nameWithoutComponent) + '/' + kebabCase(name) + '.ts')
     )
   );

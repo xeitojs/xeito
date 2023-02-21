@@ -1,9 +1,11 @@
 import Handlebars from 'handlebars';
 import fs from 'fs';
 import emoji from 'node-emoji';
-import chalk from 'chalk';
+import color from 'picocolors';
 import nodePath from 'path';
 import { kebabCase, pascalCase, camelCase } from 'case-anything';
+import { getXeitoConfig } from '../../../utils/get-xeito-config.js';
+import { intro, outro } from '@clack/prompts';
 
 export function createPipe(nameOrPath) {
 
@@ -29,11 +31,11 @@ export function createPipe(nameOrPath) {
   }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.blueBright('Creating pipe: ' + name + '...'));
+  intro(emoji.emojify(':rocket: ') + color.blue(`Creating pipe ${name}...`));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
-  const pipeTemplate = loadTemplate('../../templates/pipe');
+  const pipeTemplate = loadTemplate('../templates/pipe');
 
   // Compile template
   const template = Handlebars.compile(pipeTemplate.toString());
@@ -42,18 +44,23 @@ export function createPipe(nameOrPath) {
     selectorName: camelCase(name)
   });
 
-  // Get app root from .xeitorc
-  const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
-  const creationPath = xeitorc.appRoot + '/' + path;
+  // Get creation path from xeito.config.json
+  const xeitoConfig = getXeitoConfig();
+  let creationPath = '';
+  if (xeitoConfig.base) {
+    creationPath = xeitoConfig.base + '/' + path;
+  } else {
+    creationPath = path;
+  }
 
   // Create pipe and its folder
   fs.mkdirSync(nodePath.normalize(creationPath), { recursive: true });
   fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts'), output);
 
-  console.log(
-    emoji.emojify(':sparkles: -'), 
-    chalk.green(
-      'Pipe created successfully at ' + 
+  outro(
+    emoji.emojify(':sparkles: ') +
+    color.green('Pipe created successfully at: ') +
+    color.blue(
       nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts')
     )
   );

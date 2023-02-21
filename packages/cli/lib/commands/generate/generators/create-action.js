@@ -1,9 +1,11 @@
 import Handlebars from 'handlebars';
 import fs from 'fs';
 import emoji from 'node-emoji';
-import chalk from 'chalk';
+import color from 'picocolors';
 import nodePath from 'path';
 import { kebabCase, pascalCase, camelCase } from 'case-anything';
+import { getXeitoConfig } from '../../../utils/get-xeito-config.js';
+import { intro, outro } from '@clack/prompts';
 
 export function createAction(nameOrPath) {
 
@@ -29,11 +31,11 @@ export function createAction(nameOrPath) {
   }
 
   // Notify user
-  console.log(emoji.emojify(':rocket: -'), chalk.blueBright('Creating action: ' + name + '...'));
+  intro(emoji.emojify(':rocket: ') + color.blue(`Creating action ${name}...`));
 
   // Read template  
   const loadTemplate = (path) => fs.readFileSync(new URL(path, import.meta.url));
-  const actionTemplate = loadTemplate('../../templates/action');
+  const actionTemplate = loadTemplate('../templates/action');
 
   // Compile template
   const template = Handlebars.compile(actionTemplate.toString());
@@ -42,18 +44,23 @@ export function createAction(nameOrPath) {
     selectorName: camelCase(name)
   });
 
-  // Get app root from .xeitorc
-  const xeitorc = JSON.parse(fs.readFileSync('.xeitorc'));
-  const creationPath = xeitorc.appRoot + '/' + path;
+  // Get creation path from xeito.config.json
+  const xeitoConfig = getXeitoConfig();
+  let creationPath = '';
+  if (xeitoConfig.base) {
+    creationPath = xeitoConfig.base + '/' + path;
+  } else {
+    creationPath = path;
+  }
 
   // Create action and its folder
   fs.mkdirSync(nodePath.normalize(creationPath), { recursive: true });
   fs.writeFileSync(nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts'), output);
 
-  console.log(
-    emoji.emojify(':sparkles: -'), 
-    chalk.green(
-      'Action created successfully at ' + 
+  outro(
+    emoji.emojify(':sparkles: ') +
+    color.green('Action created successfully at: ') +
+    color.blue(
       nodePath.normalize(creationPath + '/' + kebabCase(name) + '.ts')
     )
   );
