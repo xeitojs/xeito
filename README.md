@@ -7,7 +7,7 @@
     Harness the power of the web.
   </h3>
   <p align="center">
-    Opinionated Typescript framework for building web applications.
+    Typescript framework for building web applications.
   </p>
   <p align="center">
     <a href="https://xeito.dev"><strong>www.xeito.dev</strong></a>
