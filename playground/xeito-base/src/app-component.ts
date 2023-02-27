@@ -1,4 +1,4 @@
-import { XeitoComponent, Component, State, html } from "@xeito/core";
+import { XeitoComponent, Component, State, html } from '../../../packages/core/index';
 
 @Component({
   selector: 'app-root'
