@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.3.4](https://github.com/aerotoad/xeito/compare/v0.3.3...v0.3.4) (2023-02-27)
+
+
+### Features
+
+* **cli:** Use new vite starters repo ([1ec3ad7](https://github.com/aerotoad/xeito/commit/1ec3ad7a58ddd88af8448bec4fe5c30ab8a7f7ab))
+
 ### [0.3.3](https://github.com/aerotoad/xeito/compare/v0.3.2...v0.3.3) (2023-02-21)
 
 
