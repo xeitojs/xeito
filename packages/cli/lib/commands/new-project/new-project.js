@@ -1,8 +1,9 @@
-import { intro, text, isCancel, select, note, spinner } from "@clack/prompts";
+import { intro, text, isCancel, select, note, spinner, log } from "@clack/prompts";
 import color from "picocolors";
 import fs from "fs";
 import degit from "degit";
 import emoji from "node-emoji";
+import axios from "axios";
 
 export class NewProject {
 
@@ -46,22 +47,26 @@ export class NewProject {
 
     const template = await this.selectTemplate();
 
-    this.logBlock(emoji.emojify(':rocket: ') + color.bgYellow(color.black('Creating project...')));
-    await this.degitBase(this.projectName);
-    await this.degitTemplate(this.projectName, template);
+    log.step(emoji.emojify(':rocket: ') + color.bgYellow(color.black('Creating project...')));
+    await this.degitProject(this.projectName, template);
 
     // Modify xeito.config.json file
     const config = JSON.parse(fs.readFileSync(this.projectName + '/xeito.config.json', 'utf8'));
     config.name = this.projectName;
     fs.writeFileSync(this.projectName + '/xeito.config.json', JSON.stringify(config, null, 2));
 
-    this.logBlock(emoji.emojify(':tada: ') + color.green('Project created successfully!'));
+    // Modify package.json file
+    const packageJSON = JSON.parse(fs.readFileSync(this.projectName + '/package.json', 'utf8'));
+    packageJSON.name = this.projectName;
+    fs.writeFileSync(this.projectName + '/package.json', JSON.stringify(packageJSON, null, 2));
+
+    log.info(emoji.emojify(':tada: ') + color.green('Project created successfully!'));
 
     let noteContent = '';
     noteContent += `${color.bold(color.blue('Run the following commands to start the project:'))}\n`;
     noteContent += `${color.bold('cd ' + this.projectName + ' ')}\n`;
     noteContent += `${color.bold('npm install ')}\n`;
-    noteContent += `${color.bold('npm start ')}\n`;
+    noteContent += `${color.bold('npm run dev ')}\n`;
     note(noteContent, emoji.emojify(':arrow_forward: ') + 'Next steps');
   }
 
@@ -86,12 +91,27 @@ export class NewProject {
 
   selectTemplate() {
     return new Promise(async (resolve) => {
+
+      // Load available templates from xeito-starters repo
+      let response;
+      try {
+        response = await axios.get('https://api.github.com/repos/xeitojs/xeito-starters/contents/templates');
+      } catch (error) {
+        console.error(error);
+        process.exit(1);
+      }
+
+      const availableTemplates = response.data.map((item) => item.name);
+
       const template = await select({
         message: 'Select a template',
-        options: [
-          { label: 'Default', value: 'blank', hint: 'Just the basics' },
-          { label: 'Services Example', value: 'service-example', hint: 'Basic example with a service' },
-        ]
+        options: availableTemplates.map((name) => {
+          const readableName = name.split('-').join(' ');
+          return {
+            label: readableName.charAt(0).toUpperCase() + readableName.slice(1),
+            value: name
+          }
+        })
       });
   
       if (isCancel(template) || !template) {
@@ -102,15 +122,15 @@ export class NewProject {
     })
   }
 
-  degitBase(name) {
+  degitProject(projectName, templateName) {
     return new Promise((resolve, reject) => {
       const repoURL = 'xeitojs/xeito-starters/templates';
-      
-      this.logBlock(emoji.emojify(':twisted_rightwards_arrows: ') + color.blue('Downloading base project...'));
-      const emitter = degit(repoURL + '/base', { cache: false });
-      emitter.clone(name)
+
+      log.info(emoji.emojify(':twisted_rightwards_arrows: ') + color.blue('Downloading base project...'));
+      const emitter = degit(repoURL + '/' + templateName, { cache: false });
+      emitter.clone(projectName)
         .then(() => {
-          this.logBlock(emoji.emojify(':white_check_mark: ') + color.green('Base project created'));
+          log.info(emoji.emojify(':white_check_mark: ') + color.green('Base project created'));
           resolve();
         })
         .catch((err) => {
@@ -118,30 +138,6 @@ export class NewProject {
           console.log(err);
         });
     });
-  }
-
-  degitTemplate(name, template) {
-    return new Promise((resolve, reject) => {
-      const repoURL = 'xeitojs/xeito-starters/templates';
-      
-      this.logBlock(emoji.emojify(':twisted_rightwards_arrows: ') + color.blue('Applying template...'));
-      const emitter = degit(repoURL + '/' + template , { cache: false, force: true });
-      emitter.clone(name)
-        .then(() => {
-          this.logBlock(emoji.emojify(':white_check_mark: ') + color.green('Template applied'));
-          resolve();
-        })
-        .catch((err) => {
-          this.program.closingError('Error applying template');
-          console.log(err);
-        });
-    });
-  }
-
-  logBlock(text) {
-    const sp = spinner();
-    sp.start(text);
-    sp.stop(text);
   }
 
 }
