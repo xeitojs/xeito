@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.js",
+    "clean:packages": "node scripts/clean-packages.js",
     "version-bump": "node scripts/version-bump.js",
     "publish": "node scripts/publish.js"
   },
