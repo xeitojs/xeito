@@ -136,6 +136,7 @@ Below you can find a list of the most important guides to get you started with X
 ## Stay in Touch
 
 - Author - [Samuel Bazaga](https://twitter.com/aerotoad)
+- Twitter - [@xeitojs](https://twitter.com/xeitojs)
 - Website - [xeito.dev](https://xeito.dev)
 - Github Discussions - [Github Discussions](https://github.com/aerotoad/xeito/discussions)
 
