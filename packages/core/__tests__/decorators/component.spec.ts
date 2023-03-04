@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { Component } from '../../decorators/component';
 
 describe('@Component() decorator', () => {
@@ -25,4 +25,27 @@ describe('@Component() decorator', () => {
     expect(new C()._XeitoInternals).toHaveProperty('selector');
     expect(new C()._XeitoInternals.selector).toBe('test-c');
   })
+
+  test('@Component() should throw an error if the selector is not defined', () => {
+    expect(() => Component({selector:null})(class {})).toThrowError();
+  })
+
+  test('@Component() should throw an error if the selector is not valid custom element selector', () => {
+    expect(() => Component({selector:'testc'})(class {})).toThrowError();
+  })
+
+  test('@Component() should warn if the selector is not recommended', () => {
+    const warnFn = vi.fn();
+    console.warn = warnFn;
+    Component({selector:'ng-component1'})(class {});
+    expect(warnFn).toHaveBeenCalled();
+  })
+
+  test('@Component() should warn if the component is already registered', () => {
+    const warnFn = vi.fn();
+    console.warn = warnFn;
+    Component({selector:'test-c'})(class {});
+    expect(warnFn).toHaveBeenCalled();
+  });
+
 })
