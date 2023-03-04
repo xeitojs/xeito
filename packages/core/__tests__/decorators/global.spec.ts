@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { Global } from "../../decorators/global";
 
 describe('@Global decorator', () => {
@@ -22,7 +22,10 @@ describe('@Global decorator', () => {
     const c = new TestC();
 
     // Get the value (should warning because the global object is not attached to the component)
+    const warnFn = vi.fn();
+    console.warn = warnFn;
     expect(c.testKey).toBeUndefined();
+    expect(warnFn).toHaveBeenCalled();
 
     // Attach the global object
     c['global'] = {properties: {testKey: 'test'}}
