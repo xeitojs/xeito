@@ -31,6 +31,10 @@
   <a href="https://github.com/aerotoad/xeito/blob/main/CONTRIBUTING.md">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
   </a>
+  &nbsp;
+  <a href="https://github.com/xeitojs/xeito/actions/workflows/ci.yml">
+    <img src="https://github.com/xeitojs/xeito/actions/workflows/ci.yml/badge.svg" />
+  </a>
 </p>
 
 <br>
