@@ -4,7 +4,9 @@ import { XeitoComponent } from "../../classes/xeito-component";
 describe('Xeito Component', () => {
 
   // Create a new Component extending XeitoComponent
-  const C = class extends XeitoComponent {};
+  const C = class extends XeitoComponent {
+    render(){}
+  };
 
   // Patch the _XeitoInternals object to the class (Replacing the decorator)
   C.prototype['_XeitoInternals'] = {
@@ -57,6 +59,10 @@ describe('Xeito Component', () => {
     expect(element.getProp).toBeInstanceOf(Function);
     expect(element.requestUpdate).toBeInstanceOf(Function);
     expect(element.forceUpdate).toBeInstanceOf(Function);
+    expect(element.setStore).toBeInstanceOf(Function);
+    expect(element.getStore).toBeInstanceOf(Function);
+    expect(element.use).toBeInstanceOf(Function);
+    expect(element.pipe).toBeInstanceOf(Function);
   });
 
   test('A component can be interacted with from the DOM', () => {
