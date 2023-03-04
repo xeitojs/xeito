@@ -19,7 +19,7 @@ export class DerivedStore<T> {
   ) {
     // Set the initial value and callback
     this._value = initialValue;
-    this._callback = callback;  
+    this._callback = callback;
 
     // If the stores argument is not an array, make it an array
     this._stores = Array.isArray(stores) ? stores : [stores];
@@ -32,8 +32,6 @@ export class DerivedStore<T> {
         if (this._values.length === this._stores.length) this.runCallback();
       }));
     });
-
-    this.runCallback();
   }
 
   public get value(): T {
