@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { XeitoPlugin } from "../classes/xeito-plugin";
+import { XeitoPlugin } from "../../classes/xeito-plugin";
 
 describe('Xeito Plugin Class', () => {
 

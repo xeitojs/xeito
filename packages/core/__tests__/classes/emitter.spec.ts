@@ -1,5 +1,5 @@
-import { describe, expect, test, vi } from "vitest";
-import { Emitter } from "../classes/emitter";
+import { describe, expect, test } from "vitest";
+import { Emitter } from "../../classes/emitter";
 
 describe('Emitter Class', () => {
 
