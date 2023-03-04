@@ -68,7 +68,8 @@ export class DerivedStore<T> {
   private runCallback() {
     if (this._killCallback) this._killCallback();
 
-    let values = this._values.length === 1 ? this._values[0] : this._values;
+    let values = this._values;
+    if (this._stores.length === 1) values = this._values[0];
     if (this._callback) {
       const callbackResult = this._callback(values, this.set.bind(this));
 
