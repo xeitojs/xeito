@@ -28,7 +28,8 @@ export class DerivedStore<T> {
     this._stores.forEach((store, index) => {
       this._subscriptions.push(store.subscribe((value: any) => {
         this._values[index] = value;
-        this.runCallback();
+        // Only run the callback if all the stores have values
+        if (index === this._stores.length - 1) this.runCallback();
       }));
     });
 
