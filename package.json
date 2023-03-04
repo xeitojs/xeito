@@ -9,6 +9,7 @@
     "version-bump": "node scripts/version-bump.js",
     "publish": "node scripts/publish.js",
     "test": "vitest",
+    "test:ci": "vitest run",
     "coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
