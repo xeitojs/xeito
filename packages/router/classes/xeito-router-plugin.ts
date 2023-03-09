@@ -35,7 +35,7 @@ export class XeitoRouterPlugin extends XeitoPlugin {
     if (!options) throw new Error('Router options are required');
 
     // Store the routes
-    this.routes = options.routes;
+    this.routes = this.formatRoutes(options.routes);
 
     // Initialize the history instance based on the strategy
     this.initializeHistory(options.strategy || 'browser');
@@ -124,6 +124,27 @@ export class XeitoRouterPlugin extends XeitoPlugin {
       if (route.component) this.registerGlobalComponent(route.component);
       if (route.children) this.registerRouteComponentsAsGlobal(route.children);
     });
+  }
+  
+  formatRoutes(routes: Route[]) {
+    // Move / or /:something (root routes) to the end of the array recursively for all children
+    routes.forEach(route => {
+      if (route.children) {
+        route.children = this.formatRoutes(route.children);
+        const rootRoute = route.children.find(r => r.path === '/' || r.path.startsWith('/:'));
+        if (rootRoute) {
+          route.children.splice(route.children.indexOf(rootRoute), 1);
+          route.children.push(rootRoute);
+        }
+      } else {
+        if (route.path === '/' || route.path.startsWith('/:')) {
+          routes.splice(routes.indexOf(route), 1);
+          routes.push(route);
+        }
+      }
+    });
+
+    return routes;
   }
   
 }
