@@ -69,4 +69,17 @@ describe('@State() decorator', () => {
 
   })
 
+  test('@State() decorator doesnt throw if the initial value is null', () => {
+    const mock = new MockC();
+
+    expect(mock.testKey).toBeUndefined();
+
+    // Decorate the property
+    State()(mock, 'testKey');
+    // Set the value
+    mock.testKey = null;
+
+    expect(mock.testKey).toBeNull();
+  })
+
 })
