@@ -17,7 +17,7 @@ export function State() {
         return this.getState(key);
       },
       set(value: any) {
-        if (value.subscribe instanceof Function) {
+        if (value?.subscribe instanceof Function) {
           decorateStore(this, key, value);
         } else {
           this.setState(key, value);
