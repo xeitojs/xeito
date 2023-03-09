@@ -6,6 +6,7 @@ import { XeitoComponent, Component, State, html } from '../../../packages/core/i
 export class AppComponent extends XeitoComponent {
 
   @State() count: number = 0;
+  @State() nullValue: any = null;
 
   render() {
     return html`
