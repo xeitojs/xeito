@@ -9,9 +9,17 @@ const app = new Xeito(AppComponent);
 app.usePlugin(XeitoRouterPlugin, {
   routes: [
     {
+      path: '/',
+      redirectTo: '/page1'
+    },
+    {
       path: '/page1',
       component: Page1,
       children: [
+        {
+          path: '/',
+          redirectTo: '/page1/page2'
+        },
         {
           path: '/page2',
           component: Page2
@@ -29,10 +37,6 @@ app.usePlugin(XeitoRouterPlugin, {
     {
       path: '/page3',
       component: Page3
-    },
-    {
-      path: '/',
-      redirectTo: '/page1'
     },
   ]
 })
