@@ -126,25 +126,38 @@ export class XeitoRouterPlugin extends XeitoPlugin {
     });
   }
   
+
+  /**
+   * Moves the root route to the end of the array to ensure that it is always the last route to be matched
+   * Prevents infinite loops when the root route is matched
+   * @param routes List of routes
+   * @returns routes with the root route at the end of the array
+   */
   formatRoutes(routes: Route[]) {
-    // Move / or /:something (root routes) to the end of the array recursively for all children
-    routes.forEach(route => {
+    routes.forEach((route: Route) => {
       if (route.children) {
         route.children = this.formatRoutes(route.children);
-        const rootRoute = route.children.find(r => r.path === '/' || r.path.startsWith('/:'));
-        if (rootRoute) {
-          route.children.splice(route.children.indexOf(rootRoute), 1);
-          route.children.push(rootRoute);
-        }
       } else {
-        if (route.path === '/' || route.path.startsWith('/:')) {
-          routes.splice(routes.indexOf(route), 1);
+        if (this.isRootRoute(route)) {
+          routes = routes.filter(r => r !== route);
           routes.push(route);
         }
       }
     });
-
     return routes;
+  }
+
+  isRootRoute(route: Route) {
+    if (
+      route.path === '/' ||
+      route.path === '' ||
+      route.path === ' ' ||
+      route.path === '/:' ||
+      route.path === '(.*)' ||
+      route.path === '/(.*)' ||
+      route.path === undefined ||
+      route.path === null
+    ) return true;
   }
   
 }
