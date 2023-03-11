@@ -10,11 +10,11 @@ import { EventConfig } from "../interfaces/event-config";
 export class Emitter<T> {
 
   constructor(
-    private clazz: any,
+    private clazz: HTMLElement,
     private eventConfig: EventConfig
   ) {}
 
-  emit(value: any) {
+  emit(value: T) {
     // Create a new event with the given name and options
     const event = new CustomEvent(this.eventConfig.name as string, {
       detail: value,

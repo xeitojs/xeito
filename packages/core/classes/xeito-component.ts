@@ -111,7 +111,7 @@ export class XeitoComponent extends HTMLElement {
     const slotContent: Record<string, any> = {
       default: []
     };
-    const children: any[] = Array.from(this.childNodes);
+    const children: ChildNode[] = Array.from(this.childNodes);
     
     if (children) {
       for(let child in children) {
