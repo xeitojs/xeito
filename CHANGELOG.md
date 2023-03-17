@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.3.5](https://github.com/aerotoad/xeito/compare/v0.3.4...v0.3.5) (2023-03-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **store:** Derived store callback now will always receive an array of values unless there it was created with only one store dependency.
+
+### Features
+
+* Add vitest and initial tests ([1b5467c](https://github.com/aerotoad/xeito/commit/1b5467cb534108db816fcc49c74466eb941848b0))
+* **router:** Order routes to avoid infinite recursion ([308a791](https://github.com/aerotoad/xeito/commit/308a7918399498f3c846855c66f67a941ce170b0))
+
+
+### Bug Fixes
+
+* **core:** State doesn't throw if initial value is null ([a7c05a5](https://github.com/aerotoad/xeito/commit/a7c05a5443488312e741e7026f2c4fe9cd066573))
+* Make root route detection more solid ([a112389](https://github.com/aerotoad/xeito/commit/a112389e1c165b16a18d2e57e2a96699ff804218))
+* **store:** Derived callback only called once on start ([dd0c505](https://github.com/aerotoad/xeito/commit/dd0c505632f372234c9ceb0d9bf9106c7e88e769))
+* **store:** Ensure all subscriptions ran before running callback ([f9d120b](https://github.com/aerotoad/xeito/commit/f9d120b90976741727dd6819ebf3f5a42216aa2b))
+* **store:** Ensure callback runs on every dependency change ([4e35bcb](https://github.com/aerotoad/xeito/commit/4e35bcbd3ae304a2b82405e3e72f74287d933a8b))
+
+
+* **store:** Update derived callback param ([f269d47](https://github.com/aerotoad/xeito/commit/f269d47e72931df3ffadaa2d12f99393ea2c5587))
+
 ### [0.3.4](https://github.com/aerotoad/xeito/compare/v0.3.3...v0.3.4) (2023-02-27)
 
 
