@@ -358,7 +358,7 @@ export class XeitoComponent extends HTMLElement {
    * @returns 
    */
   pipe(selector: string, ...args: any[]): any {
-    return () => {
+    return (()=>{
       // Increment the pipe index (used to keep track of the pipes as they are called by the template)
       this._IPipeIndex++;
       // Check if the pipe has been instantiated
@@ -384,7 +384,7 @@ export class XeitoComponent extends HTMLElement {
           throw new Error(`Pipe '${selector}' not found in component '<${this._XeitoInternals.selector}>', did you forget to add it to the pipes array or install the plugin?`);
         }
       }
-    }
+    })();
   }
   
   /**
