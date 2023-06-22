@@ -50,23 +50,21 @@ export function Pipe(pipeMetadata: PipeMetadata) {
           }
         }
 
-        console.log('Same value, checking arguments')
-
         // If the value is the same, we perform the array check with the arguments
+
+        // If the previous arguments are null or undefined, we trigger the update
         if (this.previousArgs === null || args === undefined) {
-          console.log('No previous args')
           return this.triggerUpdate(value, ...args);
         }
 
         // Check equality between the previous arguments and the new argument
         // Length check
         if (args.length !== this.previousArgs.length) {
-          console.log('Different args length')
           return this.triggerUpdate(value, ...args);
         }
 
         // Check each item
-        const equalArgs = args.every((arg, index) => {
+        const equalArgs = args.every((arg: any, index: number) => {
           // Check if the arg is a function 
           if (typeof arg === 'function') {
             return arg.toString() === this.previousArgs[index].toString()
