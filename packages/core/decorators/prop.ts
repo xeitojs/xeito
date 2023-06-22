@@ -3,8 +3,8 @@ import { State } from "./state";
 
 /**
  * Property decorator
- * Allows the user to define a custom attribute in the component tag
- * The property value will be set to the received attribute value
+ * 
+ * Syntactic sugar for the state decorator that always sets the prop metadata to true
  */
 export function Prop(propMetadata?: PropMetadata) {
 

@@ -3,8 +3,10 @@ import { StateMetadata } from "../interfaces/state-metadata";
 
 /**
  * State decorator
- * Wraps the state property with a Proxy or a getter/setter
- * This way we can detect when the state changes and trigger a re-render
+ * 
+ * Wraps the state property with a getter/setter
+ * It also adds the property to the observed attributes of the component if the state is also a prop
+ * This allows to listen to changes in the state and trigger updates in the component
  */
 export function State(stateMetadata?: StateMetadata) {
   
@@ -15,12 +17,15 @@ export function State(stateMetadata?: StateMetadata) {
      */
     Object.defineProperty(target, key, {
       get() {
-        return stateMetadata?.prop ? this.getProp(key) : this.getState(key);
+        const value = stateMetadata?.prop ? this.getProp(key) : this.getState(key);
+        return stateMetadata?.transform ? stateMetadata.transform(value) : value;
       },
       set(value: any) {
+        // If the value is a Store (has a subscribe method), decorate it to listen to changes
         if (value?.subscribe instanceof Function) {
           decorateStore(this, key, value);
         } else {
+          // If the value is not a Store, set it as a normal property
           stateMetadata?.prop ? this.setProp(key, value) : this.setState(key, value);
         }
       },
