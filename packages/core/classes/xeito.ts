@@ -1,9 +1,6 @@
 import { render } from '../index';
 import { XeitoGlobal } from '../interfaces/xeito-global';
 import { XeitoPlugin } from './xeito-plugin';
-import { XtForComponent } from '../components/xt-for-component';
-import { XtIfComponent } from '../components/xt-if-component';
-import { XtSwitchComponent } from '../components/xt-switch-component';
 
 export class Xeito {
 
@@ -20,11 +17,6 @@ export class Xeito {
   constructor (rootComponent: any) {
     // Add the root component to the global components array
     this.global.components.push(rootComponent);
-
-    // Register default global components
-    this.global.components.push(XtForComponent);
-    this.global.components.push(XtIfComponent);
-    this.global.components.push(XtSwitchComponent);
   }
 
   /**

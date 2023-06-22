@@ -20,6 +20,11 @@ export { Ref } from './decorators/ref';
 export { State } from './decorators/state';
 export { Watch } from './decorators/watch';
 
+// Export core pipes
+export { XtSwitch } from './pipes/xt-switch';
+export { XtWhen } from './pipes/xt-when';
+export { XtFor } from './pipes/xt-for';
+
 // Export core interfaces
 export type { Emitter } from './classes/emitter';
 export type { ActionMetadata } from './interfaces/action-metadata';
