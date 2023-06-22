@@ -2,6 +2,7 @@ import { PropChange } from '../interfaces/prop-change';
 import { ActionResult } from '../interfaces/action-result';
 import { Hole, render, Renderable } from 'uhtml';
 import { XeitoInternals } from '../interfaces/xeito-internals';
+import { isClient } from '../functions/is-client';
 
 let _HTMLElement;
 if (typeof window !== 'undefined') {
@@ -20,7 +21,7 @@ export class XeitoComponent extends _HTMLElement {
   private _XeitoInternals: XeitoInternals = {};
   
   private _DOMRoot: HTMLElement | ShadowRoot;
-  private _template: Node | Hole | Renderable;
+  public _template: Node | Hole | Renderable | string;
   private _state: Map<string, any> = new Map();
   private _watchers: Map<string, string[]>;
 
@@ -66,20 +67,18 @@ export class XeitoComponent extends _HTMLElement {
     
     // Set the global property
     this.global = this._XeitoInternals.global;
-
-    // Make sure the shadow property is correctly set
-    this._XeitoInternals.shadow = this._XeitoInternals.shadow ?? this.global.config.shadow;
     
     // Assign the children global
     this.assignChildrenGlobal();
     
     /** 
     * Set the root element to render the template in
-    * If it's a shadow root, create a shadow root
-    * If it's not a shadow root, use the element itself (default)
+    * If the component is not rendered in the client, set the root element as a string constructor
     */
-    let DOMRoot: HTMLElement = this;
-    // Set the DOMRoot in the _XeitoInternals
+    let DOMRoot: typeof _HTMLElement | String = this;
+    if (!isClient()) DOMRoot = String;
+
+    // Set the DOMRoot
     this._DOMRoot = DOMRoot;
 
     // Call the onInit method
