@@ -15,7 +15,6 @@ export class XeitoComponent extends HTMLElement {
   private _DOMRoot: HTMLElement | ShadowRoot;
   private _template: Node | Hole | Renderable;
   private _state: Map<string, any> = new Map();
-  private _props: Map<string, any> = new Map();
   private _watchers: Map<string, string[]>;
 
   // Action controls
@@ -240,33 +239,12 @@ export class XeitoComponent extends HTMLElement {
 
   /**
    * Sets a prop value and triggers an update
+   * Synthax sugar for setState to make it more intuitive in the decorator
    * @param key Key of the prop to set
    * @param value Value to set
    */
   setProp(key: string, value: any) {
-    // Check if the prop has been set before to avoid unnecessary updates
-    if (this._props.has(key)) {
-      // If the prop has been set before, check if the value is the same as the current one to avoid unnecessary updates
-
-      // Create a new changes object
-      const change: PropChange = { name: key, oldValue: this._props.get(key), newValue: value };
-      // Call the onChanges hook
-      this.onPropChange(change);
-
-      // Set the prop
-      this._props.set(key, value);
-
-      // Trigger the watchers for the key is there are any
-      this._watchers?.get(key)?.forEach((watcher: string) => {
-        this[watcher]({ name: key, value });
-      });
-
-      // Trigger an update
-      this.requestUpdate();
-    } else {
-      // If the prop hasn't been set before, set it
-      this._props.set(key, value);
-    }
+    this.setState(key, value);
   }
 
   /**
@@ -275,7 +253,23 @@ export class XeitoComponent extends HTMLElement {
    * @returns Value of the prop key
    */
   getProp(key: string): any {
-    return this._props.get(key);
+    // Check if there is a value stored in the state map
+    const value = this._state.get(key);
+    if (value === undefined) {
+      // If there isn't, check if there is an attribute with the same name
+      const attr = this.getAttribute(key);
+      if (attr) {
+        // If there is, set the prop value to the attribute value
+        this.setProp(key, attr);
+        return attr;
+      } else {
+        // If there isn't, return undefined
+        return undefined;
+      }
+    } else {
+      // If there is, return the value
+      return value;
+    }
   }
 
   /**
@@ -435,12 +429,5 @@ export class XeitoComponent extends HTMLElement {
   onWillMount(): any {}
   onDidMount(): any {}
   onUnmount(): any {}
-  
-  /**
-  * On changes method desgin to be overriden by the user
-  * Gets called when an attribute/property changes (attributeChangedCallback)
-  * @param { PropChange } change Prop changes object
-  */
-  onPropChange(change: PropChange) {}
 
 }

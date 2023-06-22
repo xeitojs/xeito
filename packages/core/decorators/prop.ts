@@ -1,34 +1,22 @@
+import { PropMetadata } from "../interfaces/prop-metadata";
+import { State } from "./state";
+
 /**
  * Property decorator
  * Allows the user to define a custom attribute in the component tag
  * The property value will be set to the received attribute value
  */
-export function Prop() {
+export function Prop(propMetadata?: PropMetadata) {
 
   return function _PropDecorator (target: any, key: string) {
 
-    Object.defineProperty(target, key, {
-      get() {
-        return this.getProp(key);
-      },
-      set(value: any) {
-        const oldValue = this.getProp(key)
+    // Set the prop metadata to true
+    let metadata = {...propMetadata};
+    metadata.prop = true;
 
-        if (oldValue === value) return;
-
-        // Set the new value in the props object
-        this.setProp(key, value);
-      }
-    });
-
-    // Update observed attributes
-    const observedAttributes = target.constructor.observedAttributes || [];
-    if (!observedAttributes.includes(key)) {
-      observedAttributes.push(key);
-      target.constructor.observedAttributes = observedAttributes;
-    } else {
-      console.warn(`Attribute '${key}' is already observed in component '<${target._XeitoInternals.selector}>'.`);
-    }
+    // The prop decorator will always call the state decorator on the same property
+    // This is because the prop decorator is just syntactic sugar for the state decorator
+    State(metadata)(target, key);
 
   }
 
