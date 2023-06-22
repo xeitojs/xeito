@@ -1,0 +1,23 @@
+{
+  "name": "@xeito/ssr",
+  "version": "0.3.5",
+  "description": "SSR modules for Xeito | Framework for building web applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Samuel Bazaga",
+  "license": "MIT",
+  "keywords": [
+    "Xeito",
+    "Framework",
+    "Web",
+    "Typescript"
+  ],
+  "dependencies": {}
+}

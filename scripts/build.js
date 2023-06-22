@@ -31,6 +31,10 @@ async function main() {
   console.log('Building core...');
   rimraf.sync('packages/core/dist');
   await runTsup(getTsupCommand('core'));
+
+  console.log('Building SSR...');
+  rimraf.sync('packages/ssr/dist');
+  await runTsup(getTsupCommand('ssr'));
   
   console.log('Building injection...');
   rimraf.sync('packages/injection/dist');
@@ -43,6 +47,7 @@ async function main() {
   console.log('Building store...');
   rimraf.sync('packages/store/dist');
   await runTsup(getTsupCommand('store'));
+  
 
 }
 main();
