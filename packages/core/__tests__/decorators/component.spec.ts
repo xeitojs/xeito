@@ -34,11 +34,10 @@ describe('@Component() decorator', () => {
     expect(() => Component({selector:'testc'})(class {})).toThrowError();
   })
 
-  test('@Component() should warn if the selector is not recommended', () => {
-    const warnFn = vi.fn();
-    console.warn = warnFn;
-    Component({selector:'ng-component1'})(class {});
-    expect(warnFn).toHaveBeenCalled();
+  test('@Component() should throw an error if it overlaps other framework`s conventions', () => {
+    expect(() => Component({selector:'ng-component1'})(class {})).toThrowError();
+    expect(() => Component({selector:'x-component1'})(class {})).toThrowError();
+    expect(() => Component({selector:'polymer-component1'})(class {})).toThrowError();
   })
 
   test('@Component() should warn if the component is already registered', () => {
