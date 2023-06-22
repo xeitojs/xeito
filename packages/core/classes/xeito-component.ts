@@ -3,7 +3,14 @@ import { ActionResult } from '../interfaces/action-result';
 import { Hole, render, Renderable } from 'uhtml';
 import { XeitoInternals } from '../interfaces/xeito-internals';
 
-export class XeitoComponent extends HTMLElement {
+let _HTMLElement;
+if (typeof window !== 'undefined') {
+  _HTMLElement = HTMLElement;
+} else {
+  _HTMLElement = class HTMLElement {};
+}
+
+export class XeitoComponent extends _HTMLElement {
   
   /**
   * Xeito internals object
@@ -71,11 +78,7 @@ export class XeitoComponent extends HTMLElement {
     * If it's a shadow root, create a shadow root
     * If it's not a shadow root, use the element itself (default)
     */
-    let DOMRoot: HTMLElement | ShadowRoot = this;
-    if (this._XeitoInternals.shadow === true) {
-      this.attachShadow({ mode: 'open' });
-      DOMRoot = this.shadowRoot as ShadowRoot;
-    }
+    let DOMRoot: HTMLElement = this;
     // Set the DOMRoot in the _XeitoInternals
     this._DOMRoot = DOMRoot;
 
