@@ -20,6 +20,7 @@
     "Typescript"
   ],
   "dependencies": {
-    "uhtml": "^3.1.0"
+    "uhtml": "^3.1.0",
+    "uhtml-ssr": "^0.9.1"
   }
 }
