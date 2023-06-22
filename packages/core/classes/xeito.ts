@@ -6,6 +6,7 @@ export class Xeito {
 
   private _rootElement: HTMLElement;
   private plugins: Array<XeitoPlugin> = [];
+  private instanceID: number = 0;
 
   public global: XeitoGlobal = {
     properties: {},
