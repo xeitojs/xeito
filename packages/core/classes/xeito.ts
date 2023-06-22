@@ -39,6 +39,17 @@ export class Xeito {
 
     // Render the root component
     render(this._rootElement, new (this.global.components[0] as any)());
+
+    // Add the xeito app to the global object
+    if (window['__XEITO__']) {
+      window['__XEITO__'].push(this);
+      this.instanceID = window['__XEITO__'].length - 1;
+    } else {
+      window['__XEITO__'] = [this];
+      this.instanceID = 0;
+    }
+  }
+
   }
 
   /**
