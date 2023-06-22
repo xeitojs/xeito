@@ -284,6 +284,12 @@ export class XeitoComponent extends HTMLElement {
    * @param store The store to set
    */
   setStore(key: string, store: any) {
+    // Check if there is a store already set for the key
+    if (this._stores.has(key)) {
+      // If there is, unsubscribe from it
+      this._storeSubscriptions.get(key)?.unsubscribe();
+    }
+    
     // Create a new subscription to the store
     const subscription = store.subscribe(() => {
       // We get a value upon subscription
