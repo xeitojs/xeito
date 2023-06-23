@@ -1,8 +1,8 @@
-import { PropChange } from '../interfaces/prop-change';
 import { ActionResult } from '../interfaces/action-result';
-import { Hole, render, Renderable } from 'uhtml';
+import { Hole, render, Renderable } from '../';
 import { XeitoInternals } from '../interfaces/xeito-internals';
 import { isClient } from '../functions/is-client';
+import { ComponentData } from '../interfaces/component-data';
 
 let _HTMLElement;
 if (typeof window !== 'undefined') {
@@ -21,7 +21,7 @@ export class XeitoComponent extends _HTMLElement {
   private _XeitoInternals: XeitoInternals = {};
   
   private _DOMRoot: HTMLElement | ShadowRoot;
-  public _template: Node | Hole | Renderable | string;
+  public _template: Node | typeof Hole | Renderable | string;
   private _state: Map<string, any> = new Map();
   private _watchers: Map<string, string[]>;
 
@@ -56,20 +56,33 @@ export class XeitoComponent extends _HTMLElement {
   */
   slotContent: Record<string, any> = {};
   
-  constructor() {
+  constructor(componentData?: ComponentData) {
     super();
     
     // Set the default _XeitoInternals object as received from the decorator
     this._XeitoInternals = Object.assign({}, this.constructor.prototype._XeitoInternals);
     
     // Set the slotted content
-    this.slotContent = this.getSlotContent();
+    if (isClient()) this.slotContent = this.getSlotContent();
+    if (!isClient()) this.slotContent = componentData.slotContent;
+
+    // Set constructor props
+    if (componentData?.props) {
+      Object.keys(componentData.props).forEach((prop: string) => {
+        this._state.set(prop, componentData.props[prop]);
+      });
+    }
     
     // Set the global property
     this.global = this._XeitoInternals.global;
     
     // Assign the children global
     this.assignChildrenGlobal();
+
+    // Hydrate the component's state if it's marked as requiring hydration
+    if (isClient()) {
+      this.getAttribute('hydrate') === 'true' && this.hydrate();
+    }
     
     /** 
     * Set the root element to render the template in
@@ -414,11 +427,24 @@ export class XeitoComponent extends _HTMLElement {
     // Unsubscribe from the stores
     this._storeSubscriptions.forEach((subscription: any) => subscription.unsubscribe());
   }
+
+  hydrate() {
+    // Get the first script type application/json
+    const script = this.querySelector('script[type="application/json"]');
+    if (script) {
+      // Parse the script content
+      const content = JSON.parse(script.innerHTML);
+      // Assign the properies to the component
+      Object.keys(content).forEach((key: string) => {
+        this._state.set(key, content[key]);
+      });
+    }
+  }
   
   /**
   * Render method desgin to be overriden by the user
   */
-  render(): Hole | void {}
+  render(): typeof Hole | void {}
   
   /**
    * Lifecycle methods desgin to be overriden by the user
