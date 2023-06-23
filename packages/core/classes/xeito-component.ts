@@ -26,11 +26,11 @@ export class XeitoComponent extends _HTMLElement {
   private _watchers: Map<string, string[]>;
 
   // Action controls
-  private _IActionIndex: number = 0;
+  private _IActionIndex: number = -1;
   private _actionInstances: any[] = [];
 
   // Pipe controls
-  private _IPipeIndex: number = 0;
+  private _IPipeIndex: number = -1;
   private _pipeInstances: any[] = [];
 
   // Store controls
@@ -43,7 +43,7 @@ export class XeitoComponent extends _HTMLElement {
   /**
   * Global properties object (will be populated by the parent component or the Xeito instance)
   */
-  global: Record<string, any>;
+  public global: Record<string, any>;
   
   /**
   * Slot Content
@@ -54,7 +54,9 @@ export class XeitoComponent extends _HTMLElement {
   * This can be accessed inside the render method
   * eg: html`<div>${this.slotContent.header}</div>`
   */
-  slotContent: Record<string, any> = {};
+  public slotContent: Record<string, any> = {};
+
+  private _constructorProps: Record<string, any> = {};
   
   constructor(componentData?: ComponentData) {
     super();
@@ -66,12 +68,8 @@ export class XeitoComponent extends _HTMLElement {
     if (isClient()) this.slotContent = this.getSlotContent();
     if (!isClient()) this.slotContent = componentData.slotContent;
 
-    // Set constructor props
-    if (componentData?.props) {
-      Object.keys(componentData.props).forEach((prop: string) => {
-        this._state.set(prop, componentData.props[prop]);
-      });
-    }
+    // Set the constructor props
+    this._constructorProps = componentData?.props || {};
     
     // Set the global property
     this.global = this._XeitoInternals.global;
@@ -79,11 +77,6 @@ export class XeitoComponent extends _HTMLElement {
     // Assign the children global
     this.assignChildrenGlobal();
 
-    // Hydrate the component's state if it's marked as requiring hydration
-    if (isClient()) {
-      this.getAttribute('hydrate') === 'true' && this.hydrate();
-    }
-    
     /** 
     * Set the root element to render the template in
     * If the component is not rendered in the client, set the root element as a string constructor
@@ -112,6 +105,11 @@ export class XeitoComponent extends _HTMLElement {
 
     // Render the component for the first time
     this._update();
+
+    // Update props with the constructor props
+    Object.keys(this._constructorProps).forEach((prop: string) => {
+      this.setProp(prop, this._constructorProps[prop]);
+    });
 
     // Call the onDidMount method
     this.onDidMount();
@@ -207,6 +205,8 @@ export class XeitoComponent extends _HTMLElement {
   private _update() {
     // Reset the pipe index
     this._IPipeIndex = -1;
+    // Reset the action index
+    this._IActionIndex = -1;
 
     // Render the template
     this._template = render(this._DOMRoot, this.render() as Renderable);
@@ -427,19 +427,6 @@ export class XeitoComponent extends _HTMLElement {
     // Unsubscribe from the stores
     this._storeSubscriptions.forEach((subscription: any) => subscription.unsubscribe());
   }
-
-  hydrate() {
-    // Get the first script type application/json
-    const script = this.querySelector('script[type="application/json"]');
-    if (script) {
-      // Parse the script content
-      const content = JSON.parse(script.innerHTML);
-      // Assign the properies to the component
-      Object.keys(content).forEach((key: string) => {
-        this._state.set(key, content[key]);
-      });
-    }
-  }
   
   /**
   * Render method desgin to be overriden by the user
@@ -457,5 +444,4 @@ export class XeitoComponent extends _HTMLElement {
   onWillMount(): any {}
   onDidMount(): any {}
   onUnmount(): any {}
-
 }
