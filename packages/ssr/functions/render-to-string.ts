@@ -9,8 +9,5 @@ export async function renderToString(app: any) {
   // Get the root component
   const rootComponent = app.global.components[0];
 
-  const res = await unrollComponent(rootComponent);
-
-  console.log('renderToString', res)
-  return res;
+  return await unrollComponent(rootComponent);
 }

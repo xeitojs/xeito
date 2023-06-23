@@ -1,12 +1,12 @@
-import { XeitoComponent } from "@xeito/core";
-import { Component, State, html } from "@xeito/core";
+import { Prop, XeitoComponent } from "@xeito/core";
+import { Component, html } from "@xeito/core";
 
 @Component({
   selector: 'app-counter',
 })
 export class CounterComponent extends XeitoComponent {
 
-  @State() count: number = 0;
+  @Prop() count: number = 0;
 
   render() {
     return html`
