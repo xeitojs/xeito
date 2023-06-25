@@ -60,8 +60,8 @@ describe('Xeito Component', () => {
     expect(element.forceUpdate).toBeInstanceOf(Function);
     expect(element.setStore).toBeInstanceOf(Function);
     expect(element.getStore).toBeInstanceOf(Function);
-    expect(element.use).toBeInstanceOf(Function);
-    expect(element.pipe).toBeInstanceOf(Function);
+    expect(element.$use).toBeInstanceOf(Function);
+    expect(element.$pipe).toBeInstanceOf(Function);
   });
 
   test('A component can be interacted with from the DOM', () => {

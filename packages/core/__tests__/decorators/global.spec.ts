@@ -28,7 +28,7 @@ describe('@Global decorator', () => {
     expect(warnFn).toHaveBeenCalled();
 
     // Attach the global object
-    c['global'] = {properties: {testKey: 'test'}}
+    c['$global'] = {properties: {testKey: 'test'}}
     
     // Get a property from the global object
     expect(c.testKey).toBe('test');
