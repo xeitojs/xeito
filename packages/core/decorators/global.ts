@@ -5,7 +5,7 @@ export function Global(propertyName?: string) {
 
     Object.defineProperty(target, key, {
       get: function() {
-        if (!this.global) {
+        if (!this.$global) {
           console.warn(`
             Cannot get the value of the global property '${key}' from component <${this._XeitoInternals.selector}>.
             The global object is not attached to the component.
@@ -15,7 +15,7 @@ export function Global(propertyName?: string) {
         }
 
         if(propertyName) return this.global?.properties[propertyName];
-        return this.global?.properties[key];
+        return this.$global?.properties[key];
       },
       set: function(value) {
         console.warn(`Cannot set the value of the global property '${key}' from a component.`);

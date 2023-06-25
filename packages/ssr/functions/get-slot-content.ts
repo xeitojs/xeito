@@ -1,8 +1,8 @@
-import { html } from "@xeito/core";
+import { ComponentSlots, html } from "@xeito/core";
 import { HTMLElement, Node } from 'node-html-parser';
 
 export async function getSlotContent(element: HTMLElement) {
-  const slotContent: Record<string, any> = {
+  const slotContent: ComponentSlots = {
     default: ''
   };
   const children: Node[] = Array.from(element.childNodes);

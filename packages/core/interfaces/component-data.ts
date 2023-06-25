@@ -1,5 +1,10 @@
+import { Hole } from "uhtml";
 
-export interface ComponentData {
-  props: Record<string, any>;
-  slotContent: Record<string, string>;
+export interface ComponentProps {
+  [key: string]: any;
+}
+
+export interface ComponentSlots {
+  default: string | typeof Hole | any;
+  [key: string]: string | typeof Hole | any;
 }

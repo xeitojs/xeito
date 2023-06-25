@@ -1,9 +1,9 @@
-import { XeitoComponent } from "@xeito/core";
+import { ComponentProps, ComponentSlots, XeitoComponent } from "@xeito/core";
 import { renderComponent } from "./render-component";
 import { getSlotContent } from "./get-slot-content";
 import { parse } from 'node-html-parser';
 
-export async function unrollComponent(component: typeof XeitoComponent, props = {}, slotContent = {}) {
+export async function unrollComponent(component: typeof XeitoComponent, props: ComponentProps = {}, slotContent: ComponentSlots = {default: []}) {
   const internals = component.prototype['_XeitoInternals'];
   const imports = internals.imports;
 

@@ -34,6 +34,8 @@ export type { PipeMetadata } from './interfaces/pipe-metadata';
 export type { WatchUpdate } from './interfaces/watch-update';
 export type { XeitoGlobal } from './interfaces/xeito-global';
 export type { XeitoInternals } from './interfaces/xeito-internals';
+export type { ComponentSlots } from './interfaces/component-data';
+export type { ComponentProps } from './interfaces/component-data';
 
 // Export util functions
 export { isClient } from './functions/is-client';

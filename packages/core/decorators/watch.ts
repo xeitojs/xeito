@@ -14,7 +14,7 @@
  */
 export function Watch(...propertyNames: string[]) {
 
-  return function _WatchDecorator(target: any, key: string, descriptor: any) {
+  return function _WatchDecorator(target: any, key: string, _descriptor: any) {
 
     const currentWatchers = target.constructor.prototype._pendingWatchers || new Map();
     const methodName = key;

@@ -2,7 +2,7 @@ import { ActionResult } from '../interfaces/action-result';
 import { Hole, render, Renderable } from '../';
 import { XeitoInternals } from '../interfaces/xeito-internals';
 import { isClient } from '../functions/is-client';
-import { ComponentData } from '../interfaces/component-data';
+import { ComponentProps, ComponentSlots } from '../interfaces/component-data';
 
 let _HTMLElement;
 if (typeof window !== 'undefined') {
@@ -43,18 +43,18 @@ export class XeitoComponent extends _HTMLElement {
   /**
   * Global properties object (will be populated by the parent component or the Xeito instance)
   */
-  public global: Record<string, any>;
+  public $global: Record<string, any>;
   
   /**
   * Slot Content
   * Will be populated by the constructor
   * It will contain the slotted content of the component
   * eg: <xeito-component><div slot="header">Header</div></xeito-component>
-  * slotContent.header will contain the div element
+  * $slots.header will contain the div element
   * This can be accessed inside the render method
-  * eg: html`<div>${this.slotContent.header}</div>`
+  * eg: html`<div>${this.$slots.header}</div>`
   */
-  public slotContent: Record<string, any> = {};
+  public $slots: ComponentSlots = {default: []};
 
   /**
    * Constructor props
@@ -63,21 +63,21 @@ export class XeitoComponent extends _HTMLElement {
    */
   private _constructorProps: Record<string, any> = {};
   
-  constructor(componentData?: ComponentData) {
+  constructor(componentProps?: ComponentProps, slots?: ComponentSlots) {
     super();
     
     // Set the default _XeitoInternals object as received from the decorator
     this._XeitoInternals = Object.assign({}, this.constructor.prototype._XeitoInternals);
     
     // Set the slotted content
-    if (isClient()) this.slotContent = this.getSlotContent();
-    if (!isClient()) this.slotContent = componentData.slotContent;
+    if (isClient()) this.$slots = this.getSlotContent();
+    if (!isClient()) this.$slots = slots;
 
     // Set the constructor props
-    this._constructorProps = componentData?.props || {};
+    this._constructorProps = componentProps || {};
     
     // Set the global property
-    this.global = this._XeitoInternals.global;
+    this.$global = this._XeitoInternals.global;
     
     // Assign the children global
     this.assignChildrenGlobal();
@@ -108,7 +108,7 @@ export class XeitoComponent extends _HTMLElement {
   connectedCallback() {
     // Wait for the global object to be populated
     // This avoids mounting the component on SSR markup before the app is bootstrapped
-    if (this.global) {
+    if (this.$global) {
       // Call the onWillMount method
       this.onWillMount();
   
@@ -132,8 +132,8 @@ export class XeitoComponent extends _HTMLElement {
   * Get the slotted content of the component
   * @returns { Record<string, any> } Slot content object
   */
-  private getSlotContent() {
-    const slotContent: Record<string, any> = {
+  private getSlotContent(): ComponentSlots {
+    const slotContent: ComponentSlots = {
       default: []
     };
     const children: ChildNode[] = Array.from(this.childNodes);
@@ -166,7 +166,7 @@ export class XeitoComponent extends _HTMLElement {
   */
   private assignChildrenGlobal() {
     this._XeitoInternals.imports?.forEach((child: typeof XeitoComponent) => {
-      child.prototype._XeitoInternals.global = this.global;
+      child.prototype._XeitoInternals.global = this.$global;
     });
   }
   
@@ -338,14 +338,17 @@ export class XeitoComponent extends _HTMLElement {
 
   /**
   * Use method (Use an action inside the component)
-  * The 'use' method is used to provide actions to the template
+  * The '$use' method is used to provide actions to the template
   * Actions have to be provided in the Component decorator options
   * eg: @Component({ actions: [Action1, Action2] })
+  * Actions can be used in the template by using the '$use' method
+  * Actions receive the parent element as the first argument
+  * eg: <div>${this.$use('action1', arg1, arg2)}</div>
   * @param selector 
   * @param args 
   * @returns 
   */
-  use(selector: string, ...args: any[]): ActionResult | void {
+  $use(selector: string, ...args: any[]): ActionResult | void {
     return (e: HTMLElement) => {
       // Increment the action index (used to keep track of the actions as they are called by the template)
       this._IActionIndex++;
@@ -361,7 +364,7 @@ export class XeitoComponent extends _HTMLElement {
         let action = this._XeitoInternals.actions?.find((action: any) => action.selector === selector);
         if (!action) {
           // Check if the selector is a global action
-          action = this.global.actions?.find((action: any) => action.selector === selector);
+          action = this.$global.actions?.find((action: any) => action.selector === selector);
         }
 
         if (action) {
@@ -378,14 +381,17 @@ export class XeitoComponent extends _HTMLElement {
 
   /**
    * Pipe method (Use a pipe inside the component)
-   * The 'pipe' method is used to provide pipes to the template
+   * The '$pipe' method is used to provide pipes to the template
    * Pipes have to be provided in the Component decorator options
    * eg: @Component({ pipes: [Pipe1, Pipe2] })
+   * Pipes can be used in the template like:
+   * <div>${this.$pipe('pipe1', 'value1')}</div>
+   * <div>${this.$pipe('pipe2', 'value2', 'value3')}</div> 
    * @param selector 
    * @param args 
    * @returns 
    */
-  pipe(selector: string, ...args: any[]): any {
+  $pipe(selector: string, ...args: any[]): any {
     return (()=>{
       // Increment the pipe index (used to keep track of the pipes as they are called by the template)
       this._IPipeIndex++;
@@ -400,7 +406,7 @@ export class XeitoComponent extends _HTMLElement {
         let pipe = this._XeitoInternals.pipes?.find((pipe: any) => pipe.selector === selector);
         if (!pipe) {
           // Check if the selector is a global pipe
-          pipe = this.global.pipes?.find((pipe: any) => pipe.selector === selector);
+          pipe = this.$global.pipes?.find((pipe: any) => pipe.selector === selector);
         }
 
         if (pipe) {

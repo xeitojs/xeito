@@ -1,7 +1,8 @@
 import { XeitoComponent } from "@xeito/core";
+import { ComponentSlots } from "@xeito/core";
 
-export async function renderComponent(component: typeof XeitoComponent, props: Record<string, any>, content: Record<string, string>) {
-  const instance = new component({ props: props, slotContent: content });
+export async function renderComponent(component: typeof XeitoComponent, props: Record<string, any>, content: ComponentSlots) {
+  const instance = new component(props, content);
   await instance.connectedCallback();
 
   let template = instance._template as string;
