@@ -40,11 +40,4 @@ describe('@Component() decorator', () => {
     expect(() => Component({selector:'polymer-component1'})(class {})).toThrowError();
   })
 
-  test('@Component() should warn if the component is already registered', () => {
-    const warnFn = vi.fn();
-    console.warn = warnFn;
-    Component({selector:'test-c'})(class {});
-    expect(warnFn).toHaveBeenCalled();
-  });
-
 })

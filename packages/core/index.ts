@@ -1,5 +1,3 @@
-import { render, html, svg, Hole, Renderable, TemplateFunction } from 'uhtml';
-
 // Export Xeito Application Class
 export { Xeito } from './classes/xeito';
 
@@ -33,10 +31,12 @@ export type { ComponentMetadata } from './interfaces/component-metadata';
 export type { ElementRef } from './interfaces/element-ref';
 export type { EventConfig } from './interfaces/event-config';
 export type { PipeMetadata } from './interfaces/pipe-metadata';
-export type { PropChange } from './interfaces/prop-change';
 export type { WatchUpdate } from './interfaces/watch-update';
 export type { XeitoGlobal } from './interfaces/xeito-global';
 export type { XeitoInternals } from './interfaces/xeito-internals';
+
+// Export util functions
+export { isClient } from './functions/is-client';
 
 /**
  * Re-export uhtml
@@ -46,5 +46,22 @@ export type { XeitoInternals } from './interfaces/xeito-internals';
  * Xeito uses uhtml to render the component template and update the DOM
  * Created by @WebReflection - All credits to them
  */
-export { render, html, svg, Hole };
-export type { Renderable, TemplateFunction };
+let uhtml;
+(async () => {
+  try {
+    // Check if this is a browser environment
+    if (typeof window !== 'undefined') {
+      // Import uhtml
+      uhtml = import('uhtml');
+    } else {
+      // Import uhtml-ssr
+      uhtml = import('uhtml-ssr');
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+})();
+
+// Export uhtml for SSR and browser
+export const { html, svg, render, ssr, Hole } = await uhtml;
+export type { Renderable, TemplateFunction } from 'uhtml';

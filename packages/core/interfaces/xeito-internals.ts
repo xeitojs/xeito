@@ -5,9 +5,7 @@ export interface XeitoInternals {
   pipes?: any[];
   imports?: any[];
   services?: any[];
-  shadow?: boolean;
-  DOMRoot?: Element | HTMLElement | Node | null;
-  template?: Element | HTMLElement | Node | null;
+  DOMRoot?: Element | HTMLElement | Node | String | null;
+  template?: Element | HTMLElement | Node | string | null;
   global?: Record<string, any>;
-  componentStyleSheet?: CSSStyleSheet[];
 }

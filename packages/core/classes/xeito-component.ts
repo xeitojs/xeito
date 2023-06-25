@@ -1,9 +1,17 @@
-import { PropChange } from '../interfaces/prop-change';
 import { ActionResult } from '../interfaces/action-result';
-import { Hole, render, Renderable } from 'uhtml';
+import { Hole, render, Renderable } from '../';
 import { XeitoInternals } from '../interfaces/xeito-internals';
+import { isClient } from '../functions/is-client';
+import { ComponentData } from '../interfaces/component-data';
 
-export class XeitoComponent extends HTMLElement {
+let _HTMLElement;
+if (typeof window !== 'undefined') {
+  _HTMLElement = HTMLElement;
+} else {
+  _HTMLElement = class HTMLElement {};
+}
+
+export class XeitoComponent extends _HTMLElement {
   
   /**
   * Xeito internals object
@@ -13,16 +21,16 @@ export class XeitoComponent extends HTMLElement {
   private _XeitoInternals: XeitoInternals = {};
   
   private _DOMRoot: HTMLElement | ShadowRoot;
-  private _template: Node | Hole | Renderable;
+  public _template: Node | typeof Hole | Renderable | string;
   private _state: Map<string, any> = new Map();
-  private _watchers: Map<string, string[]>;
+  private _watchers: Map<string, string[]> = new Map();
 
   // Action controls
-  private _IActionIndex: number = 0;
+  private _IActionIndex: number = -1;
   private _actionInstances: any[] = [];
 
   // Pipe controls
-  private _IPipeIndex: number = 0;
+  private _IPipeIndex: number = -1;
   private _pipeInstances: any[] = [];
 
   // Store controls
@@ -35,7 +43,7 @@ export class XeitoComponent extends HTMLElement {
   /**
   * Global properties object (will be populated by the parent component or the Xeito instance)
   */
-  global: Record<string, any>;
+  public global: Record<string, any>;
   
   /**
   * Slot Content
@@ -46,37 +54,46 @@ export class XeitoComponent extends HTMLElement {
   * This can be accessed inside the render method
   * eg: html`<div>${this.slotContent.header}</div>`
   */
-  slotContent: Record<string, any> = {};
+  public slotContent: Record<string, any> = {};
+
+  /**
+   * Constructor props
+   * Will be populated by the constructor with the props received from the parent component
+   * This is used during SSR component initialization
+   */
+  private _constructorProps: Record<string, any> = {};
   
-  constructor() {
+  constructor(componentData?: ComponentData) {
     super();
     
     // Set the default _XeitoInternals object as received from the decorator
     this._XeitoInternals = Object.assign({}, this.constructor.prototype._XeitoInternals);
     
     // Set the slotted content
-    this.slotContent = this.getSlotContent();
+    if (isClient()) this.slotContent = this.getSlotContent();
+    if (!isClient()) this.slotContent = componentData.slotContent;
+
+    // Set the constructor props
+    this._constructorProps = componentData?.props || {};
     
     // Set the global property
     this.global = this._XeitoInternals.global;
-
-    // Make sure the shadow property is correctly set
-    this._XeitoInternals.shadow = this._XeitoInternals.shadow ?? this.global.config.shadow;
     
     // Assign the children global
     this.assignChildrenGlobal();
-    
+
+    // Assign pending watchers (set in the constructor by the @Watch decorator)
+    const pendingWatchers = this.constructor.prototype._pendingWatchers;
+    if (pendingWatchers) this._watchers = pendingWatchers;
+
     /** 
     * Set the root element to render the template in
-    * If it's a shadow root, create a shadow root
-    * If it's not a shadow root, use the element itself (default)
+    * If the component is not rendered in the client, set the root element as a string constructor
     */
-    let DOMRoot: HTMLElement | ShadowRoot = this;
-    if (this._XeitoInternals.shadow === true) {
-      this.attachShadow({ mode: 'open' });
-      DOMRoot = this.shadowRoot as ShadowRoot;
-    }
-    // Set the DOMRoot in the _XeitoInternals
+    let DOMRoot: typeof _HTMLElement | String = this;
+    if (!isClient()) DOMRoot = String;
+
+    // Set the DOMRoot
     this._DOMRoot = DOMRoot;
 
     // Call the onInit method
@@ -89,17 +106,26 @@ export class XeitoComponent extends HTMLElement {
   * 
   */
   connectedCallback() {
-    // Call the onWillMount method
-    this.onWillMount();
-
-    // Bind the methods to the class instance
-    this.bindMethods();
-
-    // Render the component for the first time
-    this._update();
-
-    // Call the onDidMount method
-    this.onDidMount();
+    // Wait for the global object to be populated
+    // This avoids mounting the component on SSR markup before the app is bootstrapped
+    if (this.global) {
+      // Call the onWillMount method
+      this.onWillMount();
+  
+      // Bind the methods to the class instance
+      this.bindMethods();
+  
+      // Render the component for the first time
+      this._update();
+  
+      // Update props with the constructor props
+      Object.keys(this._constructorProps).forEach((prop: string) => {
+        this.setProp(prop, this._constructorProps[prop]);
+      });
+  
+      // Call the onDidMount method
+      this.onDidMount();
+    }
   }
   
   /**
@@ -192,6 +218,8 @@ export class XeitoComponent extends HTMLElement {
   private _update() {
     // Reset the pipe index
     this._IPipeIndex = -1;
+    // Reset the action index
+    this._IActionIndex = -1;
 
     // Render the template
     this._template = render(this._DOMRoot, this.render() as Renderable);
@@ -215,7 +243,7 @@ export class XeitoComponent extends HTMLElement {
       this._state.set(key, value);
 
       // Trigger the watchers for the key is there are any
-      this._watchers?.get(key)?.forEach((watcher: string) => {
+      this._watchers.get(key)?.forEach((watcher: string) => {
         this[watcher]({ name: key, value });
       });
 
@@ -416,7 +444,7 @@ export class XeitoComponent extends HTMLElement {
   /**
   * Render method desgin to be overriden by the user
   */
-  render(): Hole | void {}
+  render(): typeof Hole | void {}
   
   /**
    * Lifecycle methods desgin to be overriden by the user
@@ -429,5 +457,4 @@ export class XeitoComponent extends HTMLElement {
   onWillMount(): any {}
   onDidMount(): any {}
   onUnmount(): any {}
-
 }

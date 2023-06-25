@@ -1,5 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
 import { Watch } from "../../decorators/watch";
+import { State } from "../../decorators/state";
+import { XeitoComponent } from "../../classes/xeito-component";
+import { Component } from "../../decorators/component";
 
 describe('@Watch() decorator', () => {
 
@@ -10,11 +13,9 @@ describe('@Watch() decorator', () => {
   test('@Watch() should decorate the property', () => {
 
     // Mock class
-    class TestC {
+    class TestC extends XeitoComponent{
       watcherMethod() {}
     }
-    
-    expect(new TestC()['_watchers']).toBeUndefined();
 
     // Decorate the method
     Watch('testKey')(TestC.prototype, 'watcherMethod', {value: TestC.prototype.watcherMethod});
@@ -25,6 +26,37 @@ describe('@Watch() decorator', () => {
     expect(c['_watchers']).toBeDefined();
     expect(c['_watchers'].get('testKey')).toBeDefined();
 
+  })
+
+  test('@Watch() decorated method should be called when updating related property', () => {
+    // Mock class
+    class TestC extends XeitoComponent {
+      testValue = 0;
+      watcherMethod() {}
+    }
+
+    // Decorate the class to turn it into a component
+    Component({selector: 'test-c'})(TestC);
+    
+    console.log(TestC);
+
+    // Decorate the propery to turn it into a state
+    State()(TestC.prototype, 'testValue');
+
+    // Decorate the method
+    Watch('testValue')(TestC.prototype, 'watcherMethod', {value: TestC.prototype.watcherMethod});
+
+    // Create an instance
+    const c = new TestC();
+
+    // Spy on the method (vitest api)
+    vi.spyOn(c, 'watcherMethod');
+
+    // Update the property
+    c.testValue = 1;
+
+    // Expect the method to have been called
+    expect(c.watcherMethod).toHaveBeenCalled();
   })
 
 });

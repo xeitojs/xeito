@@ -51,6 +51,14 @@ export class Xeito {
     }
   }
 
+  /**
+   * Prepare the Xeito instance for server side rendering
+   * 
+   * WARNING: This is not intended to be used by the user, it is used internally by the framework
+   */
+  public prepareSSR() {
+    // Attach the global object to all the global components
+    this.attachGlobal();
   }
 
   /**

@@ -1,7 +1,7 @@
 {
-  "name": "@xeito/core",
+  "name": "@xeito/ssr",
   "version": "0.3.5",
-  "description": "Core modules for Xeito | Framework for building web applications",
+  "description": "SSR modules for Xeito | Framework for building web applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -20,7 +20,8 @@
     "Typescript"
   ],
   "dependencies": {
-    "uhtml": "^3.1.0",
+    "node-html-parser": "^6.1.5",
+    "npm": "^9.6.7",
     "uhtml-ssr": "^0.9.1"
   }
 }

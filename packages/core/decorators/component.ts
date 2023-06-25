@@ -1,3 +1,4 @@
+import { isClient } from '../functions/is-client';
 import { ComponentMetadata } from '../interfaces/component-metadata';
 import { validateSelector, ValidateSelectorResult } from './../functions/validate-selector';
 
@@ -28,7 +29,6 @@ export function Component(componentMetadata: ComponentMetadata) {
       pipes: componentMetadata.pipes || [],
       imports: componentMetadata.imports || [],
       services: componentMetadata.services || [],
-      shadow: componentMetadata.shadow ?? false,
       DOMRoot: null,
       template: null,
       global: null
@@ -37,10 +37,10 @@ export function Component(componentMetadata: ComponentMetadata) {
     /**
      * Register the component in the customElements registry
      */
-    if (!customElements.get(componentMetadata.selector)) {
-      customElements.define(componentMetadata.selector, constructor);
-    } else {
-      console.warn(`Component '${componentMetadata.selector}' already registered`);
+    if (isClient()) {
+      if (!customElements.get(componentMetadata.selector)) {
+        customElements.define(componentMetadata.selector, constructor);
+      }
     }
     
     // Return the new ComponentClass

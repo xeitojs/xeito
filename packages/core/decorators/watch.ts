@@ -15,23 +15,18 @@
 export function Watch(...propertyNames: string[]) {
 
   return function _WatchDecorator(target: any, key: string, descriptor: any) {
+
+    const currentWatchers = target.constructor.prototype._pendingWatchers || new Map();
+    const methodName = key;
     
-    Object.defineProperty(target, key, {
-      set() {
-        if (!this._watchers) this._watchers = new Map();
-
-        propertyNames.forEach(propertyName => {
-          if (!this._watchers.has(propertyName)) this._watchers.set(propertyName, []);
-          this._watchers.get(propertyName).push(key);
-        });
-
-        Object.defineProperty(target, key, {
-          value: descriptor.value,
-        });
-      }
+    propertyNames.forEach(propertyName => {
+      if (!currentWatchers.has(propertyName)) currentWatchers.set(propertyName, []);
+      const watchers = currentWatchers.get(propertyName);
+      watchers.push(methodName);
+      currentWatchers.set(propertyName, watchers);
     });
 
-    target[key] = descriptor.value;
+    target.constructor.prototype._pendingWatchers = currentWatchers;
   }
 
 }
