@@ -1,5 +1,4 @@
 import { WriteStore } from '@xeito/store';
-import { BehaviorSubject, Subject } from 'rxjs';
 import { Route } from "./route";
 
 export interface RouterInternal {
