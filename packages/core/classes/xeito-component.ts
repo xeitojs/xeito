@@ -23,7 +23,7 @@ export class XeitoComponent extends _HTMLElement {
   private _DOMRoot: HTMLElement | ShadowRoot;
   public _template: Node | typeof Hole | Renderable | string;
   private _state: Map<string, any> = new Map();
-  private _watchers: Map<string, string[]>;
+  private _watchers: Map<string, string[]> = new Map();
 
   // Action controls
   private _IActionIndex: number = -1;
@@ -56,6 +56,11 @@ export class XeitoComponent extends _HTMLElement {
   */
   public slotContent: Record<string, any> = {};
 
+  /**
+   * Constructor props
+   * Will be populated by the constructor with the props received from the parent component
+   * This is used during SSR component initialization
+   */
   private _constructorProps: Record<string, any> = {};
   
   constructor(componentData?: ComponentData) {
@@ -76,6 +81,10 @@ export class XeitoComponent extends _HTMLElement {
     
     // Assign the children global
     this.assignChildrenGlobal();
+
+    // Assign pending watchers (set in the constructor by the @Watch decorator)
+    const pendingWatchers = this.constructor.prototype._pendingWatchers;
+    if (pendingWatchers) this._watchers = pendingWatchers;
 
     /** 
     * Set the root element to render the template in
@@ -234,7 +243,7 @@ export class XeitoComponent extends _HTMLElement {
       this._state.set(key, value);
 
       // Trigger the watchers for the key is there are any
-      this._watchers?.get(key)?.forEach((watcher: string) => {
+      this._watchers.get(key)?.forEach((watcher: string) => {
         this[watcher]({ name: key, value });
       });
 
