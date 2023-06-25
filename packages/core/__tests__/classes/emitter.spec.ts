@@ -4,12 +4,12 @@ import { Emitter } from "../../classes/emitter";
 describe('Emitter Class', () => {
 
   test('A new emitter can be created', () => {
-    const E = new Emitter({}, {});
+    const E = new Emitter({} as any, {});
     expect(E).toBeInstanceOf(Emitter);
   })
 
   test('An emitter has the required methods', () => {
-    const E = new Emitter({}, {});
+    const E = new Emitter({} as any, {});
     expect(E.emit).toBeInstanceOf(Function);
   });
 
