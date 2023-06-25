@@ -14,7 +14,7 @@ export function Global(propertyName?: string) {
           `)
         }
 
-        if(propertyName) return this.global?.properties[propertyName];
+        if(propertyName) return this.$global?.properties[propertyName];
         return this.$global?.properties[key];
       },
       set: function(value) {
