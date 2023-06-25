@@ -1,4 +1,4 @@
-import { Prop, XeitoComponent } from "@xeito/core";
+import { Prop, Watch, XeitoComponent } from "@xeito/core";
 import { Component, html } from "@xeito/core";
 
 @Component({
@@ -7,6 +7,11 @@ import { Component, html } from "@xeito/core";
 export class CounterComponent extends XeitoComponent {
 
   @Prop() count: number = 0;
+
+  @Watch('count')
+  onCountChange() {
+    console.log('count changed', this.count)
+  }
 
   render() {
     return html`
