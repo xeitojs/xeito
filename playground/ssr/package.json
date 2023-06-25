@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@xeito/vite-plugin-xeito": "^0.0.3",
+    "express": "^4.18.2",
     "vite-plugin-inspect": "^0.7.15"
   }
 }
