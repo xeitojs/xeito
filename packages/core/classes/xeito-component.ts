@@ -97,22 +97,26 @@ export class XeitoComponent extends _HTMLElement {
   * 
   */
   connectedCallback() {
-    // Call the onWillMount method
-    this.onWillMount();
-
-    // Bind the methods to the class instance
-    this.bindMethods();
-
-    // Render the component for the first time
-    this._update();
-
-    // Update props with the constructor props
-    Object.keys(this._constructorProps).forEach((prop: string) => {
-      this.setProp(prop, this._constructorProps[prop]);
-    });
-
-    // Call the onDidMount method
-    this.onDidMount();
+    // Wait for the global object to be populated
+    // This avoids mounting the component on SSR markup before the app is bootstrapped
+    if (this.global) {
+      // Call the onWillMount method
+      this.onWillMount();
+  
+      // Bind the methods to the class instance
+      this.bindMethods();
+  
+      // Render the component for the first time
+      this._update();
+  
+      // Update props with the constructor props
+      Object.keys(this._constructorProps).forEach((prop: string) => {
+        this.setProp(prop, this._constructorProps[prop]);
+      });
+  
+      // Call the onDidMount method
+      this.onDidMount();
+    }
   }
   
   /**
