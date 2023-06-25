@@ -9,13 +9,13 @@ export class SlotterComponent extends XeitoComponent {
     return html`
       <div style="display:flex;">
         <div class="slot-start" style="width: 15%">
-          ${this.slotContent.start}
+          ${this.$slots.start}
         </div>
         <div class="slot-default" style="flex-grow: 1">
-          ${this.slotContent.default}
+          ${this.$slots.default}
         </div>
         <div class="slot-end" style="width: 15%">
-          ${this.slotContent.end}
+          ${this.$slots.end}
         </div>
       </div>
     `;
