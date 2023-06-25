@@ -1,4 +1,4 @@
-import { html } from 'uhtml';
+import { html } from '../../';
 import { describe, expect, test } from 'vitest';
 import { Xeito } from '../../classes/xeito';
 import { XeitoComponent } from '../../classes/xeito-component';

@@ -15,7 +15,6 @@ describe('Xeito Component', () => {
     pipes: [],
     imports: [],
     services: [],
-    shadow: false,
     DOMRoot: null,
     template: null,
     global: null
@@ -29,7 +28,7 @@ describe('Xeito Component', () => {
 
   test('A component can be registered in the customElements registry', () => {  
     // Register the component in the customElements registry
-    customElements.define('c-test', C);
+    customElements.define('c-test', C as any);
   
     // Check if the component is registered
     expect(customElements.get('c-test')).toBe(C);
