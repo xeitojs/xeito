@@ -37,8 +37,6 @@ describe('@Watch() decorator', () => {
 
     // Decorate the class to turn it into a component
     Component({selector: 'test-c'})(TestC);
-    
-    console.log(TestC);
 
     // Decorate the propery to turn it into a state
     State()(TestC.prototype, 'testValue');
@@ -48,6 +46,9 @@ describe('@Watch() decorator', () => {
 
     // Create an instance
     const c = new TestC();
+
+    // Overwrite the update method to prevent errors
+    c['_update'] = () => {};
 
     // Spy on the method (vitest api)
     vi.spyOn(c, 'watcherMethod');
