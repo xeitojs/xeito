@@ -5,7 +5,8 @@ export async function getSlotContent(element: HTMLElement) {
   const slotContent: ComponentSlots = {
     default: ''
   };
-  const children: Node[] = Array.from(element.childNodes);
+
+  const children: Node[] = element.childNodes;
   
   if (children) {
     for(let child in children) {
